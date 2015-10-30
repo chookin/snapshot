@@ -10,5 +10,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>snapshot-server</module>
+        <module>snapshot-api</module>
     </modules>
 </project>
