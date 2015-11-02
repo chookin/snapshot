@@ -8,6 +8,8 @@ import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.naming.AuthenticationException;
+
 /**
  * Created by zhuyin on 11/2/15.
  */
@@ -16,24 +18,15 @@ public class UserValidator {
     @Autowired
     private UserRepository userRepository;
 
-    public User validateLogin(User user){
+    public User validateLogin(User user) throws AuthenticationException {
         Validate.notEmpty(user.getPassword(), "密码不能为空");
         validateUser(user);
-        User saved;
-        if(StringUtils.isNoneEmpty(user.getEmail())){
-            saved = userRepository.findByEmail(user.getEmail());
-        }else if(user.getMobile() != null){
-            saved = userRepository.findByMobile(user.getMobile());
-        }else if(StringUtils.isNoneEmpty(user.getName())) {
-            saved = userRepository.findByName(user.getName());
-        }else{
-            throw new IllegalArgumentException("请指定用户");
-        }
+        User saved = userRepository.find(user);
         if(saved == null){
             throw new IllegalArgumentException("用户不存在");
         }
         if(!StringUtils.equals(saved.getPassword(), user.getPassword())){
-            throw new IllegalArgumentException("密码错误");
+            throw new AuthenticationException("密码错误");
         }
         return saved;
     }
@@ -58,7 +51,7 @@ public class UserValidator {
         }
     }
 
-    void validateUser(User user){
+    static void validateUser(User user){
         if(user.getMobile() != null){
             ValidateKit.isMobile(user.getMobile().toString(), "手机号码格式错误");
         }

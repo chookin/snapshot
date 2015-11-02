@@ -46,8 +46,9 @@ public class User {
         return name;
     }
 
-    public void setName(String name) {
+    public User setName(String name) {
         this.name = name;
+        return this;
     }
 
     @Basic
@@ -76,8 +77,9 @@ public class User {
         return mobile;
     }
 
-    public void setMobile(Long mobile) {
+    public User setMobile(Long mobile) {
         this.mobile = mobile;
+        return this;
     }
 
     @Basic

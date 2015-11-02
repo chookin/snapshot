@@ -5,20 +5,25 @@ import cmri.utils.captcha.AlphanumCatcha;
 import cmri.utils.captcha.CaptchaGenerator;
 import cmri.utils.configuration.ConfigManager;
 import cmri.utils.dao.RedisHandler;
+import cmri.utils.web.NetworkHelper;
 import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by zhuyin on 10/29/15.
  */
 @Controller
 public class CaptchaController {
+    protected final Logger LOG = LoggerFactory.getLogger(getClass());
+    private AtomicLong id = new AtomicLong();
     @ResponseBody
     @RequestMapping(value = "/captcha", method = RequestMethod.GET)
     public ResponseMessage index(Integer width, Integer height, Integer fontSize, HttpServletResponse response){
@@ -31,9 +36,10 @@ public class CaptchaController {
         response.setDateHeader("Expires", 0);
 
         CaptchaGenerator captcha = new AlphanumCatcha(ConfigManager.getInteger("captcha.number"), width, height, fontSize);
-        String captchaKey = "captcha-"+UUID.randomUUID().toString();
-        RedisHandler.instance().set(captchaKey, captcha.getCode(), ConfigManager.getInteger("captcha.expireSeconds"));
+        String captchaId = "captcha-"+ NetworkHelper.getHostname()+"-" + id.incrementAndGet();
+        RedisHandler.instance().set(captchaId, captcha.getCode(), ConfigManager.getInteger("captcha.expireSeconds"));
+        LOG.trace("captcha: "+captchaId+", "+captcha);
         return new ResponseMessage().set("captcha", captcha.getImageBase64())
-                .set("captchaKey", captchaKey);
+                .set("captchaId", captchaId);
     }
 }
