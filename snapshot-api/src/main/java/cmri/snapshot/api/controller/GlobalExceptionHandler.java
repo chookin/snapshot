@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
      * Convert a predefined exception to an HTTP Status code.
      */
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({ NullPointerException.class})
+    @ExceptionHandler({ NullPointerException.class, IllegalArgumentException.class})
     @ResponseBody
     public ResponseMessage nullError(Exception exception) {
         return new ResponseMessage(false, exception.getMessage());

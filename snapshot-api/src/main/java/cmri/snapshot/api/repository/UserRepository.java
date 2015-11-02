@@ -1,4 +1,4 @@
-package cmri.snapshot.api.service;
+package cmri.snapshot.api.repository;
 
 import cmri.snapshot.api.domain.User;
 import org.springframework.data.repository.CrudRepository;
@@ -8,6 +8,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface UserRepository extends CrudRepository<User, Long> {
     User findByName(String name);
-    User findByMobile(String mobile);
+    User findByMobile(long mobile);
     User findByEmail(String email);
 }

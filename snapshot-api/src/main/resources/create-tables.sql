@@ -13,13 +13,13 @@ CREATE TABLE `user` (
   `email` char(128) default NULL COMMENT '邮箱',
   # int range:[-2^31,2^31-1] [-2147483648,2147483647]
   `mobile` BIGINT(11) default NULL COMMENT '手机号',
-  `role` tinyint(1) default NULL COMMENT '用户角色：1，管理员',
-  `ustatus` tinyint(1) default 1 COMMENT '账户状态：0，禁用；1，正常启用',
-  `createTime` timestamp default CURRENT_TIMESTAMP COMMENT '账户的创建时间',
-  `updateTime` DATETIME COMMENT '账户信息的修改时间',
-  `lastLoginIP` varchar(40) default NULL COMMENT '用户最后一次登录IP',
-  `lastLoginTime` DATETIME COMMENT '用户最后一次登录时间',
-  `loginTimes` int DEFAULT 0 COMMENT '登录次数',
+  `role` tinyint default NULL COMMENT '用户角色：1, admin; 2, user; 3, photographer',
+  `status` tinyint default 1 COMMENT '账户状态：0，禁用；1，正常启用',
+  `create_time` timestamp default CURRENT_TIMESTAMP COMMENT '账户的创建时间',
+  `update_time` DATETIME COMMENT '账户信息的修改时间',
+  `last_login_ip` varchar(40) default NULL COMMENT '用户最后一次登录IP',
+  `last_login_time` DATETIME COMMENT '用户最后一次登录时间',
+  `login_times` int not NULL DEFAULT 0 COMMENT '登录次数',
   PRIMARY KEY  (`id`)
 );
 

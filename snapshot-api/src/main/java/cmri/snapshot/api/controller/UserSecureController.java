@@ -3,8 +3,6 @@ package cmri.snapshot.api.controller;
 import cmri.snapshot.api.domain.ResponseMessage;
 import cmri.snapshot.api.domain.User;
 import cmri.snapshot.api.repository.UserRepository;
-import cmri.snapshot.api.validator.CaptchaValidator;
-import cmri.snapshot.api.validator.UserValidator;
 import cmri.utils.dao.RedisHandler;
 import cmri.utils.web.HttpHelper;
 import org.slf4j.Logger;
@@ -18,11 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 
 /**
- * Created by zhuyin on 10/28/15.
+ * Created by zhuyin on 11/2/15.
  */
 @RestController
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/userSecure")
+public class UserSecureController {
     protected final Logger LOG = LoggerFactory.getLogger(getClass());
     @Autowired
     private UserRepository userRepository;

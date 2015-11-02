@@ -1,20 +1,35 @@
 package cmri.snapshot.api.domain;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by zhuyin on 10/28/15.
  */
 public class ResponseMessage {
-    public ResponseMessage(boolean success, String errorInfo){
-        this.result = success? "success":"failed";
-        this.errorInfo = errorInfo;
+    public ResponseMessage(){
+        this(true, "");
     }
-    public String getResult() {
-        return result;
+    public ResponseMessage(boolean succeed, String message){
+        this.succeed = succeed;
+        this.message = message;
     }
-    public String getErrorInfo() {
-        return errorInfo;
+    public boolean isSucceed() {
+        return succeed;
     }
 
-    private String result;
-    private String errorInfo;
+    public String getMessage() {
+        return message;
+    }
+
+    public Map<String, String> getData() {
+        return data;
+    }
+    public ResponseMessage set(String key, String val){
+        data.put(key, val);
+        return this;
+    }
+    private boolean succeed;
+    private String message;
+    private Map<String, String> data = new HashMap<>();
 }
