@@ -11,7 +11,7 @@ Use spring mvc framework.
 # database
 ## user
 
-| column name  | type   | desc           |
+| column name  | type     |desc          |
 | ------------ | -------- | ------------ |
 | id           | bigint   | auto increment   |
 | name         | char 50  | user name        |
@@ -26,30 +26,40 @@ Use spring mvc framework.
 
 # security
 基于用户uid和pwd做签名，实现安全认证。
+
+<pre>
 $key=md5Hex($date+md5Hex($password));
 $signature = hmacSha1($key, $date + $time);
+</pre>
 
 ## login
-POST {username:$username,password:$password,date:$date,time:$time,sig:$sig}
+
+<pre>POST {username:$username,password:$password,date:$date,time:$time,sig:$sig}</pre>
 or
-POST {phoneNum:phoneNum,password:$password,date:$date,time:$time,sig:$sig}
+
+<pre>POST {phoneNum:phoneNum,password:$password,date:$date,time:$time,sig:$sig}</pre>
 ## register
 1, get captcha
 Captcha number is 5 in default.
-GET captcha?width=145&height=36&fontSize=22
--> response
-{"succeed":true,"message":"","data":{"captchaId":"captcha-4b2ed8e7-36e3-437d-9672-2a116acab0bd","captcha":"/9j/4AAQSkZJRgABAgAA.."}}
+
+<pre>GET captcha?width=145&height=36&fontSize=22</pre>
+response
+<pre>{"succeed":true,"message":"","data":{"captchaId":"captcha-4b2ed8e7-36e3-437d-9672-2a116acab0bd","captcha":"/9j/4AAQSkZJRgABAgAA.."}}</pre>
 captcha jpg is encoded to base64 string.
 
 2, submit register
-POST {username:$username,phoneNum:phoneNum,password:$password,$captchaId:$captchaId,$captcha:$captcha}
+
+<pre>POST {username:$username,phoneNum:phoneNum,password:$password,$captchaId:$captchaId,$captcha:$captcha}</pre>
 
 # test
+
+<pre>
 curl -d "username=admin&password=abc" http://localhost:8080/user/login
 curl -d "username=admin&password=e6d2cbe9f7f04256e3d6466d4a770990" http://localhost:8080/user/login
 curl -d "username=admin&password=hi&phoneNum=13699996666&captcha=9yu8" http://localhost:8080/user/register
 curl -d "username=test&password=hi&phoneNum=13699996666" http://localhost:8080/user/register
 wget 'http://localhost:8080/captcha?width=145&height=36&fontSize=22'
+</pre>
 
 # problems
 ## hibernate
