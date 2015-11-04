@@ -33,11 +33,11 @@ public class UserSecureController {
     @Autowired
     private CaptchaValidator captchaValidator;
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseMessage login(String username, Long phoneNum, String password, String date, Long time, String sig) throws AuthenticationException {
+    public ResponseMessage login(String username, Long phoneNum, String date, Long time, String sig) throws AuthenticationException {
         User me = new User()
                 .setName(username)
                 .setMobile(phoneNum)
-                .setPassword(password);
+                ;
         User user = userSecureValidator.validateSignature(me, date, time, sig);
         user.setLoginTimes(me.getLoginTimes() + 1);
         user.setLastLoginTime(new Timestamp(System.currentTimeMillis()));
