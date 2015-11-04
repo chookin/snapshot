@@ -10,17 +10,19 @@ Use spring mvc framework.
 
 # database
 ## user
-|| *column name*|| *type*   || *desc*           ||
-|| id           || bigint   || auto increment   ||
-|| name         || char 50  || user name        ||
-|| password     || char 32  || password         ||
-|| mobile       || bigint 11|| phone number     ||
-|| role         || tinyint  || user role: 1, admin; 2, user; 3, photographer ||
-|| create_time  || timestamp || user created time ||
-|| update_time  || timestamp || user info updated time ||
-|| last_login_ip || varchar(40) || last login ip ||
-|| last_login_time || timestamp || last login time ||
-|| login_times  || int      || login times      ||
+
+| column name  | type   | desc           |
+| ------------ | -------- | ------------ |
+| id           | bigint   | auto increment   |
+| name         | char 50  | user name        |
+| password     | char 32  | password         |
+| mobile       | bigint 11| phone number     |
+| role         | tinyint  | user role: 1, admin; 2, user; 3, photographer |
+| create_time  | timestamp | user created time |
+| update_time  | timestamp | user info updated time |
+| last_login_ip | varchar(40) | last login ip |
+| last_login_time | timestamp | last login time |
+| login_times  | int      | login times      |
 
 # security
 基于用户uid和pwd做签名，实现安全认证。
