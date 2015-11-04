@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CaptchaValidator {
-    public void validateCaptcha(String key, String captcha){
-        String code = RedisHandler.instance().get(key);
+    public void validateCaptcha(String captchaId, String captcha){
+        String code = RedisHandler.instance().get(captchaId);
         Validate.notEmpty(code, "验证码错误");
         if (!code.equalsIgnoreCase(captcha)) {
             throw new IllegalArgumentException("验证码错误");

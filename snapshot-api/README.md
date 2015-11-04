@@ -9,6 +9,38 @@ http port is 8080.
 Use spring mvc framework.
 
 # database
+## user
+|| *column name*|| *type*   || *desc*           ||
+|| id           || bigint   || auto increment   ||
+|| name         || char 50  || user name        ||
+|| password     || char 32  || password         ||
+|| mobile       || bigint 11|| phone number     ||
+|| role         || tinyint  || user role: 1, admin; 2, user; 3, photographer ||
+|| create_time  || timestamp || user created time ||
+|| update_time  || timestamp || user info updated time ||
+|| last_login_ip || varchar(40) || last login ip ||
+|| last_login_time || timestamp || last login time ||
+|| login_times  || int      || login times      ||
+
+# security
+基于用户uid和pwd做签名，实现安全认证。
+$key=md5Hex($date+md5Hex($password));
+$signature = hmacSha1($key, $date + $time);
+
+## login
+POST {username:$username,password:$password,date:$date,time:$time,sig:$sig}
+or
+POST {phoneNum:phoneNum,password:$password,date:$date,time:$time,sig:$sig}
+## register
+1, get captcha
+Captcha number is 5 in default.
+GET captcha?width=145&height=36&fontSize=22
+-> response
+{"succeed":true,"message":"","data":{"captchaId":"captcha-4b2ed8e7-36e3-437d-9672-2a116acab0bd","captcha":"/9j/4AAQSkZJRgABAgAA.."}}
+captcha jpg is encoded to base64 string.
+
+2, submit register
+POST {username:$username,phoneNum:phoneNum,password:$password,$captchaId:$captchaId,$captcha:$captcha}
 
 # test
 curl -d "username=admin&password=abc" http://localhost:8080/user/login
