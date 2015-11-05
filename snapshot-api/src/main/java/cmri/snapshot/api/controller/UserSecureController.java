@@ -47,10 +47,9 @@ public class UserSecureController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseMessage register(String username, String password, Long phoneNum, String email, String captchaId, String captcha) {
+    public ResponseMessage register(String username, String password, Long phoneNum, String captchaId, String captcha) {
         captchaValidator.validateCaptcha(captchaId, captcha);
-        RedisHandler.instance().del(captchaId);
-        User me = new User(username, password, phoneNum, email);
+        User me = new User(username, password, phoneNum);
         userValidator.validateNotRegistered(me);
         LOG.info(me.getName() + " register");
         userRepository.save(me);

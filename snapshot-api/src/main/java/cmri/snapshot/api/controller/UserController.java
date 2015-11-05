@@ -3,9 +3,8 @@ package cmri.snapshot.api.controller;
 import cmri.snapshot.api.domain.ResponseMessage;
 import cmri.snapshot.api.domain.User;
 import cmri.snapshot.api.repository.UserRepository;
-import cmri.snapshot.api.validator.CaptchaValidator;
+import cmri.snapshot.api.validator.SMSValidator;
 import cmri.snapshot.api.validator.UserValidator;
-import cmri.utils.dao.RedisHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +27,10 @@ public class UserController {
     @Autowired
     private UserValidator userValidator;
     @Autowired
-    private CaptchaValidator captchaValidator;
+    private SMSValidator smsValidator;
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseMessage login(String username, String password, Long phoneNum, String email) throws AuthenticationException {
-        User me = new User(username, password, phoneNum, email);
+    public ResponseMessage login(String username, String password, Long phoneNum) throws AuthenticationException {
+        User me = new User(username, password, phoneNum);
         User user = userValidator.validateLogin(me);
         user.setLoginTimes(me.getLoginTimes() + 1);
         user.setLastLoginTime(new Timestamp(System.currentTimeMillis()));
@@ -41,10 +40,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseMessage register(String username, String password, Long phoneNum, String email, String captchaId, String captcha) {
-        captchaValidator.validateCaptcha(captchaId, captcha);
-        RedisHandler.instance().del(captchaId);
-        User me = new User(username, password, phoneNum, email);
+    public ResponseMessage register(String username, String password, Long phoneNum, String verifyCode) {
+        smsValidator.validateVerifyCode(phoneNum, verifyCode);
+        User me = new User(username, password, phoneNum);
         userValidator.validateNotRegistered(me);
         LOG.info(me.getName() + " register");
         userRepository.save(me);

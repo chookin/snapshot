@@ -24,6 +24,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="CCP_REST_SDK_JAVA_v2.7r" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:1.2.7.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:1.2.7.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:1.2.7.RELEASE" level="project" />
@@ -79,6 +80,7 @@
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:1.9.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:jcl-over-slf4j:1.7.12" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aspects:4.1.8.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-test:4.1.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.37" level="project" />
     <orderEntry type="module" module-name="cmri-utils" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.3.1" level="project" />

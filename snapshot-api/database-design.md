@@ -13,48 +13,63 @@
 | name          | char(50)  | user name        |
 | password      | char(32)  | password         |
 | mobile        | bigint(11) | phone number     |
-| birthday      | date | 生日 |
-| sex           | char(2) | 性别 |
+| birthday      | date      | 生日             |
+| sex           | char(2)   | 性别             |
 | role          | tinyint    | user role: 1, consumer; 2, cameraman |
-| resume        | varchar(1024) | 个人简介       |
+| resume        | varchar(1024) | 个人简介      |
 | photoFav      | varchar(521) | 拍照偏好:宝宝外拍、全家福 |
-| location      | int       | 所在地            |
-| address       | varchar(128) | 详细地址 |
-| orderNum      | int       | 订单量            |
-| Favorites     |           | 收藏              |
-| value         | long      | 身价              |
-| rating        | int       | 评级              |
-| head_portrait | | 头像 |
-| registered_time | timestamp | registered time |
+| area          | int       | 所在地            |
+| photo         | varchar(512) | 头像          |
+| sign_up_time  | timestamp    | 注册时间       |
 | update_time   | timestamp | user info updated time |
-| login_times   | int       | login times      |
+
+## area 区域表
+| column name   | type      |desc              |
+| ------------- | --------- | ---------------- |
+| id            | bigint    | auto increment   |
+| province      | char(6)   | 省               |
+| city          | char(6)   | 市               |
+| country       | char(6)   | 县               |
+| region        | varchar(32)| 地域             |
 
 ## login 用户登录历史详情表
 
 | column name   | type      |desc              |
 | ------------- | --------- | ---------------- |
 | id            | bigint    | auto increment   |
-| user          | bigInt    | user id          |
+| user_id       | bigInt    | user id          |
 | login_ip      | char(40)  | 登录IP            |
 | login_time    | timestamp | 登录时间          |
 
-# camera 相机信息表
+## user_stat
+| user_id       | bigInt    | user id          |
+| orderNum      | int       | 订单量            |
+| Favorites     |           | 收藏              |
+| login_times   | int       | login times      |
+
+## camera 相机信息表
 | column name   | type      |desc              |
 | ------------- | --------- | ---------------- |
 | id            | bigint    | auto increment   |
-| user          | bigInt    | 摄影师id          |
+| user_id       | bigInt    | 摄影师id          |
 | camera        | varchar(256) | 相机类型       |
 | camera_identity | varchar(256) | 相机标识     |
 | create_time   | timestamp | 添加时间          |
 
-# cameraman 摄影师信息表
+## cameraman 摄影师信息表
 | column name   | type      |desc              |
 | ------------- | --------- | ---------------- |
 | id            | bigint    | auto increment   |
-| user          | bigInt    | user id          |
+| user_id       | bigInt    | user id          |
+| value         | long      | 身价              |
+| rating        | int       | 评级              |
 | range         | varchar(256) | 约拍范围       |
 | desire        | varchar(256) | 约拍意愿       |
-| photos        |  | 个人作品 |
+| status        | tinyint   | -1: unauthorized, 1: authorized |
+
+
+## photo
+
 
 ## shot 约拍订单表
 | column name   | type      |desc              |
@@ -75,14 +90,14 @@
 | column name   | type      |desc              |
 | ------------- | --------- | ---------------- |
 | id            | bigint    | auto increment   |
-| shot          | bigint    | shot id          |
+| shot_id       | bigint    | shot id          |
 | consumer      | bigint    | 消费者            |
 
 ## order_cameraman 订单-摄影师表
 | column name   | type      |desc              |
 | ------------- | --------- | ---------------- |
 | id            | bigint    | auto increment   |
-| shot          | bigint    | shot id          |
+| shot_id       | bigint    | shot id          |
 | cameraman     | bigint    | 摄影师            |
 
 ## like 对用户点赞

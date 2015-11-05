@@ -14,6 +14,9 @@ public class ResponseMessage {
         this.succeed = succeed;
         this.message = message;
     }
+    private boolean succeed;
+    private String message;
+    private Map<String, String> data = new HashMap<>();
     public boolean isSucceed() {
         return succeed;
     }
@@ -29,7 +32,30 @@ public class ResponseMessage {
         data.put(key, val);
         return this;
     }
-    private boolean succeed;
-    private String message;
-    private Map<String, String> data = new HashMap<>();
+
+    @Override
+    public int hashCode() {
+        return (data.toString() + message + succeed).hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ResponseMessage)) return false;
+
+        ResponseMessage that = (ResponseMessage) o;
+
+        if (succeed != that.succeed) return false;
+        if (message != null ? !message.equals(that.message) : that.message != null) return false;
+        return data.equals(that.data);
+    }
+
+    @Override
+    public String toString() {
+        return "ResponseMessage{" +
+                "succeed=" + succeed +
+                ", message='" + message + '\'' +
+                ", data=" + data +
+                '}';
+    }
 }

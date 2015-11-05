@@ -24,11 +24,10 @@ public class User {
     private Timestamp lastLoginTime;
     private int loginTimes;
     public User(){}
-    public User(String name, String password, Long mobile, String email){
+    public User(String name, String password, Long mobile){
         this.name = name;
         this.password = password;
         this.mobile = mobile;
-        this.email = email;
     }
     @Id
     @Column(name = "id")

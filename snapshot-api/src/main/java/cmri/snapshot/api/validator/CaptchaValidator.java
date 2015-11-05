@@ -15,5 +15,6 @@ public class CaptchaValidator {
         if (!code.equalsIgnoreCase(captcha)) {
             throw new IllegalArgumentException("验证码错误");
         }
+        RedisHandler.instance().del(captchaId);
     }
 }

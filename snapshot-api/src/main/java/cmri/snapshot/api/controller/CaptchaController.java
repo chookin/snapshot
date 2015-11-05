@@ -26,7 +26,7 @@ public class CaptchaController {
     private AtomicLong id = new AtomicLong();
     @ResponseBody
     @RequestMapping(value = "/captcha", method = RequestMethod.GET)
-    public ResponseMessage index(Integer width, Integer height, Integer fontSize, HttpServletResponse response){
+    public ResponseMessage captcha(Integer width, Integer height, Integer fontSize, HttpServletResponse response){
         Validate.notNull(width, "没有指定width");
         Validate.notNull(height, "没有指定height");
         Validate.notNull(fontSize, "没有指定fontSize");
@@ -36,10 +36,14 @@ public class CaptchaController {
         response.setDateHeader("Expires", 0);
 
         CaptchaGenerator captcha = new AlphanumCatcha(ConfigManager.getInteger("captcha.number"), width, height, fontSize);
-        String captchaId = "captcha-"+ NetworkHelper.getHostname()+"-" + id.incrementAndGet();
+        String captchaId = getCaptchaId();
         RedisHandler.instance().set(captchaId, captcha.getCode(), ConfigManager.getInteger("captcha.expireSeconds"));
         LOG.trace("captcha: "+captchaId+", "+captcha);
         return new ResponseMessage().set("captcha", captcha.getImageBase64())
                 .set("captchaId", captchaId);
+    }
+
+    private String getCaptchaId(){
+        return "captcha-"+ NetworkHelper.getHostname()+"-" + id.incrementAndGet();
     }
 }
