@@ -20,9 +20,6 @@ public class User {
     private Byte status;
     private Timestamp createTime;
     private Timestamp updateTime;
-    private String lastLoginIp;
-    private Timestamp lastLoginTime;
-    private int loginTimes;
     public User(){}
     public User(String name, String password, Long mobile){
         this.name = name;
@@ -122,36 +119,6 @@ public class User {
         this.updateTime = updateTime;
     }
 
-    @Basic
-    @Column(name = "last_login_ip")
-    public String getLastLoginIp() {
-        return lastLoginIp;
-    }
-
-    public void setLastLoginIp(String lastLoginIp) {
-        this.lastLoginIp = lastLoginIp;
-    }
-
-    @Basic
-    @Column(name = "last_login_time")
-    public Timestamp getLastLoginTime() {
-        return lastLoginTime;
-    }
-
-    public void setLastLoginTime(Timestamp lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
-    }
-
-    @Basic
-    @Column(name = "login_times")
-    public int getLoginTimes() {
-        return loginTimes;
-    }
-
-    public void setLoginTimes(int loginTimes) {
-        this.loginTimes = loginTimes;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -160,7 +127,6 @@ public class User {
         User user = (User) o;
 
         if (id != user.id) return false;
-        if (loginTimes != user.loginTimes) return false;
         if (name != null ? !name.equals(user.name) : user.name != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (email != null ? !email.equals(user.email) : user.email != null) return false;
@@ -169,9 +135,6 @@ public class User {
         if (status != null ? !status.equals(user.status) : user.status != null) return false;
         if (createTime != null ? !createTime.equals(user.createTime) : user.createTime != null) return false;
         if (updateTime != null ? !updateTime.equals(user.updateTime) : user.updateTime != null) return false;
-        if (lastLoginIp != null ? !lastLoginIp.equals(user.lastLoginIp) : user.lastLoginIp != null) return false;
-        if (lastLoginTime != null ? !lastLoginTime.equals(user.lastLoginTime) : user.lastLoginTime != null)
-            return false;
 
         return true;
     }
@@ -187,9 +150,6 @@ public class User {
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
-        result = 31 * result + (lastLoginIp != null ? lastLoginIp.hashCode() : 0);
-        result = 31 * result + (lastLoginTime != null ? lastLoginTime.hashCode() : 0);
-        result = 31 * result + loginTimes;
         return result;
     }
 }

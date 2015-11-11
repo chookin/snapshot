@@ -24,6 +24,10 @@ import java.util.concurrent.atomic.AtomicLong;
 public class CaptchaController {
     protected final Logger LOG = LoggerFactory.getLogger(getClass());
     private AtomicLong id = new AtomicLong();
+
+    /**
+     * 生成图片验证码
+     */
     @ResponseBody
     @RequestMapping(value = "/captcha", method = RequestMethod.GET)
     public ResponseMessage captcha(Integer width, Integer height, Integer fontSize, HttpServletResponse response){
@@ -35,9 +39,9 @@ public class CaptchaController {
         response.setHeader("Cache-Control", "no-cache");
         response.setDateHeader("Expires", 0);
 
-        CaptchaGenerator captcha = new AlphanumCatcha(ConfigManager.getInteger("captcha.number"), width, height, fontSize);
+        CaptchaGenerator captcha = new AlphanumCatcha(ConfigManager.getInt("captcha.number"), width, height, fontSize);
         String captchaId = getCaptchaId();
-        RedisHandler.instance().set(captchaId, captcha.getCode(), ConfigManager.getInteger("captcha.expireSeconds"));
+        RedisHandler.instance().set(captchaId, captcha.getCode(), ConfigManager.getInt("captcha.expireSeconds"));
         LOG.trace("captcha: "+captchaId+", "+captcha);
         return new ResponseMessage().set("captcha", captcha.getImageBase64())
                 .set("captchaId", captchaId);

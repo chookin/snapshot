@@ -19,7 +19,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
         }else if(mobile != null){
             return findByMobile(mobile);
         }else if(StringUtils.isNoneEmpty(email)) {
-            return findByName(email);
+            return findByEmail(email);
         }
         throw new IllegalArgumentException("请指定用户");
     }

@@ -40,21 +40,16 @@ $signature = hmacSha1($key, $date + $time);
 or
 <pre>POST {phoneNum:phoneNum,date:$date,time:$time,sig:$signature}</pre>
 ## register
-1. get captcha
-Captcha number is 5 in default.
-<pre>GET captcha?width=145&height=36&fontSize=22</pre>
-response
-<pre>{"succeed":true,"message":"","data":{"captchaId":"captcha-4b2ed8e7-36e3-437d-9672-2a116acab0bd","captcha":"/9j/4AAQSkZJRgABAgAA.."}}</pre>
-captcha jpg is encoded to base64 string.
+1, send sms auth code
+auth code的id是 sms_authCode_{phoneNum}
 
 2. submit register
 <pre>POST {username:$username,phoneNum:phoneNum,password:$password,$captchaId:$captchaId,$captcha:$captcha}</pre>
 
 # test
 <pre>
-curl -d "username=admin&password=abc" http://localhost:8080/user/login
-curl -d "username=admin&password=e6d2cbe9f7f04256e3d6466d4a770990" http://localhost:8080/user/login
-curl -d "username=admin&password=hi&phoneNum=13699996666&captcha=9yu8" http://localhost:8080/user/register
+curl -d "username=test&password=098f6bcd4621d373cade4e832627b4f6" http://localhost:8080/user/login
+curl -d "username=test&password=hi&phoneNum=13699996666&captcha=9yu8" http://localhost:8080/user/register
 curl -d "username=test&password=hi&phoneNum=13699996666" http://localhost:8080/user/register
 wget 'http://localhost:8080/captcha?width=145&height=36&fontSize=22'
 </pre>

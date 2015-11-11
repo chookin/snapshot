@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
+ * spring mvc rest开发入门示例
+ *
  * https://spring.io/guides/gs/rest-service/
  * This code uses Spring 4’s new @RestController annotation, which marks the class as a controller where every method returns a domain object instead of a view. It’s shorthand for @Controller and @ResponseBody rolled together.
  *

@@ -3,23 +3,22 @@ package cmri.snapshot.api.controller;
 import cmri.snapshot.api.WebAppTest;
 import cmri.snapshot.api.domain.ResponseMessage;
 import cmri.snapshot.api.interceptor.SigInterceptor;
+import cmri.utils.configuration.ConfigManager;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Created by zhuyin on 11/5/15.
+ * Created by zhuyin on 11/10/15.
  */
+public class SMSControllerTest extends WebAppTest{
 
-public class CaptchaControllerTest extends WebAppTest {
     @Test
-    public void testCaptcha() throws Exception {
+    public void testSendAuthCode() throws Exception {
         ResponseMessage response = rest.clear()
-                .setPath("captcha")
+                .setPath("sms/authCode/send")
                 .setKey(SigInterceptor.defaultKey)
-                .add("width", 145)
-                .add("height", 36)
-                .add("fontSize", 22)
-                .get();
+                .add("phoneNum", ConfigManager.getInt("test.phone.num"))
+                .post();
         log(response);
         Assert.assertTrue(response.isSucceed());
     }

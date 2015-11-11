@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SMSValidator {
-    public void validateVerifyCode(Long phoneNum, String verifyCode){
-        String id = SMSController.getVerifyCodeId(phoneNum);
+    public void validateAuthCode(long phoneNum, String authCode){
+        String id = SMSController.getAuthCodeId(phoneNum);
         String code = RedisHandler.instance().get(id);
         Validate.notEmpty(code, "验证码错误");
-        if (!code.equalsIgnoreCase(verifyCode)) {
+        if (!code.equalsIgnoreCase(authCode)) {
             throw new IllegalArgumentException("验证码错误");
         }
         RedisHandler.instance().del(id);
