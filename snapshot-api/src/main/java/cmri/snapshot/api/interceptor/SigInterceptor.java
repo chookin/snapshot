@@ -14,6 +14,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -22,7 +24,7 @@ import java.util.TreeMap;
  */
 @Service
 public class SigInterceptor extends HandlerInterceptorAdapter {
-    public static final String defaultKey = ConfigManager.get("sig.baseKey");
+    public static final String defaultKey = ConfigManager.get("sig.defaultKey");
 
     @Autowired
     private UserRepository userRepository;
@@ -63,7 +65,7 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
         }
     }
     void validate(String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
-        String mySig = computeSig(httpMethod, url, paras);
+        String mySig = genSig(httpMethod, url, paras);
         if(sig.equals(mySig)){
             return;
         }
@@ -72,8 +74,8 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
     User validate(String username, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         Validate.notEmpty(sig, "para 'sig' is empty");
         User user = userRepository.findByName(username);
-        String key = computeKey(user.getPassword());
-        String mySig = computeSig(key, httpMethod, url, paras);
+        String key = genKey(user.getPassword());
+        String mySig = genSig(key, httpMethod, url, paras);
         if(sig.equals(mySig)){
             return user;
         }
@@ -87,20 +89,20 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
     }
 
     User validate(User user, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
-        String key = computeKey(user.getPassword());
-        String mySig = computeSig(key, httpMethod, url, paras);
+        String key = genKey(user.getPassword());
+        String mySig = genSig(key, httpMethod, url, paras);
         if(!sig.equals(mySig)) {
             throw new AuthException("签名校验失败");
         }
         return user;
     }
-    public static String computeKey(String password){
+    public static String genKey(String password){
         return DigestUtils.md5Hex(password);
     }
-    public static String computeSig(String httpMethod, String url, TreeMap<String, Object> paras){
-        return computeSig(defaultKey, httpMethod, url, paras);
+    public static String genSig(String httpMethod, String url, TreeMap<String, Object> paras){
+        return genSig(defaultKey, httpMethod, url, paras);
     }
-    public static String computeSig(String key, String httpMethod, String url, TreeMap<String, Object> paras){
+    public static String genSig(String key, String httpMethod, String url, TreeMap<String, Object> paras){
         StringBuilder strb = new StringBuilder(httpMethod).append(url);
         for(Map.Entry<String, Object> entry: paras.entrySet()){
             strb.append(entry.getKey())
@@ -108,6 +110,10 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
                     .append(entry.getValue());
         }
         strb.append(key);
-        return DigestUtils.md5Hex(strb.toString());
+        try {
+            return DigestUtils.md5Hex(URLEncoder.encode(strb.toString(), "utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("Broken VM does not support UTF-8");
+        }
     }
 }

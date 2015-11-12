@@ -18,7 +18,7 @@ public class RestHandler {
     MapAdapter<String, Object> paras = new MapAdapter<>();
     String baseUrl = WebAppConfig.baseUrl;
     String path;
-    String key = SigInterceptor.computeKey(DigestUtils.md5Hex(ConfigManager.get("test.password")));
+    String key = SigInterceptor.genKey(DigestUtils.md5Hex(ConfigManager.get("test.password")));
     String method = HttpConstant.Method.POST;
 
     public RestHandler setBaseUrl(String baseUrl){
@@ -67,7 +67,7 @@ public class RestHandler {
 
     RestHandler updateSig(){
         paras.put("time", System.currentTimeMillis());
-        String sig = SigInterceptor.computeSig(key, method, getUrl(), paras.getSorted());
+        String sig = SigInterceptor.genSig(key, method, getUrl(), paras.getSorted());
         paras.put("sig", sig);
         return this;
     }

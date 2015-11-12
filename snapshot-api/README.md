@@ -11,18 +11,22 @@ Response of server:
 {
 	"succeed" : true  | false,
 	"message" : "message...",
-	"data" : {para1:$para1,para2:$para2}
+	"data" : {para1:$para1,para2:$para2...}
 }
 </pre>
+such as:
+<pre>
+{succeed=true, message='', data={}}
+{succeed=false, message='签名校验失败', data={}}
 # web
 Use spring mvc framework.
 
 # database
 [database](./database-design.md)
 # security
-基于用户uid和password做签名，实现安全认证。
+基于用户password做签名，实现安全认证。
 <pre>
-$key=md5Hex($date+md5Hex($password));
+$key=md5Hex(md5Hex($password));
 $signature = hmacSha1($key, $date + $time);
 </pre>
 其中，

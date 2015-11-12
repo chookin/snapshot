@@ -2,21 +2,28 @@ package cmri.snapshot.api.domain;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by zhuyin on 10/28/15.
  */
 public class ResponseMessage {
+    private static AtomicLong idGen = new AtomicLong(0);
     public ResponseMessage(){
         this(true, "");
     }
     public ResponseMessage(boolean succeed, String message){
         this.succeed = succeed;
         this.message = message;
+        this.id = idGen.incrementAndGet();
     }
+    private long id;
     private boolean succeed;
     private String message;
     private Map<String, String> data = new HashMap<>();
+    public long getId(){
+        return id;
+    }
     public boolean isSucceed() {
         return succeed;
     }
@@ -52,8 +59,9 @@ public class ResponseMessage {
 
     @Override
     public String toString() {
-        return "ResponseMessage{" +
-                "succeed=" + succeed +
+        return "response: {" +
+                "id=" + id +
+                ", succeed=" + succeed +
                 ", message='" + message + '\'' +
                 ", data=" + data +
                 '}';
