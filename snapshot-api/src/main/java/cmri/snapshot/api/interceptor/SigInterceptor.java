@@ -9,6 +9,7 @@ import cmri.utils.exception.AuthException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -41,7 +42,7 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
         if(url.endsWith("user/register") || url.endsWith("authCode/send") || url.endsWith("captcha")){
             validate(request.getMethod(),
                     request.getRequestURL().toString(),
-                    ParasHelper.getParasWithoutSig(request),
+                    ParasHelper.getParas(request).getSorted(),
                     sig);
         }else{
             String username = request.getParameter("username");
@@ -50,7 +51,7 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
                 validate(username,
                         request.getMethod(),
                         request.getRequestURL().toString(),
-                        ParasHelper.getParasWithoutSig(request),
+                        ParasHelper.getParas(request).getSorted(),
                         sig);
             }else{
                 String str = request.getParameter("phoneNum");
@@ -59,7 +60,7 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
                 validate(phoneNum,
                         request.getMethod(),
                         request.getRequestURL().toString(),
-                        ParasHelper.getParasWithoutSig(request),
+                        ParasHelper.getParas(request).getSorted(),
                         sig);
             }
         }
@@ -72,7 +73,6 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
         throw new AuthException("签名校验失败");
     }
     User validate(String username, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
-        Validate.notEmpty(sig, "para 'sig' is empty");
         User user = userRepository.findByName(username);
         String key = genKey(user.getPassword());
         String mySig = genSig(key, httpMethod, url, paras);
@@ -83,7 +83,6 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
     }
 
     User validate(Long phoneNum, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
-        Validate.notEmpty(sig, "para 'sig' is empty");
         User user = userRepository.findByMobile(phoneNum);
         return validate(user, httpMethod, url, paras, sig);
     }
@@ -105,6 +104,12 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
     public static String genSig(String key, String httpMethod, String url, TreeMap<String, Object> paras){
         StringBuilder strb = new StringBuilder(httpMethod).append(url);
         for(Map.Entry<String, Object> entry: paras.entrySet()){
+            if(entry.getValue() instanceof FileSystemResource){
+                continue;
+            }
+            if(entry.getKey().equals("sig")){
+                continue;
+            }
             strb.append(entry.getKey())
                     .append("=")
                     .append(entry.getValue());

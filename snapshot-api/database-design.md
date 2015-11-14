@@ -19,7 +19,7 @@
 | resume        | varchar(1024) | 个人简介      |
 | photoFav      | varchar(521) | 拍照偏好:宝宝外拍、全家福 |
 | area          | int       | 所在地            |
-| photo         | varchar(512) | 头像          |
+| avatar        | varchar(512) | 头像          |
 | sign_up_time  | timestamp    | 注册时间       |
 | update_time   | timestamp | user info updated time |
 
@@ -33,7 +33,6 @@
 | region        | varchar(32)| 地域             |
 
 ## login 用户登录历史详情表
-
 | column name   | type      |desc              |
 | ------------- | --------- | ---------------- |
 | id            | bigint    | auto increment   |
@@ -69,7 +68,11 @@
 
 
 ## photo
-
+| column name   | type      |desc              |
+| ------------- | --------- | ---------------- |
+| id            | bigint    | auto increment   |
+| user_id       | bigInt    | 摄影师id          |
+| photo         | varchar(512) | 照片地址       |
 
 ## shot 约拍订单表
 | column name   | type      |desc              |

@@ -64,6 +64,12 @@
             <artifactId>commons-codec</artifactId>
             <version>1.10</version>
         </dependency>
+        <!--Thumbnailator 是一个为Java界面更流畅的缩略图生成库。从API提供现有的图像文件和图像对象的缩略图中简化了缩略过程，两三行代码就能够从现有图片生成缩略图，且允许微调缩略图生成，同时保持了需要写入到最低限度的代码量。同时还支持根据一个目录批量生成缩略图。-->
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.8</version>
+        </dependency>
     </dependencies>
 
     <properties>
