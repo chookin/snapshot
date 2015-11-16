@@ -3,6 +3,7 @@ package cmri.snapshot.api.controller;
 import cmri.snapshot.api.WebAppTest;
 import cmri.snapshot.api.domain.ResponseMessage;
 import cmri.snapshot.api.interceptor.SigInterceptor;
+import cmri.utils.configuration.ConfigManager;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,10 +14,10 @@ public class SMSControllerTest extends WebAppTest{
 
     @Test
     public void testSendAuthCode() throws Exception {
-        ResponseMessage response = rest.clear()
+        ResponseMessage response = rest.reset()
                 .setPath("sms/authCode/send")
                 .setKey(SigInterceptor.defaultKey)
-                .add("phoneNum", 13426198753L)
+                .add("phoneNum", ConfigManager.getLong("test.phoneNum"))
                 .post();
         log(response);
         Assert.assertTrue(response.isSucceed());

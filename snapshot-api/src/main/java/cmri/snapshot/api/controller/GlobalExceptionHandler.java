@@ -28,14 +28,16 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ NullPointerException.class, IllegalArgumentException.class, AuthException.class})
     @ResponseBody
-    public ResponseMessage nullError(Exception exception) {
-        return new ResponseMessage(false, exception.getMessage());
+    public ResponseMessage knownError(Exception e) {
+        LOG.error(null, e);
+        return new ResponseMessage(false, e.getMessage());
     }
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({ Exception.class})
     @ResponseBody
-    public ResponseMessage error(Exception exception) {
-        return new ResponseMessage(false, exception.toString() + "\t" + Arrays.toString(exception.getStackTrace()));
+    public ResponseMessage error(Throwable e) {
+        LOG.error(null, e);
+        return new ResponseMessage(false, e.toString() + "\t" + Arrays.toString(e.getStackTrace()));
     }
 }

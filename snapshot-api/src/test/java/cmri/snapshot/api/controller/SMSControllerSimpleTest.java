@@ -10,6 +10,6 @@ public class SMSControllerSimpleTest {
 
     @Test
     public void testSendAuthCode() throws Exception {
-        new SMSController().sendAuthCode(13426198753L, "1124", ConfigManager.getInt("sms.authCode.expireMinutes"));
+        new SMSController().sendAuthCode(ConfigManager.getLong("test.phoneNum"), "1124", ConfigManager.getInt("sms.authCode.expireMinutes"));
     }
 }

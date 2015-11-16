@@ -4,10 +4,12 @@ import cmri.snapshot.api.domain.User;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by zhuyin on 10/29/15.
  */
+@Transactional
 public interface UserRepository extends CrudRepository<User, Long> {
     default User find(User user){
         Validate.notNull(user, "arg user is null");

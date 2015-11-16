@@ -1,6 +1,7 @@
 package cmri.snapshot.api.domain;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 /**
@@ -15,14 +16,23 @@ public class User {
     private Long mobile;
     private Byte role;
     private Byte status;
-    private Timestamp createTime;
+    private Timestamp createTime = new Timestamp(System.currentTimeMillis());
     private Timestamp updateTime;
+    private Date birthday;
+    private String sex;
+    private String resume;
+    private Integer area;
+    private String avatar;
+    private Timestamp registerTime;
+
     public User(){}
+
     public User(String name, String password, Long mobile){
         this.name = name;
         this.password = password;
         this.mobile = mobile;
     }
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +40,9 @@ public class User {
         return id;
     }
 
-    public void setId(long id) {
+    public User setId(long id) {
         this.id = id;
+        return this;
     }
 
     @Basic
@@ -62,8 +73,9 @@ public class User {
         return email;
     }
 
-    public void setEmail(String email) {
+    public User setEmail(String email) {
         this.email = email;
+        return this;
     }
 
     @Basic
@@ -83,8 +95,9 @@ public class User {
         return role;
     }
 
-    public void setRole(Byte role) {
+    public User setRole(Byte role) {
         this.role = role;
+        return this;
     }
 
     @Basic
@@ -93,18 +106,9 @@ public class User {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public User setStatus(Byte status) {
         this.status = status;
-    }
-
-    @Basic
-    @Column(name = "create_time")
-    public Timestamp getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Timestamp createTime) {
-        this.createTime = createTime;
+        return this;
     }
 
     @Basic
@@ -113,8 +117,9 @@ public class User {
         return updateTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
+    public User setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+        return this;
     }
 
     @Override
@@ -149,5 +154,71 @@ public class User {
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "birthday")
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public User setBirthday(Date birthday) {
+        this.birthday = birthday;
+        return this;
+    }
+
+    @Basic
+    @Column(name = "sex")
+    public String getSex() {
+        return sex;
+    }
+
+    public User setSex(String sex) {
+        this.sex = sex;
+        return this;
+    }
+
+    @Basic
+    @Column(name = "resume")
+    public String getResume() {
+        return resume;
+    }
+
+    public User setResume(String resume) {
+        this.resume = resume;
+        return this;
+    }
+
+    @Basic
+    @Column(name = "area")
+    public Integer getArea() {
+        return area;
+    }
+
+    public User setArea(Integer area) {
+        this.area = area;
+        return this;
+    }
+
+    @Basic
+    @Column(name = "avatar")
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public User setAvatar(String avatar) {
+        this.avatar = avatar;
+        return this;
+    }
+
+    @Basic
+    @Column(name = "register_time")
+    public Timestamp getRegisterTime() {
+        return registerTime;
+    }
+
+    public User setRegisterTime(Timestamp registerTime) {
+        this.registerTime = registerTime;
+        return this;
     }
 }

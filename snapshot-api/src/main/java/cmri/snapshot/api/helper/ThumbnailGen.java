@@ -80,6 +80,6 @@ public class ThumbnailGen {
                 .toFile(fileName)
         ;
         LOG.info("gen avatar "+fileName);
-        return fileName;
+        return fileName;// TODO should return relative path on context path.
     }
 }
