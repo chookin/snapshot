@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Created by zhuyin on 10/29/15.
  */
+// mark @Transactional to avoid exception: No transactional EntityManager available.
 @Transactional
 public interface UserRepository extends CrudRepository<User, Long> {
     default User find(User user){
