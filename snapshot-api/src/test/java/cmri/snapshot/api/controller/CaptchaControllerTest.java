@@ -13,7 +13,7 @@ import org.junit.Test;
 public class CaptchaControllerTest extends WebAppTest {
     @Test
     public void testCaptcha() throws Exception {
-        ResponseMessage response = rest.clear()
+        ResponseMessage response = rest.reset()
                 .setPath("captcha")
                 .setKey(SigInterceptor.defaultKey)
                 .add("width", 145)

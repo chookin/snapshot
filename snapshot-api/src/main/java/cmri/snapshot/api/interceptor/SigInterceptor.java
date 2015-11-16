@@ -55,7 +55,7 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
                         sig);
             }else{
                 String str = request.getParameter("phoneNum");
-                Validate.notNull(str, "para 'phoneNum' is null");
+                Validate.notNull(str, "please assign 'username' or 'phoneNum'");
                 long phoneNum = Long.parseLong(str);
                 validate(phoneNum,
                         request.getMethod(),
@@ -74,6 +74,8 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
     }
     User validate(String username, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         User user = userRepository.findByName(username);
+        if(user == null)
+            throw new AuthException("不存在用户 "+username);
         String key = genKey(user.getPassword());
         String mySig = genSig(key, httpMethod, url, paras);
         if(sig.equals(mySig)){
@@ -84,6 +86,8 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
 
     User validate(Long phoneNum, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         User user = userRepository.findByMobile(phoneNum);
+        if(user == null)
+            throw new AuthException("不存在用户 "+phoneNum);
         return validate(user, httpMethod, url, paras, sig);
     }
 
