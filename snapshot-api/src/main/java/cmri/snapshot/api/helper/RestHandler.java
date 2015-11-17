@@ -1,6 +1,6 @@
 package cmri.snapshot.api.helper;
 
-import cmri.snapshot.api.WebAppConfig;
+import cmri.snapshot.api.Application;
 import cmri.snapshot.api.domain.ResponseMessage;
 import cmri.snapshot.api.interceptor.SigInterceptor;
 import cmri.utils.lang.MapAdapter;
@@ -15,7 +15,7 @@ import org.springframework.util.MultiValueMap;
  */
 public class RestHandler {
     MapAdapter<String, Object> paras = new MapAdapter<>();
-    String baseUrl = WebAppConfig.baseUrl;
+    String baseUrl = Application.baseUrl;
     String path;
     /**
      * 默认的key为账号‘test’的密码的2次md5值

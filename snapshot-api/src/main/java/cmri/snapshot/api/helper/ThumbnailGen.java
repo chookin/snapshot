@@ -69,6 +69,11 @@ public class ThumbnailGen {
         this.outputFormat = outputFormat;
     }
 
+    /**
+     * destination file path: FilenameUtils.concat(dstPath, identity)+"-"+width+"-"+height+ "." + outputFormat
+     * @return destination file path
+     * @throws IOException
+     */
     public String gen(String srcFile) throws IOException {
         FileHelper.mkdirs(dstPath);
         String fileName = FilenameUtils.concat(dstPath, identity)+"-"+width+"-"+height+ "." + outputFormat;

@@ -1,6 +1,17 @@
 # introduction
 snapshot-api
 
+# compile
+Install the sms sdk jar into local maven repository:
+
+```
+mvn install:install-file -Dfile=lib/CCP_REST_SDK_JAVA_v2.7r.jar -DgroupId=com-cloopen-rest -DartifactId=rest-sdk -Dversion=1.0.0 -Dpackaging=jar -DgeneratePom=true
+```
+
+```
+cd ~/project/ub-lab/tagbase/src/utils && mvn install -DskipTests \
+&& cd ~/project/snapshot/snapshot-api && mvn clean compile -DskipTests
+```
 # configuration
 Default configuration file is 'app.properties', which will be auto loaded, and reloaded every 10s.
 
@@ -72,3 +83,5 @@ It's a JPA configuration file, which should be placed into META-INF folder in yo
 ## mysql
 Tinyint,占用1字节的存储空间,取值范围是：带符号的范围是-128到127.
 
+## spring
+document root default to  AbstractEmbeddedServletContainerFactory.COMMON_DOC_ROOTS = { "src/main/webapp", "public","static"}
