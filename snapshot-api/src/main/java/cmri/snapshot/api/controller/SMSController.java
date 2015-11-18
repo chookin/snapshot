@@ -6,6 +6,7 @@ import cmri.utils.dao.RedisHandler;
 import cmri.utils.exception.AuthException;
 import cmri.utils.lang.RandomHelper;
 import com.cloopen.rest.sdk.CCPRestSDK;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,12 @@ public class SMSController {
     protected final Logger LOG = LoggerFactory.getLogger(getClass());
 
     String generateCode(){
-        return String.valueOf(RandomHelper.rand(1001,9999));
+        // int类型的最大值的常量可取的值为 2的31次方-1。理论上最大值是：2147483647
+        int number = ConfigManager.getInt("sms.authCode.number");
+        Validate.isTrue(number>= 3 && number <= 9, "'sms.authCode.number'需要是不大于9且不小于2的数字");
+        int min = (int) Math.pow(10, number - 1);
+        int max = (int) Math.pow(10, number);
+        return String.valueOf(RandomHelper.rand(min, max));
     }
 
     public static String getAuthCodeId(long phoneNum){
