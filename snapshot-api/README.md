@@ -125,34 +125,8 @@ such as:
 # web
 Use spring mvc framework.
 
-# database
-[database](./database-design.md)
-# security
-基于用户password做签名，实现安全认证。
-<pre>
-$key=md5Hex(md5Hex($password));
-$signature = hmacSha1($key, $date + $time);
-</pre>
-其中，
-
-* $date为'yyyyMMdd'的日期字符串，日期为计算密钥时的日期
-* $password为用户密码
-* md5Hex()是用于将字符串编码为md5字符串的方法
-* $key为用于hmacSha1加密消息的密钥
-* $date和$key可以缓存到客户端，减少密钥的计算频次
-* $time为计算签名时的时间，long型，采用utc时间
-* $signature为消息签名
-服务方根据请求中的username找到对应的password，同样计算密钥、做签名，如果signature相等则认证通过。
-## login
-<pre>POST {username:$username,date:$date,time:$time,sig:$signature}</pre>
-or
-<pre>POST {phoneNum:phoneNum,date:$date,time:$time,sig:$signature}</pre>
-## register
-1, send sms auth code
-auth code的id是 sms_authCode_{phoneNum}
-
-2. submit register
-<pre>POST {username:$username,phoneNum:phoneNum,password:$password,$captchaId:$captchaId,$captcha:$captcha}</pre>
+# 接口规范
+[接口规范](./interface_specification.md)
 
 # test
 <pre>
@@ -174,7 +148,14 @@ It's a JPA configuration file, which should be placed into META-INF folder in yo
 
 # appendix
 ## mysql
-Tinyint,占用1字节的存储空间,取值范围是：带符号的范围是-128到127.
+Notice:
+
+* Tinyint,占用1字节的存储空间,取值范围是：带符号的范围是-128到127.
+* Int range:[-2^31,2^31-1] [-2147483648,2147483647], so using bigint for mobile.
+* The length of a string's md5 output is 32.
+* TIMESTAMP values are converted from the current time zone to UTC for storage, and converted back from UTC to the current time zone for retrieval. (This occurs only for the TIMESTAMP data type, not for other types such as DATETIME.) More notably:If you store a TIMESTAMP value, and then change the time zone and retrieve the value, the retrieved value is different from the value you stored.
+* Timestamps in MySQL generally used to track changes to records, and are often updated every time the record is changed. If you want to store a specific value you should use a datetime field.
+* BIGINT[(M)] [UNSIGNED] [ZEROFILL] 大整数。带符号的范围是-9223372036854775808到9223372036854775807。无符号的范围是0到18446744073709551615。M指示最大显示宽度。最大有效显示宽度是255。显示宽度与存储大小或类型包含的值的范围无关
 
 ## spring
 document root default to  AbstractEmbeddedServletContainerFactory.COMMON_DOC_ROOTS = { "src/main/webapp", "public","static"}

@@ -15,12 +15,14 @@ paras:
 
 * username, string, 用户名
 
+<pre>POST {username:$username,date:$date,time:$time,sig:$signature}</pre>
 说明：因为签名校验时已经使用了密码信息，因此不需要再传递密码的参数。
 ### 基于手机号的登录
 paras:
 
 * phoneNum, string, 手机号码
 
+<pre>POST {phoneNum:phoneNum,date:$date,time:$time,sig:$signature}</pre>
 ## 获取账号信息
 path: /user/info/get
 paras:
