@@ -4,6 +4,7 @@ import cmri.snapshot.api.WebAppTest;
 import cmri.snapshot.api.domain.ResponseMessage;
 import cmri.snapshot.api.interceptor.SigInterceptor;
 import cmri.snapshot.api.repository.UserRepository;
+import cmri.utils.configuration.ConfigFileManager;
 import cmri.utils.configuration.ConfigManager;
 import cmri.utils.dao.RedisHandler;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -70,7 +71,7 @@ public class UserControllerTest extends WebAppTest{
 
     @Test
     public void testModAvatar() throws Exception {
-        String file = "/home/work/tmp/738b4710b912c8fcae1799cdfe039245d78821cd.jpg";
+        String file = ConfigFileManager.dump("pic/sandy-2009.jpg");
         ResponseMessage response = rest.reset()
                 .setPath("user/avatar/mod")
                 .add("phoneNum", ConfigManager.getLong("test.phoneNum"))
