@@ -17,9 +17,10 @@ snapshot-api
     * Modify 'log4j.appender.logfile.File' of configuration file 'log4j.properties';
     * Modify 'server.hostname' of configuration file 'app.properties' to the user ip.
 1. Configure and start mysql.
-    * create configuration file. <pre>cp support-files/my-large.cnf ~/local/mysql/etc/my.cnf</pre>
-    * edit 'my.cnf'.   
-    
+    * create configuration file.
+    <pre>cp support-files/my-large.cnf ~/local/mysql/etc/my.cnf</pre>
+    * edit 'my.cnf', check to use available port. Notice, full text replacement command of vi:<pre>:g/work/s//yourname/g</pre>
+        
     <pre>
     $ vi my.cnf         
     # The following options will be passed to all MySQL clients
@@ -71,14 +72,32 @@ snapshot-api
     
     <pre>
     bin/mysql --defaults-file=etc/my.cnf -u root -p
-    mysql> select user, host, password from mysql.user\G;
+    mysql> select user, host, password from mysql.user;
     mysql> create database if not exists `snapshot` default character set utf8;
     mysql> grant all on snapshot.* to 'snap'@'localhost' identified by 'snap_cm';
     </pre>
 1. Configure and start redis
-<pre>
-bin/redis-server redis.conf
-</pre>
+    * key paras
+    
+    <pre>
+    # By default Redis does not run as a daemon. Use 'yes' if you need it.
+    # Note that Redis will write a pid file in /var/run/redis.pid when daemonized.
+    daemonize yes    
+    # The working directory.
+    #
+    # The DB will be written inside this directory, with the filename specified
+    # above using the 'dbfilename' configuration directive.
+    #
+    # The Append Only File will also be created inside this directory.
+    #
+    # Note that you must specify a directory here, not a file name.
+    dir /home/zhuyin/data/redis/
+    </pre>
+    
+    * start 
+    <pre>
+    bin/redis-server redis.conf
+    </pre>
 
 # configuration
 Default configuration file is 'app.properties', which will be auto loaded, and reloaded every 10s.
@@ -98,6 +117,8 @@ such as:
 <pre>
 {succeed=true, message='', data={}}
 {succeed=false, message='签名校验失败', data={}}
+</pre>
+
 # web
 Use spring mvc framework.
 
