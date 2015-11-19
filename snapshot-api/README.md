@@ -82,7 +82,10 @@ snapshot-api
     <pre>
     # By default Redis does not run as a daemon. Use 'yes' if you need it.
     # Note that Redis will write a pid file in /var/run/redis.pid when daemonized.
-    daemonize yes    
+    daemonize yes
+    # Accept connections on the specified port, default is 6379.
+    # If port 0 is specified Redis will not listen on a TCP socket.
+    port 6379
     # The working directory.
     #
     # The DB will be written inside this directory, with the filename specified

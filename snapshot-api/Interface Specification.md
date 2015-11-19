@@ -92,10 +92,11 @@ $sig = genSig($secret_key, $method, $url, $arrContent);
 
 # 通用参数
 以下参数是所有API都会用到的统一系统级参数。
-| 参数名称	    | 类型	    | 是否必需	       | 描述 |
+
+| 参数名称	    | 类型	    | 是否必需 | 描述 |
 | ------------- | --------- | ------ | ----|
-| time          | long      | 是 | 用户发起请求时的unix时间戳
-| sig           | string    | 是 | 签名值
+| time          | long      | 是 | 用户发起请求时的unix时间戳 |
+| sig           | string    | 是 | 签名值 |
 # JSON响应输出格式
 响应输出内容符合以下规范：
 - id字段，long型，由web server生成，返回给用户方便问题追查与定位;
