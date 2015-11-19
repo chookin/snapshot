@@ -21,7 +21,7 @@ import java.io.File;
 @SpringBootApplication
 public class Application{
     public static final String serverProtocol = ConfigManager.get("server.protocol");
-    public static final String domain = ConfigManager.get("server.domain");
+    public static final String domain = ConfigManager.get("server.hostname");
     public static final int port = ConfigManager.getInt("server.port");
     public static final String baseUrl;
     static {

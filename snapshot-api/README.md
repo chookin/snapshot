@@ -1,21 +1,90 @@
 # introduction
 snapshot-api
 
-# compile
-Install the sms sdk jar into local maven repository:
+# compile and package
 
-```
-mvn install:install-file -Dfile=lib/CCP_REST_SDK_JAVA_v2.7r.jar -DgroupId=com-cloopen-rest -DartifactId=rest-sdk -Dversion=1.0.0 -Dpackaging=jar -DgeneratePom=true
-```
+1. mvn install cmri-utils.
+<pre>mvn install -DskipTests</pre>
+2. Install the sms sdk jar into local maven repository.
+<pre>mvn install:install-file -Dfile=lib/CCP_REST_SDK_JAVA_v2.7r.jar -DgroupId=com-cloopen-rest -DartifactId=rest-sdk -Dversion=1.0.0 -Dpackaging=jar -DgeneratePom=true </pre>
+3. compile.
+<pre>mvn clean compile -DskipTests</pre>
 
-```
-cd ~/project/ub-lab/tagbase/src/utils && mvn install -DskipTests \
-&& cd ~/project/snapshot/snapshot-api && mvn clean compile -DskipTests
-```
+# deploy
+
+1. Configure properties and make dirs:
+    * Manual create the document root dir 'chu.server.documentRoot' configured by configuration file 'application.properties';
+    * Modify 'log4j.appender.logfile.File' of configuration file 'log4j.properties';
+    * Modify 'server.hostname' of configuration file 'app.properties' to the user ip.
+1. Configure and start mysql.
+    * create configuration file. <pre>cp support-files/my-large.cnf ~/local/mysql/etc/my.cnf</pre>
+    * edit 'my.cnf'.   
+    
+    <pre>
+    $ vi my.cnf         
+    # The following options will be passed to all MySQL clients
+    [client]
+    #password       = your_password
+    port            = 3306
+    socket          = /home/work/local/mysql/var/mysqld.sock      
+    # Here follows entries for some specific programs
+    [mysqld_safe]
+    socket          = /home/work/local/mysql/var/mysqld.sock
+    nice            = 0       
+    # The MySQL server
+    [mysqld]
+    port            = 3306
+    socket          = /home/work/local/mysql/var/mysql.sock
+    local-infile    = 0
+    user            = work
+    pid-file        = /home/work/local/mysql/var/mysqld.pid
+    socket          = /home/work/local/mysql/var/mysqld.sock
+    port            = 3306
+    basedir         = /home/work/local/mysql
+    datadir         =/home/work/data/mysql
+    tmpdir          = /tmp
+    skip-external-locking
+    key_buffer              = 16M
+    max_allowed_packet      = 16M
+    thread_stack            = 192K
+    thread_cache_size       = 8
+    myisam-recover         = BACKUP
+    query_cache_limit       = 1M
+    query_cache_size        = 16M
+    expire_logs_days        = 10
+    max_binlog_size         = 100M
+    # Replication Master Server (default)
+    # binary logging is required for replication
+    server-id       = 1
+    log-bin         = mysql-bin
+    [mysqldump]
+    quick
+    quote-names
+    max_allowed_packet      = 16M
+    [isamchk]
+    key_buffer              = 16M
+    </pre>
+    * init database. <pre>scripts/mysql_install_db --defaults-file=etc/my.cnf</pre>
+    * start mysql, ensure the port is usable.<pre>bin/mysqld_safe  --defaults-file=etc/my.cnf &</pre>
+    * set the root password. <pre>bin/mysqladmin --defaults-file=etc/my.cnf -u root password</pre>
+    * view users, create database, and create user. 
+    
+    <pre>
+    bin/mysql --defaults-file=etc/my.cnf -u root -p
+    mysql> select user, host, password from mysql.user\G;
+    mysql> create database if not exists `snapshot` default character set utf8;
+    mysql> grant all on snapshot.* to 'snap'@'localhost' identified by 'snap_cm';
+    </pre>
+1. Configure and start redis
+<pre>
+bin/redis-server redis.conf
+</pre>
+
 # configuration
 Default configuration file is 'app.properties', which will be auto loaded, and reloaded every 10s.
 
-http port is 8080.
+* Default http port is 8080.
+
 # protocol
 Response of server:
 <pre>

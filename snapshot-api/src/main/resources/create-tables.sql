@@ -1,7 +1,7 @@
 
-# DROP DATABASE chubot;
+# DROP DATABASE snapshot;
 # create database if not exists `snapshot` default character set utf8;
-# grant all on *.* to 'snap'@'localhost' identified by 'snap_cm';
+# grant all on snapshot.* to 'snap'@'localhost' identified by 'snap_cm';
 
 use snapshot;
 
