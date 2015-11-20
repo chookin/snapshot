@@ -15,7 +15,7 @@ paras:
 1. compute sig:
 
     <pre>
-    str="POSThttp://111.13.47.167:8080/sms/authCode/sendphoneNum=13426198753time=1447917334486f4a8yoxG9F6b1gUB"
+    str="POSThttp://111.13.47.169:8080/sms/authCode/sendphoneNum=13426198753time=1447917334486f4a8yoxG9F6b1gUB"
     sig=md5(URLEncoder.encode(str,"utf-8"))
     // => sig=72e42b10f73241140ad0cd05fcbc9b3c
     </pre> 
@@ -23,6 +23,6 @@ paras:
 
     <pre>
     method: post
-    url: http://111.13.47.167:8080/sms/authCode/send
+    url: http://111.13.47.169:8080/sms/authCode/send
     data: phoneNum=13426198753&time=1447917334486&sig=72e42b10f73241140ad0cd05fcbc9b3c
     </pre>

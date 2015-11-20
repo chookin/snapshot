@@ -18,6 +18,7 @@ public class SMSControllerTest extends WebAppTest{
                 .setPath("sms/authCode/send")
                 .setKey(SigInterceptor.defaultKey)
                 .add("phoneNum", ConfigManager.getLong("test.phoneNum"))
+                .add("time", 1447917334486L)
                 .post();
         log(response);
         Assert.assertTrue(response.isSucceed());

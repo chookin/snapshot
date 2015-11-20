@@ -119,8 +119,12 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
                     .append(entry.getValue());
         }
         strb.append(key);
+       return genSig(strb.toString());
+    }
+    public static String genSig(String str){
+//        return DigestUtils.md5Hex(str);
         try {
-            return DigestUtils.md5Hex(URLEncoder.encode(strb.toString(), "utf-8"));
+            return DigestUtils.md5Hex(URLEncoder.encode(str, "utf-8"));
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("Broken VM does not support UTF-8");
         }

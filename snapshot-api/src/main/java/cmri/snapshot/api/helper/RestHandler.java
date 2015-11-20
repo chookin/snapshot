@@ -72,7 +72,9 @@ public class RestHandler {
     }
 
     RestHandler updateSig(){
-        paras.put("time", System.currentTimeMillis());
+        if(!paras.containsKey("time")) {
+            paras.put("time", System.currentTimeMillis());
+        }
         String sig = SigInterceptor.genSig(key, method, getUrl(), paras.getSorted());
         paras.put("sig", sig);
         return this;

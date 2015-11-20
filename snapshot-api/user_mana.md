@@ -33,7 +33,7 @@ response:
 
 ```
 {id=$id, succeed=true, message='', data={
-username:$name，
+username:$name,
 phoneNum:$phoneNum,
 sex:$sex,
 }}
