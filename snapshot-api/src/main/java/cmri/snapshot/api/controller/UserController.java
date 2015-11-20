@@ -11,6 +11,7 @@ import cmri.snapshot.api.repository.UserRepository;
 import cmri.snapshot.api.validator.SMSValidator;
 import cmri.snapshot.api.validator.UserValidator;
 import cmri.utils.lang.JsonHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +50,7 @@ public class UserController {
         if(username != null){
             user = userRepository.findByName(username);
         }else{
-            Validate.notNull(phoneNum, "please assign 'username' or 'phoneNum' to login");
+            Validate.isTrue(phoneNum != null, "please assign 'username' or 'phoneNum' to login");
             user = userRepository.findByMobile(phoneNum);
         }
         LOG.info("user '" + user.getName() + "' login");

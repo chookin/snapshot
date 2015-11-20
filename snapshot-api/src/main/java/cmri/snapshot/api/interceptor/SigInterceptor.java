@@ -7,6 +7,7 @@ import cmri.snapshot.api.repository.UserRepository;
 import cmri.utils.configuration.ConfigManager;
 import cmri.utils.exception.AuthException;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -37,7 +38,7 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
     }
     void validate(HttpServletRequest request) {
         String sig = request.getParameter("sig");
-        Validate.notEmpty(sig, "para 'sig' is empty");
+        Validate.isTrue(StringUtils.isNotEmpty(sig), "para 'sig' is empty");
         String url = request.getRequestURL().toString();
         if(url.endsWith("user/register") || url.endsWith("authCode/send") || url.endsWith("captcha")){
             validate(request.getMethod(),
@@ -47,7 +48,7 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
         }else{
             String username = request.getParameter("username");
             if(username != null){
-                Validate.notEmpty(username, "para 'username' is empty");
+                Validate.isTrue(StringUtils.isNotEmpty(username), "para 'username' is empty");
                 validate(username,
                         request.getMethod(),
                         request.getRequestURL().toString(),
@@ -55,7 +56,7 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
                         sig);
             }else{
                 String str = request.getParameter("phoneNum");
-                Validate.notNull(str, "please assign 'username' or 'phoneNum'");
+                Validate.isTrue(StringUtils.isNotEmpty(str), "please assign 'username' or 'phoneNum'");
                 long phoneNum = Long.parseLong(str);
                 validate(phoneNum,
                         request.getMethod(),

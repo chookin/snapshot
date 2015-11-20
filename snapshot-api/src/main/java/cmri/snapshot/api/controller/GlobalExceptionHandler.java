@@ -25,19 +25,31 @@ public class GlobalExceptionHandler {
     /**
      * Convert a predefined exception to an HTTP Status code.
      */
+
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({ NullPointerException.class, IllegalArgumentException.class, AuthException.class})
+    @ExceptionHandler({ IllegalArgumentException.class, AuthException.class})
     @ResponseBody
-    public ResponseMessage knownError(Exception e) {
-        LOG.error(null, e);
-        return new ResponseMessage(false, e.getMessage());
+    public ResponseMessage tinyError(Exception e) {
+        ResponseMessage responseMessage = new ResponseMessage(false, e.getMessage());
+        LOG.error("Response: " + responseMessage.getId(), e.getMessage());
+        return responseMessage;
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({ NullPointerException.class})
+    @ResponseBody
+    public ResponseMessage simpleError(Exception e) {
+        ResponseMessage responseMessage = new ResponseMessage(false, e.getMessage());
+        LOG.error("Response: " + responseMessage.getId(), e);
+        return responseMessage;
     }
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({ Exception.class})
     @ResponseBody
     public ResponseMessage error(Throwable e) {
-        LOG.error(null, e);
-        return new ResponseMessage(false, e.toString() + "\t" + Arrays.toString(e.getStackTrace()));
+        ResponseMessage responseMessage = new ResponseMessage(false, e.toString() + "\t" + Arrays.toString(e.getStackTrace()));
+        LOG.error("Response: " + responseMessage.getId(), e);
+        return responseMessage;
     }
 }

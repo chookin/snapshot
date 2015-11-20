@@ -18,6 +18,7 @@ public class DebugInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
         StringBuilder strb = new StringBuilder()
+                .append("Request: ")
                 .append(request.getRequestURL())
                 .append("\t")
                 .append("request paras: ")
