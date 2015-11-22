@@ -1,6 +1,8 @@
 package cmri.snapshot.api;
 
 import cmri.utils.configuration.ConfigManager;
+import cmri.utils.lang.TimeHelper;
+import cmri.utils.web.NetworkHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -9,8 +11,13 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
+import javax.servlet.Filter;
 import java.io.File;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Date;
 
 /**
  * http://docs.spring.io/spring-boot/docs/current/reference/html/howto-traditional-deployment.html<br>
@@ -25,6 +32,15 @@ public class Application{
     public static final int port = ConfigManager.getInt("server.port");
     public static final String baseUrl;
     static {
+        // configure log4j to log to custom file at runtime. In the java program directly by setting a system property (BEFORE you make any calls to log4j).
+        try {
+            String suffix = InetAddress.getLocalHost().getHostName() + "-" + TimeHelper.toString(new Date(), "yyyyMMddHH");
+            String actionName = System.getProperty("action");
+            System.setProperty("hostname.time", actionName == null ? suffix : (actionName + "-" + suffix));
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        NetworkHelper.setDefaultProxy();
         baseUrl = serverProtocol + "://" + domain + ":" + port + "/";
     }
     @Bean
@@ -51,8 +67,18 @@ public class Application{
             if (getDocumentRoot() != null){
                 container.setDocumentRoot(new File(getDocumentRoot()));
             }
+            // container.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST, "/400"));
         }
     }
+
+    @Bean
+    public Filter characterEncodingFilter() {
+        final CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+        characterEncodingFilter.setEncoding("UTF-8");
+        characterEncodingFilter.setForceEncoding(true);
+        return characterEncodingFilter;
+    }
+
     public static String getUrl(String path){
         return baseUrl + path;
     }

@@ -24,10 +24,17 @@ public class ResponseMessage {
     public long getId(){
         return id;
     }
+    public ResponseMessage setSucceed(boolean succeed) {
+        this.succeed = succeed;
+        return this;
+    }
     public boolean isSucceed() {
         return succeed;
     }
-
+    public ResponseMessage setMessage(String message) {
+        this.message = message;
+        return this;
+    }
     public String getMessage() {
         return message;
     }

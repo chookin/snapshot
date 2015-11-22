@@ -9,6 +9,8 @@ import cmri.utils.exception.AuthException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ import java.util.TreeMap;
  */
 @Service
 public class SigInterceptor extends HandlerInterceptorAdapter {
+    protected static final Logger LOG = LoggerFactory.getLogger(SigInterceptor.class);
     public static final String defaultKey = ConfigManager.get("sig.defaultKey");
 
     @Autowired
@@ -123,11 +126,12 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
        return genSig(strb.toString());
     }
     public static String genSig(String str){
-//        return DigestUtils.md5Hex(str);
-        try {
-            return DigestUtils.md5Hex(URLEncoder.encode(str, "utf-8"));
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("Broken VM does not support UTF-8");
-        }
+        LOG.trace("gen sig for "+ str);
+        return DigestUtils.md5Hex(str);
+//        try {
+//            return DigestUtils.md5Hex(URLEncoder.encode(str, "utf-8"));
+//        } catch (UnsupportedEncodingException e) {
+//            throw new RuntimeException("Broken VM does not support UTF-8");
+//        }
     }
 }

@@ -29,6 +29,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!--<dependency>-->
+            <!--&lt;!&ndash;Applications that use spring-boot-devtools will automatically restart whenever files on the classpath change.&ndash;&gt;-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-devtools</artifactId>-->
+            <!--<optional>true</optional>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -36,6 +42,10 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -83,6 +93,14 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/webapp</directory>
+            </resource>
+        </resources>
         <plugins>
             <!--https://spring.io/blog/2014/03/07/deploying-spring-boot-applications-->
             <!--“how do I deploy it to an existing Tomcat installation, or to the classic Java EE application servers (some of which cost a lot of money!) like WebSphere, WebLogic, or JBoss?” Easy! It’s still just Spring, after all, so very little else is required. You’ll need to make three intuitive changes: move from a jar build to a war build in Maven: comment out the declaration of the spring-boot-maven-plugin plugin in your pom.xml file, then change the Maven packaging type to war. Finally, add a web entry point into your application.-->
@@ -90,6 +108,14 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-war-plugin</artifactId>-->
+                <!--<version>2.1.1</version>-->
+                <!--<configuration>-->
+                    <!--<warSourceDirectory>src/main/webapp</warSourceDirectory>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 

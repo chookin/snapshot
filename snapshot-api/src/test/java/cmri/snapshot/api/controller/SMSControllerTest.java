@@ -16,7 +16,7 @@ public class SMSControllerTest extends WebAppTest{
     public void testSendAuthCode() throws Exception {
         ResponseMessage response = rest.reset()
                 .setPath("sms/authCode/send")
-                .setKey(SigInterceptor.defaultKey)
+                .setSecretKey(SigInterceptor.defaultKey)
                 .add("phoneNum", ConfigManager.getLong("test.phoneNum"))
                 .add("time", 1447917334486L)
                 .post();

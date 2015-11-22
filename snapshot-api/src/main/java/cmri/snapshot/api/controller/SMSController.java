@@ -56,7 +56,7 @@ public class SMSController {
         return restAPI;
     }
     void sendAuthCode(long phoneNum, String code, int expireMinutes){
-        LOG.info("send auth code for "+phoneNum);
+        LOG.info("send auth code " + code + " for "+phoneNum);
         HashMap<String, Object> result = getServer().sendTemplateSMS(
                 String.valueOf(phoneNum), // 短信接收手机号码集合,用英文逗号分开,如 '13810001000,13810011001',最多一次发送100个
                 ConfigManager.get("sms.template.id"), // 模板Id,如使用测试模板，模板id为1，如使用自己创建的模板，则使用自己创建的短信模板id即可

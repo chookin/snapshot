@@ -15,7 +15,7 @@ public class CaptchaControllerTest extends WebAppTest {
     public void testCaptcha() throws Exception {
         ResponseMessage response = rest.reset()
                 .setPath("captcha")
-                .setKey(SigInterceptor.defaultKey)
+                .setSecretKey(SigInterceptor.defaultKey)
                 .add("width", 145)
                 .add("height", 36)
                 .add("fontSize", 22)

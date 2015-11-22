@@ -59,8 +59,8 @@ public class UserControllerTest extends WebAppTest{
         RedisHandler.instance().set(SMSController.getAuthCodeId(mobile), code, ConfigManager.getInt("sms.authCode.expireMinutes") * 60);
         ResponseMessage response = rest.reset()
                 .setPath("user/register")
-                .setKey(SigInterceptor.defaultKey)
-                .add("username", "test" + System.currentTimeMillis())
+                .setSecretKey(SigInterceptor.defaultKey)
+                .add("username", "test_" + System.currentTimeMillis())
                 .add("phoneNum", mobile)
                 .add("password", DigestUtils.md5Hex("test"))
                 .add("authCode", code)
