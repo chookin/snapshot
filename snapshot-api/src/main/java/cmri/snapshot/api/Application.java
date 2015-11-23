@@ -11,9 +11,12 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.servlet.Filter;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -26,11 +29,8 @@ import java.util.Date;
  *
  */
 @SpringBootApplication
-public class Application{
-    public static final String serverProtocol = ConfigManager.get("server.protocol");
-    public static final String domain = ConfigManager.get("server.hostname");
-    public static final int port = ConfigManager.getInt("server.port");
-    public static final String baseUrl;
+public class Application {
+
     static {
         // configure log4j to log to custom file at runtime. In the java program directly by setting a system property (BEFORE you make any calls to log4j).
         try {
@@ -41,46 +41,6 @@ public class Application{
             e.printStackTrace();
         }
         NetworkHelper.setDefaultProxy();
-        baseUrl = serverProtocol + "://" + domain + ":" + port + "/";
-    }
-    @Bean
-    public ChuServerProperties chuServerProperties(){
-        return new ChuServerProperties();
-    }
-
-    @ConfigurationProperties(prefix = "chu.server")
-    public static class ChuServerProperties
-            implements EmbeddedServletContainerCustomizer
-    {
-        protected final Logger LOG = LoggerFactory.getLogger(getClass());
-        private String documentRoot;
-        public String getDocumentRoot(){
-            return documentRoot;
-        }
-        public void setDocumentRoot(String documentRoot){
-            LOG.info("set document root: "+documentRoot);
-            this.documentRoot = documentRoot;
-        }
-
-        @Override
-        public void customize(ConfigurableEmbeddedServletContainer container){
-            if (getDocumentRoot() != null){
-                container.setDocumentRoot(new File(getDocumentRoot()));
-            }
-            // container.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST, "/400"));
-        }
-    }
-
-    @Bean
-    public Filter characterEncodingFilter() {
-        final CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-        characterEncodingFilter.setEncoding("UTF-8");
-        characterEncodingFilter.setForceEncoding(true);
-        return characterEncodingFilter;
-    }
-
-    public static String getUrl(String path){
-        return baseUrl + path;
     }
 
     public static void main(String[] args) {

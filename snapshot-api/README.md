@@ -159,3 +159,6 @@ Notice:
 
 ## spring
 document root default to  AbstractEmbeddedServletContainerFactory.COMMON_DOC_ROOTS = { "src/main/webapp", "public","static"}
+
+* [Spring Framework Reference Documentation](http://docs.spring.io/spring/docs/4.2.3.RELEASE/spring-framework-reference/htmlsingle)
+* [Spring Boot Reference Guide](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)

@@ -27,7 +27,7 @@ public class SMSController {
     String generateCode(){
         // int类型的最大值的常量可取的值为 2的31次方-1。理论上最大值是：2147483647
         int number = ConfigManager.getInt("sms.authCode.number");
-        Validate.isTrue(number>= 3 && number <= 9, "'sms.authCode.number'需要是不大于9且不小于2的数字");
+        Validate.isTrue(number>= 3 && number <= 9, "'sms.authCode.number' should be lte 9 and gte 2");// 需要是不大于9且不小于2的数字
         int min = (int) Math.pow(10, number - 1);
         int max = (int) Math.pow(10, number);
         return String.valueOf(RandomHelper.rand(min, max));
@@ -72,7 +72,7 @@ public class SMSController {
             }
         }else{
             //异常返回输出错误码和错误信息
-            throw new AuthException("短信发送失败, 错误码:" + result.get("statusCode") +" 错误信息:"+result.get("statusMsg"));
+            throw new AuthException("Fail to send message, error code:" + result.get("statusCode") +" msg:"+result.get("statusMsg"));
         }
     }
 }

@@ -9,6 +9,7 @@ import cmri.utils.configuration.ConfigManager;
 import cmri.utils.dao.RedisHandler;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -35,6 +36,17 @@ public class UserControllerTest extends WebAppTest{
         ResponseMessage response = rest.reset()
                 .setPath("user/login")
                 .add("phoneNum", ConfigManager.get("test.phoneNum"))
+                .post();
+        log(response);
+        Assert.assertTrue(response.isSucceed());
+    }
+    @Ignore
+    public void testLoginByPhone1() throws Exception {
+        ResponseMessage response = rest.reset()
+                .setPath("user/login")
+                .add("phoneNum", "13811245934")
+                .add("time", "1448270715676")
+                .setSecretKey("13fd59d9500ade84f079ca65ac4a46d7")
                 .post();
         log(response);
         Assert.assertTrue(response.isSucceed());

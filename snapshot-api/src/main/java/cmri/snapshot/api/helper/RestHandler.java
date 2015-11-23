@@ -1,6 +1,6 @@
 package cmri.snapshot.api.helper;
 
-import cmri.snapshot.api.Application;
+import cmri.snapshot.api.WebMvcConfig;
 import cmri.snapshot.api.domain.ResponseMessage;
 import cmri.snapshot.api.interceptor.SigInterceptor;
 import cmri.utils.lang.MapAdapter;
@@ -9,16 +9,11 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
 /**
@@ -26,7 +21,7 @@ import java.nio.charset.Charset;
  */
 public class RestHandler {
     MapAdapter<String, Object> paras = new MapAdapter<>();
-    String baseUrl = Application.baseUrl;
+    String baseUrl = WebMvcConfig.baseUrl;
     String path;
     /**
      * 默认的key为账号‘test’的密码的2次md5值

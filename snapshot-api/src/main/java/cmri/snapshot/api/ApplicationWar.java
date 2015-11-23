@@ -14,20 +14,10 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
  */
 @SpringBootApplication
 public class ApplicationWar extends SpringBootServletInitializer {
-    public static final String serverProtocol = ConfigManager.get("server.protocol");
-    public static final String domain = ConfigManager.get("server.hostname");
-    public static final int port = ConfigManager.getInt("server.port");
-    public static final String baseUrl;
-    static {
-        baseUrl = serverProtocol + "://" + domain + ":" + port + "/";
-    }
     @Override
     protected SpringApplicationBuilder configure(
             SpringApplicationBuilder builder) {
         return builder.sources(ApplicationWar.class);
-    }
-    public static String getUrl(String path){
-        return baseUrl + path;
     }
 
     public static void main(String[] args) {

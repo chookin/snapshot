@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
+ * 签名校验
  * Created by zhuyin on 11/2/15.
  */
 @Service
@@ -74,24 +75,24 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
         if(sig.equals(mySig)){
             return;
         }
-        throw new AuthException("签名校验失败");
+        throw new AuthException("Fail on validating signature");
     }
     User validate(String username, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         User user = userRepository.findByName(username);
         if(user == null)
-            throw new AuthException("不存在用户 "+username);
+            throw new AuthException("No user of "+username);
         String key = genKey(user.getPassword());
         String mySig = genSig(key, httpMethod, url, paras);
         if(sig.equals(mySig)){
             return user;
         }
-        throw new AuthException("签名校验失败");
+        throw new AuthException("Fail on validating signature");
     }
 
     User validate(Long phoneNum, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         User user = userRepository.findByMobile(phoneNum);
         if(user == null)
-            throw new AuthException("不存在用户 "+phoneNum);
+            throw new AuthException("No user of "+phoneNum);
         return validate(user, httpMethod, url, paras, sig);
     }
 
@@ -99,7 +100,7 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
         String key = genKey(user.getPassword());
         String mySig = genSig(key, httpMethod, url, paras);
         if(!sig.equals(mySig)) {
-            throw new AuthException("签名校验失败");
+            throw new AuthException("Fail on validating signature");
         }
         return user;
     }
