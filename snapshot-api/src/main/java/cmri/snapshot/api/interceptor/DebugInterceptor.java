@@ -3,6 +3,7 @@ package cmri.snapshot.api.interceptor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,12 +20,12 @@ public class DebugInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
         StringBuilder strb = new StringBuilder()
-                .append("Request: ")
+                .append("Receive request: ")
                 .append(request.getMethod())
                 .append("\t")
                 .append(request.getRequestURL())
                 .append("\t")
-                .append("request paras: ")
+                .append("paras: ")
                 .append("\n")
                 ;
         for(Map.Entry<String, String[]> entry: request.getParameterMap().entrySet()){
@@ -40,4 +41,8 @@ public class DebugInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        super.postHandle(request, response, handler, modelAndView);
+    }
 }

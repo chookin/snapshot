@@ -1,7 +1,7 @@
 package cmri.snapshot.api.controller;
 
 import cmri.snapshot.api.domain.ResponseMessage;
-import cmri.snapshot.api.helper.ParasHelper;
+import cmri.snapshot.api.helper.ServerHelper;
 import cmri.utils.exception.AuthException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,10 +33,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({ IllegalArgumentException.class, AuthException.class, HttpRequestMethodNotSupportedException.class})
     @ResponseBody
     public ResponseMessage tinyError(HttpServletRequest request, Exception e) {
-        ResponseMessage response = new ResponseMessage();
-        String message = getErrorPrefix(request, response)+": "+e.getMessage();
-        response.setSucceed(false)
-                .setMessage(message);
+        String requestDesc = ServerHelper.getDesc(request);
+        ResponseMessage response = new ResponseMessage(false, requestDesc + ". " + e.getMessage());
+        String message = ServerHelper.getErrorDesc(requestDesc, response.getId())+": "+e.getMessage();
         LOG.error(message);
         return response;
     }
@@ -46,7 +45,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ResponseMessage simpleError(HttpServletRequest request, Exception e) {
         ResponseMessage response = new ResponseMessage(false, e.getMessage());
-        LOG.error(getErrorPrefix(request, response), e);
+        LOG.error(ServerHelper.getErrorDesc(ServerHelper.getDesc(request), response.getId()), e);
         return response;
     }
 
@@ -55,19 +54,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ResponseMessage error(HttpServletRequest request, Throwable e) {
         ResponseMessage response = new ResponseMessage(false, e.toString() + "\t" + Arrays.toString(e.getStackTrace()));
-        LOG.error(getErrorPrefix(request, response), e);
+        LOG.error(ServerHelper.getErrorDesc(ServerHelper.getDesc(request), response.getId()), e);
         return response;
-    }
-    
-    String getErrorPrefix(HttpServletRequest request, ResponseMessage response){
-        StringBuilder strb = new StringBuilder("Error for request ")
-                .append("'")
-                .append(request.getRequestURL())
-                .append("' ")
-                .append(ParasHelper.getParas(request).toString())
-                .append(" at response ")
-                .append(response.getId())
-                ;
-        return strb.toString();
     }
 }

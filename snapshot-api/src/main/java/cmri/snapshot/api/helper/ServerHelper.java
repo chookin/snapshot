@@ -1,5 +1,6 @@
 package cmri.snapshot.api.helper;
 
+import cmri.snapshot.api.domain.ResponseMessage;
 import cmri.utils.configuration.ConfigManager;
 import cmri.utils.lang.TimeHelper;
 import org.apache.commons.io.FilenameUtils;
@@ -27,5 +28,12 @@ public class ServerHelper {
         String uploadPath = FilenameUtils.concat(basePath, relPath);
         uploadPath = FilenameUtils.concat(uploadPath, TimeHelper.toString(new Date(), "yyyyMMdd"));
         return uploadPath;
+    }
+
+    public static String getDesc(HttpServletRequest request){
+        return "request '" + request.getRequestURL() + "' " + ParasHelper.getParas(request).toString();
+    }
+    public static String getErrorDesc(String request, long id){
+        return "Error for " + request + " at response " + id;
     }
 }
