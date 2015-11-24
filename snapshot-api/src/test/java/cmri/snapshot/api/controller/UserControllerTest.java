@@ -40,7 +40,7 @@ public class UserControllerTest extends WebAppTest{
         log(response);
         Assert.assertTrue(response.isSucceed());
     }
-    @Ignore
+    @Test
     public void testLoginByPhone1() throws Exception {
         ResponseMessage response = rest.reset()
                 .setPath("user/login")

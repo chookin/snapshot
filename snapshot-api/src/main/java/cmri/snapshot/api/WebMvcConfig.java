@@ -11,6 +11,10 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomi
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
+import org.springframework.orm.jpa.persistenceunit.PersistenceUnitManager;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -86,6 +90,12 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return new ChuServerProperties();
     }
 
+    @Bean
+    public LocalEntityManagerFactoryBean entityManagerFactoryBean(){
+        LocalEntityManagerFactoryBean bean = new LocalEntityManagerFactoryBean();
+        bean.setPersistenceUnitName("snapshot");
+        return bean;
+    }
     @ConfigurationProperties(prefix = "chu.server")
     public static class ChuServerProperties
             implements EmbeddedServletContainerCustomizer
