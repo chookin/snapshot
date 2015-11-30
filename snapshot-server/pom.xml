@@ -2,14 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>cmri-snapshot</artifactId>
-        <groupId>cmri.snapshot</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <groupId>cmri.snapshot</groupId>
     <artifactId>snapshot-server</artifactId>
+    <version>0.1.0</version>
     <packaging>war</packaging>
     <properties>
         <!-- Spring -->
@@ -29,9 +25,9 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>cmri.cashcow</groupId>
-            <artifactId>cmri-utils</artifactId>
-            <version>1.0</version>
+            <groupId>cmri.snapshot</groupId>
+            <artifactId>snapshot-utils</artifactId>
+            <version>0.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

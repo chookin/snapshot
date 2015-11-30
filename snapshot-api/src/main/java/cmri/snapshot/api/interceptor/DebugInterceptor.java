@@ -15,7 +15,6 @@ import java.util.Map;
  */
 public class DebugInterceptor extends HandlerInterceptorAdapter {
      protected final Logger LOG = LoggerFactory.getLogger(getClass());
-//    protected static final Logger LOG = Logger.getLogger(DebugInterceptor.class);
     // 重写 preHandle()方法，在业务处理器处理请求之前对该请求进行拦截处理
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
