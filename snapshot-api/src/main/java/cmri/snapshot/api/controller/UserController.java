@@ -1,17 +1,19 @@
 package cmri.snapshot.api.controller;
 
+import cmri.snapshot.api.WebMvcConfig;
+import cmri.snapshot.api.domain.AvatarDetail;
 import cmri.snapshot.api.domain.Login;
 import cmri.snapshot.api.domain.ResponseMessage;
 import cmri.snapshot.api.domain.User;
-import cmri.snapshot.api.helper.MultipartFileUploader;
 import cmri.snapshot.api.helper.ServerHelper;
 import cmri.snapshot.api.helper.ThumbnailGen;
+import cmri.snapshot.api.repository.AvatarDetailRepository;
 import cmri.snapshot.api.repository.LoginRepository;
 import cmri.snapshot.api.repository.UserRepository;
 import cmri.snapshot.api.validator.SMSValidator;
 import cmri.snapshot.api.validator.UserValidator;
-import cmri.utils.lang.JsonHelper;
-import org.apache.commons.lang3.StringUtils;
+import cmri.utils.configuration.ConfigManager;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.FilenameFilter;
 import java.sql.Timestamp;
 
 /**
@@ -40,6 +43,8 @@ public class UserController {
     private UserValidator userValidator;
     @Autowired
     private SMSValidator smsValidator;
+    @Autowired
+    private AvatarDetailRepository avatarDetailRepository;
 
     /**
      * 因为签名校验时已经使用了密码信息，因此不需要再传递密码的参数。
@@ -78,8 +83,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/info/get", method = RequestMethod.POST)
-    public ResponseMessage getInfo(Long phoneNum){
-        User user = userRepository.findByMobile(phoneNum);
+    public ResponseMessage getInfo(Long uid){
+        User user = userRepository.findById(uid);
         return new ResponseMessage()
                 .set("username", user.getName())
                 .set("phoneNum", String.valueOf(user.getMobile()))
@@ -90,44 +95,58 @@ public class UserController {
     }
 
     @RequestMapping(value = "/name/mod", method = RequestMethod.POST)
-    public ResponseMessage modName(Long phoneNum, String newName){
-        User user = userRepository.findByMobile(phoneNum);
+    public ResponseMessage modName(Long uid, String newName){
+        User user = userRepository.findById(uid);
         user.setName(newName);
         userRepository.save(user);
         return new ResponseMessage();
     }
 
     @RequestMapping(value = "/password/mod", method = RequestMethod.POST)
-    public ResponseMessage modPassword(Long phoneNum, String password, String authCode){
-        smsValidator.validateAuthCode(phoneNum, authCode);
-        User user = userRepository.findByMobile(phoneNum);
+    public ResponseMessage modPassword(Long uid, String password, String authCode){
+        User user = userRepository.findById(uid);
+        smsValidator.validateAuthCode(user.getMobile(), authCode);
         user.setPassword(password);
         userRepository.save(user);
         return new ResponseMessage();
     }
-
     /**
-     * 上传头像
+     * 上传头像照片
      */
-    @RequestMapping(value="/avatar/mod", method = RequestMethod.POST)
-    public ResponseMessage modAvatar(HttpServletRequest request, Long phoneNum, @RequestParam(value = "avatar") MultipartFile file) throws Exception{
-        // save the source avatar image file
-        String filename = MultipartFileUploader.getInstance(request)
-                .setRelPath("image")
-                .setDefaultExtension("png")
-                .upload(file)
-                ;
-        // generate image of the specified size and save
-        String avatar = ThumbnailGen.getInstance()
-                .setDstPath(ServerHelper.getUploadPath(request, "avatar"))
-                .setIdentity(phoneNum.toString())
-                .gen(filename);
-        User user = userRepository.findByMobile(phoneNum);
-        user.setAvatar(avatar);
-        userRepository.save(user);
+    @RequestMapping(value="/avatar/upload", method = RequestMethod.POST)
+    public ResponseMessage uploadAvatar(HttpServletRequest request, Long uid, @RequestParam(value = "img") MultipartFile file) throws Exception{
+        // save the source avatar image file, 原始尺寸
+        String filename = ImageController.uploadImg(request, file);
+        AvatarDetail origin = new AvatarDetail();
+        origin.setPhoto(filename);
+        origin.setUserId(uid);
+        origin.setTime(new Timestamp(System.currentTimeMillis()));
+        avatarDetailRepository.save(origin);
+        // generate image of the specified size and save，指定尺寸
+        String avatar = ThumbnailGen.getInstance(request)
+                .setUploadPath(FilenameUtils.concat(ConfigManager.get("upload.basePath"), "avatar"))
+                .setIdentity(String.valueOf(uid))
+                .gen(FilenameUtils.concat(ServerHelper.getContextPath(request), filename));
+
+        AvatarDetail thumbnail = new AvatarDetail();
+        thumbnail.setPhoto(avatar);
+        thumbnail.setUserId(uid);
+        thumbnail.setTime(new Timestamp(System.currentTimeMillis()));
+        avatarDetailRepository.save(thumbnail);
         return new ResponseMessage()
-                .set("avatar", JsonHelper.toJson(avatar))
+                .set("filename", avatar)
+                .set("url", WebMvcConfig.getUrl(avatar))
                 ;
     }
 
+    /**
+     * 提交头像修改
+     */
+    @RequestMapping(value="/avatar/mod", method = RequestMethod.POST)
+    public ResponseMessage modAvatar(Long uid, String imgPath) throws Exception{
+        User user = userRepository.findById(uid);
+        user.setAvatar(imgPath);
+        userRepository.save(user);
+        return new ResponseMessage();
+    }
 }

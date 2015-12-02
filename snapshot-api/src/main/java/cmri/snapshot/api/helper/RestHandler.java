@@ -3,6 +3,7 @@ package cmri.snapshot.api.helper;
 import cmri.snapshot.api.WebMvcConfig;
 import cmri.snapshot.api.domain.ResponseMessage;
 import cmri.snapshot.api.interceptor.SigInterceptor;
+import cmri.utils.configuration.ConfigManager;
 import cmri.utils.lang.MapAdapter;
 import cmri.utils.web.HttpConstant;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -26,20 +27,25 @@ public class RestHandler {
     /**
      * 默认的key为账号‘test’的密码的2次md5值
      */
-    String secretKey = SigInterceptor.genKey(DigestUtils.md5Hex("test"));
+    String secretKey = SigInterceptor.genKey(DigestUtils.md5Hex(ConfigManager.get("test.password")));
     String method = HttpConstant.Method.POST;
     HttpHeaders headers = new HttpHeaders();
     public RestHandler(){
         initHeader();
     }
     void initHeader(){
-//        header("Accept-Charset", "utf-8");
-//        header("Content-type", "multipart/form-data; charset=utf-8");
+        // header("Accept-Charset", "utf-8");
+        // header("Content-type", "multipart/form-data; charset=utf-8");
     }
     public RestHandler setBaseUrl(String baseUrl){
         this.baseUrl = baseUrl;
         return this;
     }
+
+    /**
+     * 设置请求的资源路径
+     * @param path 资源路径，不需要以"/"开头。
+     */
     public RestHandler setPath(String path){
         this.path = path;
         return this;

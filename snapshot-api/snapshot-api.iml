@@ -26,6 +26,8 @@
         <setting name="provider-name" value="" />
         <datasource-mapping>
           <factory-entry name="cmri-snapshot" />
+          <factory-entry name="noname-a.xml@0" value="5251808b-ea05-4f6c-9b86-c71207d405b8" />
+          <factory-entry name="snapshot" value="5251808b-ea05-4f6c-9b86-c71207d405b8" />
         </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />
       </configuration>

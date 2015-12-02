@@ -13,11 +13,15 @@ import static org.junit.Assert.*;
  */
 public class GlobalExceptionHandlerTest extends WebAppTest{
 
+    /**
+     * Test 'Request method 'GET' not supported' of Exception HttpRequestMethodNotSupportedException.
+     * @throws Exception
+     */
     @Test
     public void testTinyError() throws Exception {
         ResponseMessage response = rest.reset()
                 .setPath("user/info/get")
-                .add("phoneNum", ConfigManager.getLong("test.phoneNum"))
+                .add("uid", ConfigManager.getLong("test.uid"))
                 .get();
         log(response);
         Assert.assertTrue(!response.isSucceed());

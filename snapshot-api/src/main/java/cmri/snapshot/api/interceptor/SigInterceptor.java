@@ -51,22 +51,31 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
                     sig);
         }else{
             String username = request.getParameter("username");
+            String phoneNum = request.getParameter("phoneNum");
+            String uid = request.getParameter("uid");
             if(username != null){
                 Validate.isTrue(StringUtils.isNotEmpty(username), "para 'username' is empty");
-                validate(username,
+                validateByUsername(username,
+                        request.getMethod(),
+                        request.getRequestURL().toString(),
+                        ParasHelper.getParas(request).getSorted(),
+                        sig);
+            }else if(phoneNum != null){
+                Long myPhoneNum = Long.valueOf(phoneNum);
+                validateByPhoneNum(myPhoneNum,
+                        request.getMethod(),
+                        request.getRequestURL().toString(),
+                        ParasHelper.getParas(request).getSorted(),
+                        sig);
+            }else if(uid != null) {
+                Long myUid = Long.valueOf(uid);
+                validateByUid(myUid,
                         request.getMethod(),
                         request.getRequestURL().toString(),
                         ParasHelper.getParas(request).getSorted(),
                         sig);
             }else{
-                String str = request.getParameter("phoneNum");
-                Validate.isTrue(StringUtils.isNotEmpty(str), "please assign 'username' or 'phoneNum'");
-                long phoneNum = Long.parseLong(str);
-                validate(phoneNum,
-                        request.getMethod(),
-                        request.getRequestURL().toString(),
-                        ParasHelper.getParas(request).getSorted(),
-                        sig);
+                throw new AuthException("please assign 'username', 'phoneNum' or 'uid'");
             }
         }
     }
@@ -77,25 +86,25 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
         }
         throw new AuthException("Fail on validating signature");
     }
-    User validate(String username, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
+    User validateByUsername(String username, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         User user = userRepository.findByName(username);
         if(user == null)
             throw new AuthException("No user of "+username);
-        String key = genKey(user.getPassword());
-        String mySig = genSig(key, httpMethod, url, paras);
-        if(sig.equals(mySig)){
-            return user;
-        }
-        throw new AuthException("Fail on validating signature");
+        return validate(user, httpMethod, url, paras, sig);
     }
 
-    User validate(Long phoneNum, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
+    User validateByPhoneNum(Long phoneNum, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         User user = userRepository.findByMobile(phoneNum);
         if(user == null)
             throw new AuthException("No user of "+phoneNum);
         return validate(user, httpMethod, url, paras, sig);
     }
-
+    User validateByUid(Long uid, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
+        User user = userRepository.findById(uid);
+        if(user == null)
+            throw new AuthException("No user of "+uid);
+        return validate(user, httpMethod, url, paras, sig);
+    }
     User validate(User user, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         String key = genKey(user.getPassword());
         String mySig = genSig(key, httpMethod, url, paras);

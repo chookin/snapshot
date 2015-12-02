@@ -13,6 +13,9 @@ CREATE TABLE user (
   password char(32) COMMENT '账户密码',
   mobile BIGINT(11) COMMENT '手机号',
   email varchar(128) COMMENT '邮箱',
+  realName VARCHAR(128) COMMENT '真实姓名',
+  idNum char(18) COMMENT '身份证号码',
+  idImage VARCHAR(512) COMMENT '身份证照片的存储地址',
   role tinyint default 1 COMMENT '用户角色：-1, admin; 0, test; 1, user; 2, photographer',
   descr VARCHAR(1024) COMMENT '个人简介',
   status tinyint default 1 COMMENT '账户状态：0，禁用；1，正常启用',
@@ -44,6 +47,16 @@ CREATE TABLE login(
   PRIMARY KEY  (id)
 );
 
+# 头像记录表
+DROP TABLE if EXISTS avatar_detail;
+CREATE TABLE avatar_detail(
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  user_id BIGINT NOT NULL COMMENT '用户id',
+  photo varchar(512) comment '头像地址',
+  time DATETIME COMMENT '头像的上传时间',
+  PRIMARY KEY (id)
+);
+
 # 区域表
 drop table if EXISTS area;
 CREATE TABLE area(
@@ -55,22 +68,23 @@ CREATE TABLE area(
   PRIMARY KEY  (id)
 ) ;
 
-# 相机信息表
+# 器材信息表
 DROP TABLE IF EXISTS camera;
 CREATE TABLE camera(
   id BIGINT NOT NULL auto_increment,
-  identity VARCHAR(512) NOT NULL COMMENT '相机标识',
-  model varchar(128) NOT NULL COMMENT '型号',
-  user_id BIGINT NOT NULL COMMENT '用户id',
+  identity VARCHAR(512) NOT NULL COMMENT '器材标识',
+  model varchar(128) NOT NULL COMMENT '器材型号',
+  lensModel varchar(128) NOT NULL COMMENT '镜头型号',
+  user_id BIGINT NOT NULL COMMENT '所属摄影师的id',
   create_time DATETIME COMMENT '添加时间',
   PRIMARY KEY  (id)
 );
 
 # 摄影师信息表
-DROP TABLE if EXISTS photographer;
-create TABLE photographer(
+DROP TABLE if EXISTS grapher;
+create TABLE grapher(
   id BIGINT NOT NULL auto_increment,
-  user_id BIGINT NOT NULL COMMENT '摄影所id',
+  user_id BIGINT NOT NULL COMMENT '摄影师id',
   price int DEFAULT 0 NOT NULL COMMENT '身价',
   rating int DEFAULT 0 NOT NULL COMMENT '评级',
   scope varchar(1024) COMMENT '约拍范围，服务城市，例如：北京、天津',
@@ -82,7 +96,7 @@ create TABLE photographer(
 # 摄影师身价表，记录历史身价
 DROP TABLE IF EXISTS grapher_price;
 CREATE TABLE grapher_price(
-  user_id BIGINT NOT NULL COMMENT '摄影所id',
+  user_id BIGINT NOT NULL COMMENT '摄影师id',
   price int DEFAULT 0 NOT NULL COMMENT '身价',
   time DATETIME COMMENT '时间'
 );
@@ -114,6 +128,7 @@ create table photo(
   photo varchar(512) comment '照片地址',
   like_count int default 0 not null comment '点赞次数',
   comment_count int default 0 not null comment '评论次数',
+  TIME DATETIME COMMENT '照片上传的时间',
   PRIMARY KEY  (id)
 );
 

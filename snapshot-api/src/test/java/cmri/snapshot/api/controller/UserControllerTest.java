@@ -82,12 +82,12 @@ public class UserControllerTest extends WebAppTest{
     }
 
     @Test
-    public void testModAvatar() throws Exception {
+    public void testUploadAvatar() throws Exception {
         String file = ConfigFileManager.dump("pic/sandy-2009.jpg");
         ResponseMessage response = rest.reset()
-                .setPath("user/avatar/mod")
-                .add("phoneNum", ConfigManager.getLong("test.phoneNum"))
-                .add("avatar", new FileSystemResource(new File(file)))
+                .setPath("user/avatar/upload")
+                .add("uid", ConfigManager.getLong("test.uid"))
+                .add("img", new FileSystemResource(new File(file)))
                 .post();
         log(response);
         Assert.assertTrue(response.isSucceed());
@@ -97,7 +97,7 @@ public class UserControllerTest extends WebAppTest{
     public void testGetInfo() throws Exception {
         ResponseMessage response = rest.reset()
                 .setPath("user/info/get")
-                .add("phoneNum", ConfigManager.getLong("test.phoneNum"))
+                .add("uid", ConfigManager.getLong("test.uid"))
                 .post();
         log(response);
         Assert.assertTrue(response.isSucceed());
@@ -111,7 +111,7 @@ public class UserControllerTest extends WebAppTest{
     void modName(String name){
         ResponseMessage response = rest.reset()
                 .setPath("user/name/mod")
-                .add("phoneNum", ConfigManager.getLong("test.phoneNum"))
+                .add("uid", ConfigManager.getLong("test.uid"))
                 .add("newName", name)
                 .post();
         log(response);

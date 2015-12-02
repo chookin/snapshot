@@ -26,6 +26,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
         }
         throw new IllegalArgumentException("请指定用户");
     }
+    User findById(long id);
     User findByName(String name);
     User findByMobile(long mobile);
     User findByEmail(String email);
