@@ -118,28 +118,6 @@ public class UserControllerTest extends WebAppTest{
     }
 
     @Test
-    public void testAddUserComment() throws Exception {
-        ResponseMessage response = rest.reset()
-                .setPath("user/userComment/add")
-                .add("uid", ConfigManager.getLong("test.uid"))
-                .add("object", ConfigManager.getLong("test.uid"))
-                .add("content", "hi~~")
-                .post();
-        log(response);
-        Assert.assertTrue(response.isSucceed());
-    }
-
-    @Test
-    public void testGetCommentsAboutUser() throws Exception {
-        ResponseMessage response = rest.reset()
-                .setPath("user/commentsAboutUser/get")
-                .add("uid", ConfigManager.getLong("test.uid"))
-                .post();
-        log(response);
-        Assert.assertTrue(response.isSucceed());
-    }
-
-    @Test
     public void testGetUsername() throws Exception {
         ResponseMessage response = rest.reset()
                 .setPath("user/username/get")

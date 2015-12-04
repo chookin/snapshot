@@ -4,10 +4,7 @@ import cmri.snapshot.api.WebMvcConfig;
 import cmri.snapshot.api.domain.*;
 import cmri.snapshot.api.helper.ServerHelper;
 import cmri.snapshot.api.helper.ThumbnailGen;
-import cmri.snapshot.api.repository.AvatarDetailRepository;
-import cmri.snapshot.api.repository.LoginRepository;
-import cmri.snapshot.api.repository.UserCommentRepository;
-import cmri.snapshot.api.repository.UserRepository;
+import cmri.snapshot.api.repository.*;
 import cmri.snapshot.api.validator.SMSValidator;
 import cmri.snapshot.api.validator.UserValidator;
 import cmri.utils.configuration.ConfigManager;
@@ -45,8 +42,6 @@ public class UserController {
     private SMSValidator smsValidator;
     @Autowired
     private AvatarDetailRepository avatarDetailRepository;
-    @Autowired
-    private UserCommentRepository userCommentRepository;
 
     /**
      * 因为签名校验时已经使用了密码信息，因此不需要再传递密码的参数。
@@ -96,6 +91,14 @@ public class UserController {
                 .set("appointmentCount", String.valueOf(user.getAppointmentCount()))
                 .set("collectedCount", String.valueOf(user.getCollectedCount()))
                 ;
+    }
+
+    @RequestMapping(value = "/username/get", method = RequestMethod.POST)
+    public ResponseMessage getUsername(Long uid){
+        // TODO use redis to cache
+        String username = userRepository.findById(uid).getName();
+        return new ResponseMessage()
+                .set("username", username);
     }
 
     @RequestMapping(value = "/name/mod", method = RequestMethod.POST)
@@ -148,44 +151,11 @@ public class UserController {
                 ;
     }
 
-    /**
-     * 对其他用户进行评论
-     * @param uid 用户id
-     * @param object 其他用户的id
-     * @param parent 父评论id
-     * @param content 评论内容
-     */
-    @RequestMapping(value = "/userComment/add", method = RequestMethod.POST)
-    public ResponseMessage addUserComment(Long uid, Long object, Long parent, String content){
-        Assert.notNull(object, "para 'object' is null");
-        UserComment comment = new UserComment();
-        comment.setUserId(uid);
-        comment.setObject(object);
-        if(parent == null){
-            comment.setParent(0);
-        }else {
-            comment.setParent(parent);
-        }
-        comment.setContent(content);
-        comment.setTime(new Timestamp(System.currentTimeMillis()));
-        userCommentRepository.save(comment);
-        return new ResponseMessage()
-                .set("comment", JsonHelper.toJson(comment));
-    }
 
-    @RequestMapping(value = "/commentsAboutUser/get", method = RequestMethod.POST)
-    public ResponseMessage getCommentsAboutUser(Long uid){
-        List<UserComment> comments = userCommentRepository.findCommentsAboutUser(uid);
-        return new ResponseMessage()
-                .set("comments", JsonHelper.toJson(comments))
-                ;
-    }
 
-    @RequestMapping(value = "/username/get", method = RequestMethod.POST)
-    public ResponseMessage getUsername(Long uid){
-        // TODO use redis to cache
-        String username = userRepository.findById(uid).getName();
-        return new ResponseMessage()
-                .set("username", username);
-    }
+
+
+
+
+
 }
