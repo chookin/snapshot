@@ -1,6 +1,5 @@
 package cmri.snapshot.api.helper;
 
-import cmri.snapshot.api.controller.ImageController;
 import cmri.utils.configuration.ConfigManager;
 import cmri.utils.io.FileHelper;
 import net.coobird.thumbnailator.Thumbnails;
@@ -21,7 +20,7 @@ public class ThumbnailGen {
     private int width = ConfigManager.getInt("avatar.width");
     private int height = ConfigManager.getInt("avatar.height");
     private String uploadPath;
-    private String identity;
+    private String uid;
     private String outputFormat = "png";
     private float outputQuality = 0.8f;
     protected ThumbnailGen(HttpServletRequest request){
@@ -58,15 +57,15 @@ public class ThumbnailGen {
         return this;
     }
 
-    public String getIdentity() {
-        return identity;
+    public String getUid() {
+        return uid;
     }
 
     /**
      * 设置文件名的标识
      */
-    public ThumbnailGen setIdentity(String identity) {
-        this.identity = identity;
+    public ThumbnailGen setUid(String uid) {
+        this.uid = uid;
         return this;
     }
 
@@ -79,7 +78,7 @@ public class ThumbnailGen {
     }
 
     /**
-     * destination file path: FilenameUtils.concat(uploadPath, identity)+"-"+width+"-"+height+ "." + outputFormat
+     * destination file path: FilenameUtils.concat(uploadPath, uid)+"-"+width+"-"+height+ "." + outputFormat
      * @return destination file path
      * @throws IOException
      */
@@ -87,7 +86,7 @@ public class ThumbnailGen {
         String imgPath = ServerHelper.getDateSubPath(uploadPath);
         String fullPath = ServerHelper.getUploadPath(request, imgPath);
         FileHelper.mkdirs(fullPath);
-        String myName = identity+"-"+width+"-"+height+ "." + outputFormat;
+        String myName = uid +"-"+width+"-"+height+ "." + outputFormat;
         String fullName = FilenameUtils.concat(fullPath, myName);
         //Thumbnail读取并压缩图片
         Thumbnails.of(srcFile)

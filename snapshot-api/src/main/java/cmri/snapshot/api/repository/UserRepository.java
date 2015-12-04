@@ -14,13 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 public interface UserRepository extends CrudRepository<User, Long> {
     default User find(User user){
         Validate.notNull(user, "arg user is null");
-        return find(user.getName(), user.getMobile(), user.getEmail());
+        return find(user.getName(), user.getPhone(), user.getEmail());
     }
-    default User find(String name, Long mobile, String email){
+    default User find(String name, Long phone, String email){
         if(StringUtils.isNoneEmpty(name)){
             return findByName(name);
-        }else if(mobile != null){
-            return findByMobile(mobile);
+        }else if(phone != null){
+            return findByPhone(phone);
         }else if(StringUtils.isNoneEmpty(email)) {
             return findByEmail(email);
         }
@@ -28,7 +28,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
     }
     User findById(long id);
     User findByName(String name);
-    User findByMobile(long mobile);
+    User findByPhone(long phone);
     User findByEmail(String email);
-    void deleteByMobile(long mobile);
+    void deleteByPhone(long phone);
 }

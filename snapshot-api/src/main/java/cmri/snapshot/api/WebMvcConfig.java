@@ -6,12 +6,15 @@ import cmri.utils.configuration.ConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.springframework.orm.jpa.persistenceunit.PersistenceUnitManager;
@@ -24,6 +27,7 @@ import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 
 import javax.servlet.Filter;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 /**
@@ -117,13 +121,17 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
             }
         }
     }
-
-    @Bean
-    public Filter characterEncodingFilter() {
-        final CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-        characterEncodingFilter.setEncoding("UTF-8");
-        characterEncodingFilter.setForceEncoding(true);
-        return characterEncodingFilter;
-    }
-
+    //    @Bean
+    //    public Filter characterEncodingFilter() {
+    //        final CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+    //        characterEncodingFilter.setEncoding("UTF-8");
+    //        characterEncodingFilter.setForceEncoding(true);
+    //        return characterEncodingFilter;
+    //    }
+    //
+    //    @Bean
+    //    public HttpMessageConverters customConverters() {
+    //        HttpMessageConverter<?> utf8 = new StringHttpMessageConverter(StandardCharsets.UTF_8);
+    //        return new HttpMessageConverters(utf8);
+    //    }
 }

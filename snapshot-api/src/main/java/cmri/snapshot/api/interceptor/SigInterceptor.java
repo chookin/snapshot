@@ -18,8 +18,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -94,7 +92,7 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
     }
 
     User validateByPhoneNum(Long phoneNum, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
-        User user = userRepository.findByMobile(phoneNum);
+        User user = userRepository.findByPhone(phoneNum);
         if(user == null)
             throw new AuthException("No user of "+phoneNum);
         return validate(user, httpMethod, url, paras, sig);

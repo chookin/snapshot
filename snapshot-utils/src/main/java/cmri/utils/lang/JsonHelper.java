@@ -1,10 +1,9 @@
 package cmri.utils.lang;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.google.gson.Gson;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,13 +11,26 @@ import java.util.Set;
  * Created by zhuyin on 3/18/15.
  */
 public class JsonHelper {
-
+    private static final String datePattern = "yyyy-MM-dd HH:mm:ss.SSS";
     public static String toJson(Object obj){
-        return JSON.toJSONString(obj, SerializerFeature.WriteClassName);
+        // return JSON.toJSONString(obj, SerializerFeature.WriteClassName);
+        // return new Gson().toJson(obj);
+        return new GsonBuilder()
+                //.setDateFormat(datePattern)
+                .registerTypeAdapter(Date.class, dateSer)
+                .registerTypeAdapter(Date.class, dateDeser)
+                .create()
+                .toJson(obj);
     }
 
     public static <T> T parseObject(String json, Class<T> classOfT) {
-        return JSON.parseObject(json, classOfT);
+        // return JSON.parseObject(json, classOfT);
+        return new GsonBuilder()
+                //.setDateFormat(datePattern)
+                .registerTypeAdapter(Date.class, dateSer)
+                .registerTypeAdapter(Date.class, dateDeser)
+                .create()
+                .fromJson(json, classOfT);
     }
 
     public static Set<String> parseStringSet(String json) {
@@ -39,4 +51,10 @@ public class JsonHelper {
         map.remove("@type");
         return map;
     }
+
+    // http://stackoverflow.com/questions/6873020/gson-date-format
+    static final JsonSerializer<Date> dateSer = (src, typeOfSrc, context) -> src == null ? null : new JsonPrimitive(src.getTime());
+
+    static final JsonDeserializer<Date> dateDeser = (json, typeOfT, context) -> json == null ? null : new Date(json.getAsLong());
+
 }

@@ -2,38 +2,70 @@ package cmri.utils.lang;
 
 import com.alibaba.fastjson.JSON;
 import junit.framework.TestCase;
+import org.junit.Test;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.TreeMap;
+import java.sql.Timestamp;
+import java.util.*;
 
 /**
  * Created by zhuyin on 3/19/15.
  */
 public class JsonHelperTest extends TestCase {
-    public void testObject(){
+
+    @Test
+    public void testToJson() throws Exception {
+        List<List<String>> items = new ArrayList<>();
+        List<String> item = new ArrayList<>();
+        item.add("a");
+        item.add("b");
+        items.add(item);
+        items.add(item);
+        String json = JsonHelper.toJson(items);
+        System.out.println(json);
+    }
+
+    @Test
+    public void testToJson1() throws Exception {
+        List<User> users = new ArrayList<>();
+        User user = new User();
+        user.setId(1L);
+        user.setName("test");
+        users.add(user);
+        users.add(user);
+        String json = JsonHelper.toJson(users);
+        System.out.println(json);
+    }
+
+    @Test
+    public void testParseObject() throws Exception {
         // ref: https://github.com/alibaba/fastjson/wiki/Samples-DataBind
-        User rootUser = new User();
-        rootUser.setId(3L);
-        rootUser.setName("root");
-        String jsonString = JSON.toJSONString(rootUser);
+        User user = new User();
+        user.setId(1L);
+        user.setName("test");
+        String jsonString = JsonHelper.toJson(user);
         System.out.println(jsonString);
 
-        User parsedUser = JSON.parseObject(jsonString, User.class);
-        assertEquals(rootUser, parsedUser);
+        User parsedUser = JsonHelper.parseObject(jsonString, User.class);
+        assertEquals(user, parsedUser);
+    }
 
+    public void testParseObject1(){
         Group group = new Group();
-        group.setId(0L);
+        group.setId(1L);
         group.setName("admin");
 
+        User rootUser = new User();
+        rootUser.setId(2L);
+        rootUser.setName("root");
+
         User guestUser = new User();
-        guestUser.setId(2L);
+        guestUser.setId(3L);
         guestUser.setName("guest");
 
         group.addUser(guestUser);
         group.addUser(rootUser);
 
-        jsonString = JSON.toJSONString(group);
+        String jsonString = JsonHelper.toJson(group);
         System.out.println(jsonString);
         Group parsedGroup = JsonHelper.parseObject(jsonString, Group.class);
         assertEquals(group, parsedGroup);
@@ -44,7 +76,7 @@ public class JsonHelperTest extends TestCase {
 
         private Long   id;
         private String name;
-
+        private Timestamp time = new Timestamp(System.currentTimeMillis());
         public Long getId() {
             return id;
         }
@@ -61,31 +93,41 @@ public class JsonHelperTest extends TestCase {
             this.name = name;
         }
 
+        public Timestamp getTime() {
+            return time;
+        }
+
+        public void setTime(Timestamp time) {
+            this.time = time;
+        }
+
         @Override
         public String toString() {
             return "User{" +
                     "id=" + id +
                     ", name='" + name + '\'' +
+                    ", time=" + time +
                     '}';
         }
 
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (!(o instanceof User)) return false;
+            if (o == null || getClass() != o.getClass()) return false;
 
             User user = (User) o;
 
             if (id != null ? !id.equals(user.id) : user.id != null) return false;
             if (name != null ? !name.equals(user.name) : user.name != null) return false;
+            return !(time != null ? !time.equals(user.time) : user.time != null);
 
-            return true;
         }
 
         @Override
         public int hashCode() {
             int result = id != null ? id.hashCode() : 0;
             result = 31 * result + (name != null ? name.hashCode() : 0);
+            result = 31 * result + (time != null ? time.hashCode() : 0);
             return result;
         }
     }

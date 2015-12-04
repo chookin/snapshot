@@ -13,24 +13,30 @@ public class User {
     private String name;
     private String password;
     private String email;
-    private Long mobile;
     private Byte role;
     private Byte status;
     private Timestamp createTime = new Timestamp(System.currentTimeMillis());
     private Timestamp updateTime;
     private Date birthday;
     private String sex;
-    private String resume;
     private Integer area;
     private String avatar;
     private Timestamp registerTime;
+    private String realName;
+    private String idNum;
+    private int orderCount;
+    private int collectedCount;
+    private Long phone;
+    private String profile;
+    private String idImage;
+    private Integer appointmentCount;
 
     public User(){}
 
-    public User(String name, String password, Long mobile){
+    public User(String name, String password, Long phone){
         this.name = name;
         this.password = password;
-        this.mobile = mobile;
+        this.phone = phone;
     }
 
     @Id
@@ -79,17 +85,6 @@ public class User {
     }
 
     @Basic
-    @Column(name = "mobile")
-    public Long getMobile() {
-        return mobile;
-    }
-
-    public User setMobile(Long mobile) {
-        this.mobile = mobile;
-        return this;
-    }
-
-    @Basic
     @Column(name = "role")
     public Byte getRole() {
         return role;
@@ -133,7 +128,7 @@ public class User {
         if (name != null ? !name.equals(user.name) : user.name != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (mobile != null ? !mobile.equals(user.mobile) : user.mobile != null) return false;
+        if (phone != null ? !phone.equals(user.phone) : user.phone != null) return false;
         if (role != null ? !role.equals(user.role) : user.role != null) return false;
         if (status != null ? !status.equals(user.status) : user.status != null) return false;
         if (createTime != null ? !createTime.equals(user.createTime) : user.createTime != null) return false;
@@ -148,7 +143,7 @@ public class User {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (mobile != null ? mobile.hashCode() : 0);
+        result = 31 * result + (phone != null ? phone.hashCode() : 0);
         result = 31 * result + (role != null ? role.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
@@ -175,17 +170,6 @@ public class User {
 
     public User setSex(String sex) {
         this.sex = sex;
-        return this;
-    }
-
-    @Basic
-    @Column(name = "resume")
-    public String getResume() {
-        return resume;
-    }
-
-    public User setResume(String resume) {
-        this.resume = resume;
         return this;
     }
 
@@ -220,5 +204,85 @@ public class User {
     public User setRegisterTime(Timestamp registerTime) {
         this.registerTime = registerTime;
         return this;
+    }
+
+    @Basic
+    @Column(name = "real_name")
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    @Basic
+    @Column(name = "id_num")
+    public String getIdNum() {
+        return idNum;
+    }
+
+    public void setIdNum(String idNum) {
+        this.idNum = idNum;
+    }
+
+    @Basic
+    @Column(name = "order_count")
+    public int getOrderCount() {
+        return orderCount;
+    }
+
+    public void setOrderCount(int orderCount) {
+        this.orderCount = orderCount;
+    }
+
+    @Basic
+    @Column(name = "collected_count")
+    public int getCollectedCount() {
+        return collectedCount;
+    }
+
+    public void setCollectedCount(int collectedCount) {
+        this.collectedCount = collectedCount;
+    }
+
+    @Basic
+    @Column(name = "phone")
+    public Long getPhone() {
+        return phone;
+    }
+
+    public void setPhone(Long phone) {
+        this.phone = phone;
+    }
+
+    @Basic
+    @Column(name = "profile")
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+
+    @Basic
+    @Column(name = "id_image")
+    public String getIdImage() {
+        return idImage;
+    }
+
+    public void setIdImage(String idImage) {
+        this.idImage = idImage;
+    }
+
+    @Basic
+    @Column(name = "appointment_count")
+    public Integer getAppointmentCount() {
+        return appointmentCount;
+    }
+
+    public void setAppointmentCount(Integer appointmentCount) {
+        this.appointmentCount = appointmentCount;
     }
 }

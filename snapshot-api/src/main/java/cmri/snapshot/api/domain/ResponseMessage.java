@@ -46,7 +46,9 @@ public class ResponseMessage {
         data.put(key, val);
         return this;
     }
-
+    public String get(String key){
+        return data.get(key);
+    }
     @Override
     public int hashCode() {
         return (data.toString() + message + succeed).hashCode();

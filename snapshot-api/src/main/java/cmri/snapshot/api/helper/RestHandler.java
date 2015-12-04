@@ -10,12 +10,24 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
+import org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter;
+import org.springframework.http.converter.xml.SourceHttpMessageConverter;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.charset.Charset;
+import javax.xml.transform.Source;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zhuyin on 11/11/15.
@@ -30,84 +42,154 @@ public class RestHandler {
     String secretKey = SigInterceptor.genKey(DigestUtils.md5Hex(ConfigManager.get("test.password")));
     String method = HttpConstant.Method.POST;
     HttpHeaders headers = new HttpHeaders();
-    public RestHandler(){
+
+    public RestHandler() {
         initHeader();
     }
-    void initHeader(){
-        // header("Accept-Charset", "utf-8");
-        // header("Content-type", "multipart/form-data; charset=utf-8");
+
+    void initHeader() {
+        /* header("Accept-Charset", "utf-8");*/
+        header("Content-type", "multipart/form-data; charset=utf-8");
     }
-    public RestHandler setBaseUrl(String baseUrl){
+
+    public RestHandler setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
         return this;
     }
 
     /**
      * 设置请求的资源路径
+     *
      * @param path 资源路径，不需要以"/"开头。
-     */
-    public RestHandler setPath(String path){
+     **/
+    public RestHandler setPath(String path) {
         this.path = path;
         return this;
     }
-    public RestHandler setSecretKey(String secretKey){
+
+    public RestHandler setSecretKey(String secretKey) {
         this.secretKey = secretKey;
         return this;
     }
-    public RestHandler add(String name, Object value){
+
+    public RestHandler add(String name, Object value) {
         paras.put(name, value);
         return this;
     }
-    public RestHandler header(String key, String value){
+
+    public RestHandler header(String key, String value) {
         this.headers.add(key, value);
         return this;
     }
+
     /**
      * 重置所有参数
      */
-    public RestHandler reset(){
+    public RestHandler reset() {
         this.paras.clear();
         this.headers.clear();
         initHeader();
         return this;
     }
 
-    String getUrl(){
-        return this.baseUrl + path;
+    String getUrl() {
+        if (baseUrl.endsWith("/")) {
+            if (path.startsWith("/")) {
+                return baseUrl + path.substring(1);
+            } else {
+                return baseUrl + path;
+            }
+        } else{
+            if (path.startsWith("/")) {
+                return baseUrl + path;
+            } else {
+                return baseUrl + "/" + path;
+            }
+        }
     }
-    public ResponseMessage post(){
+
+    public ResponseMessage post() {
         updateSig();
         return justPost();
     }
-    public ResponseMessage justPost(){
-        HttpEntity<MultiValueMap<String, Object>> requestEntity  = new HttpEntity<>(getParas(), headers);
+
+    public ResponseMessage justPost() {
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(getParas(), headers);
+        // return getRestTemplate().postForObject(getUrl(), requestEntity, ResponseMessage.class);
         return getRestTemplate()
-                .postForObject(getUrl(), requestEntity, ResponseMessage.class);
+                .exchange(getUrl(), HttpMethod.POST, requestEntity, ResponseMessage.class).getBody();
     }
-    public ResponseMessage get(){
+
+    public ResponseMessage get() {
         setMethod(HttpConstant.Method.GET);
         updateSig();
-        return getRestTemplate().getForObject(getUrl() + "?" + this.paras.join("=", "&"), ResponseMessage.class);
+        return getRestTemplate()
+                .getForObject(getUrl() + "?" + this.paras.join("=", "&"), ResponseMessage.class);
     }
-    RestTemplate getRestTemplate(){
-        RestTemplate template = new TestRestTemplate();
+
+    RestTemplate getRestTemplate() {
+        RestTemplate restTemplate = new TestRestTemplate();
+        replaceStringHttpMessageConverter(restTemplate);
+        return restTemplate;
+    }
+
+    /**
+     * 解决中文乱码问题，StringHttpMessageConverter默认使用的"ISO-8859-1",改为使用"utf-8".<br>
+     * 若提交的是MultiValueMap，则RestTemplate 使用的是AllEncompassingFormHttpMessageConverter，此时，只修改RestTemplate的converters没有用. AllEncompassingFormHttpMessageConverter继承FormHttpMessageConverter，并由FormHttpMessageConverter.partConverters序列化请求参数。
+     */
+    void replaceStringHttpMessageConverter(RestTemplate template) {
+        int index = 0;
+        for (HttpMessageConverter converter : template.getMessageConverters()) {
+            if (converter instanceof StringHttpMessageConverter) {
+                break;
+            }
+            ++index;
+        }
+        template.getMessageConverters().remove(index);
         template.getMessageConverters()
-                .add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
-        return template;
+                .add(index, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+
+        // replace AllEncompassingFormHttpMessageConverter
+        index = 0;
+        for (HttpMessageConverter converter : template.getMessageConverters()) {
+            if (converter instanceof AllEncompassingFormHttpMessageConverter) {
+                break;
+            }
+            ++index;
+        }
+        template.getMessageConverters().remove(index);
+        List<HttpMessageConverter<?>> converters = new ArrayList<>();
+        converters.add(new ByteArrayHttpMessageConverter());
+        StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter(StandardCharsets.UTF_8);
+        stringHttpMessageConverter.setWriteAcceptCharset(false);
+        converters.add(stringHttpMessageConverter);
+        converters.add(new ResourceHttpMessageConverter());
+        converters.add(new SourceHttpMessageConverter<>());
+        if(ClassUtils.isPresent("javax.xml.bind.Binder", AllEncompassingFormHttpMessageConverter.class.getClassLoader())){
+            converters.add(new Jaxb2RootElementHttpMessageConverter());
+        }
+        if(ClassUtils.isPresent("com.fasterxml.jackson.databind.ObjectMapper", AllEncompassingFormHttpMessageConverter.class.getClassLoader()) &&
+                ClassUtils.isPresent("com.fasterxml.jackson.core.JsonGenerator", AllEncompassingFormHttpMessageConverter.class.getClassLoader())){
+            converters.add(new MappingJackson2HttpMessageConverter());
+        }
+        AllEncompassingFormHttpMessageConverter allEncompassingFormHttpMessageConverter = new AllEncompassingFormHttpMessageConverter();
+        allEncompassingFormHttpMessageConverter.setPartConverters(converters);
+        template.getMessageConverters().add(index, allEncompassingFormHttpMessageConverter);
     }
-    MultiValueMap<String, Object> getParas(){
+
+    MultiValueMap<String, Object> getParas() {
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
         map.setAll(paras.innerMap());
         return map;
     }
 
-    RestHandler setMethod(String method){
+    RestHandler setMethod(String method) {
         this.method = method;
         return this;
     }
 
-    RestHandler updateSig(){
-        if(!paras.containsKey("time")) {
+    RestHandler updateSig() {
+        if (!paras.containsKey("time")) {
             paras.put("time", System.currentTimeMillis());
         }
         String sig = SigInterceptor.genSig(secretKey, method, getUrl(), paras.getSorted());

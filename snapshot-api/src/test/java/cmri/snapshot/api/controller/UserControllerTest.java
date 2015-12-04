@@ -9,7 +9,6 @@ import cmri.utils.configuration.ConfigManager;
 import cmri.utils.dao.RedisHandler;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -65,15 +64,15 @@ public class UserControllerTest extends WebAppTest{
      */
     @Test
     public void testRegister() throws Exception {
-        long mobile = 13911119999L;
+        long phone = 13911119999L;
         String code = "9999";
-        userRepository.deleteByMobile(mobile);
-        RedisHandler.instance().set(SMSController.getAuthCodeId(mobile), code, ConfigManager.getInt("sms.authCode.expireMinutes") * 60);
+        userRepository.deleteByPhone(phone);
+        RedisHandler.instance().set(SMSController.getAuthCodeId(phone), code, ConfigManager.getInt("sms.authCode.expireMinutes") * 60);
         ResponseMessage response = rest.reset()
                 .setPath("user/register")
                 .setSecretKey(SigInterceptor.defaultKey)
                 .add("username", "test_" + System.currentTimeMillis())
-                .add("phoneNum", mobile)
+                .add("phoneNum", phone)
                 .add("password", DigestUtils.md5Hex("test"))
                 .add("authCode", code)
                 .post();
@@ -82,10 +81,10 @@ public class UserControllerTest extends WebAppTest{
     }
 
     @Test
-    public void testUploadAvatar() throws Exception {
+    public void testModAvatar() throws Exception {
         String file = ConfigFileManager.dump("pic/sandy-2009.jpg");
         ResponseMessage response = rest.reset()
-                .setPath("user/avatar/upload")
+                .setPath("user/avatar/mod")
                 .add("uid", ConfigManager.getLong("test.uid"))
                 .add("img", new FileSystemResource(new File(file)))
                 .post();
@@ -116,5 +115,37 @@ public class UserControllerTest extends WebAppTest{
                 .post();
         log(response);
         Assert.assertTrue(response.isSucceed());
+    }
+
+    @Test
+    public void testAddUserComment() throws Exception {
+        ResponseMessage response = rest.reset()
+                .setPath("user/userComment/add")
+                .add("uid", ConfigManager.getLong("test.uid"))
+                .add("object", ConfigManager.getLong("test.uid"))
+                .add("content", "hi~~")
+                .post();
+        log(response);
+        Assert.assertTrue(response.isSucceed());
+    }
+
+    @Test
+    public void testGetCommentsAboutUser() throws Exception {
+        ResponseMessage response = rest.reset()
+                .setPath("user/commentsAboutUser/get")
+                .add("uid", ConfigManager.getLong("test.uid"))
+                .post();
+        log(response);
+        Assert.assertTrue(response.isSucceed());
+    }
+
+    @Test
+    public void testGetUsername() throws Exception {
+        ResponseMessage response = rest.reset()
+                .setPath("user/username/get")
+                .add("uid", ConfigManager.getLong("test.uid"))
+                .post();
+        log(response);
+        Assert.assertEquals("test", response.get("username"));
     }
 }

@@ -27,7 +27,8 @@ snapshot-api
     [client]
     #password       = your_password
     port            = 3306
-    socket          = /home/work/local/mysql/var/mysqld.sock      
+    socket          = /home/work/local/mysql/var/mysqld.sock   
+    default-character-set=utf8
     # Here follows entries for some specific programs
     [mysqld_safe]
     socket          = /home/work/local/mysql/var/mysqld.sock
@@ -49,11 +50,14 @@ snapshot-api
     max_allowed_packet      = 16M
     thread_stack            = 192K
     thread_cache_size       = 8
-    myisam-recover         = BACKUP
+    myisam-recover          = BACKUP
     query_cache_limit       = 1M
     query_cache_size        = 16M
     expire_logs_days        = 10
     max_binlog_size         = 100M
+    collation-server        = utf8_unicode_ci
+    init-connect            ='SET NAMES utf8'
+    character-set-server    = utf8
     # Replication Master Server (default)
     # binary logging is required for replication
     server-id       = 1
@@ -76,6 +80,7 @@ snapshot-api
     mysql> create database if not exists `snapshot` default character set utf8;
     mysql> grant all on snapshot.* to 'snap'@'localhost' identified by 'snap_cm';
     </pre>
+    * stop mysql. <pre>bin/mysqladmin --defaults-file=etc/my.cnf -uroot -p shutdown</pre>
 1. Configure and start redis
     * key paras
     
@@ -151,7 +156,7 @@ It's a JPA configuration file, which should be placed into META-INF folder in yo
 Notice:
 
 * Tinyint,占用1字节的存储空间,取值范围是：带符号的范围是-128到127.
-* Int range:[-2^31,2^31-1] [-2147483648,2147483647], so using bigint for mobile.
+* Int range:[-2^31,2^31-1] [-2147483648,2147483647], so using bigint for phone number.
 * The length of a string's md5 output is 32.
 * TIMESTAMP values are converted from the current time zone to UTC for storage, and converted back from UTC to the current time zone for retrieval. (This occurs only for the TIMESTAMP data type, not for other types such as DATETIME.) More notably:If you store a TIMESTAMP value, and then change the time zone and retrieve the value, the retrieved value is different from the value you stored.
 * Timestamps in MySQL generally used to track changes to records, and are often updated every time the record is changed. If you want to store a specific value you should use a datetime field.

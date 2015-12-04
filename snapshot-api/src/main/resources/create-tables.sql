@@ -11,13 +11,13 @@ CREATE TABLE user (
   id BIGINT NOT NULL auto_increment COMMENT '用户唯一标示',
   name varchar(50) NOT NULL COMMENT '昵称',
   password char(32) COMMENT '账户密码',
-  mobile BIGINT(11) COMMENT '手机号',
+  phone BIGINT(11) COMMENT '手机号',
   email varchar(128) COMMENT '邮箱',
-  realName VARCHAR(128) COMMENT '真实姓名',
-  idNum char(18) COMMENT '身份证号码',
-  idImage VARCHAR(512) COMMENT '身份证照片的存储地址',
+  real_name VARCHAR(128) COMMENT '真实姓名',
+  id_num char(18) COMMENT '身份证号码',
+  id_image VARCHAR(512) COMMENT '身份证照片的存储地址',
   role tinyint default 1 COMMENT '用户角色：-1, admin; 0, test; 1, user; 2, photographer',
-  descr VARCHAR(1024) COMMENT '个人简介',
+  profile VARCHAR(1024) COMMENT '个人简介',
   status tinyint default 1 COMMENT '账户状态：0，禁用；1，正常启用',
   birthday DATE COMMENT '生日',
   sex enum('男','女'),
@@ -26,16 +26,18 @@ CREATE TABLE user (
   register_time DATETIME COMMENT '注册时间',
   update_time DATETIME COMMENT '账户信息的修改时间',
   order_count int DEFAULT 0 NOT NULL COMMENT '订单数',
+  appointment_count int DEFAULT 0 COMMENT '预约数',
   collected_count int DEFAULT 0 NOT NULL COMMENT '被收藏数',
-  login_times int DEFAULT 0 NOT NULL COMMENT '登录次数',
   # Must define 'id' as primary key, or else throw exception: Incorrect table definition; there can be only one auto column and it must be defined as a key
   PRIMARY KEY  (id)
 );
 
 # 创建帐户test test
-Insert into user(id, name, mobile, password, role) values(1,'test', 13426198753, '098f6bcd4621d373cade4e832627b4f6', 0);
+Insert into user(id, name, phone, password, role) values(1,'test', 13426198753, '098f6bcd4621d373cade4e832627b4f6', 0);
 # 创建帐户admin admin@init_sn
 Insert into user(id, name, password, role) values(2,'admin','d35f1337e3f698228e641ea4b29b507d',-1);
+
+INSERT INTO user(id, name, phone, password) VALUE(3, 'jacob', '13811245934', '730ea9a92c1f03e5b1934129e98528c7');
 
 # 用户登录历史详情表
 DROP TABLE IF EXISTS login;
@@ -74,8 +76,9 @@ CREATE TABLE camera(
   id BIGINT NOT NULL auto_increment,
   identity VARCHAR(512) NOT NULL COMMENT '器材标识',
   model varchar(128) NOT NULL COMMENT '器材型号',
-  lensModel varchar(128) NOT NULL COMMENT '镜头型号',
+  lens_model varchar(128) NOT NULL COMMENT '镜头型号',
   user_id BIGINT NOT NULL COMMENT '所属摄影师的id',
+  image VARCHAR(512) COMMENT '相机照片',
   create_time DATETIME COMMENT '添加时间',
   PRIMARY KEY  (id)
 );
@@ -83,16 +86,29 @@ CREATE TABLE camera(
 # 摄影师信息表
 DROP TABLE if EXISTS grapher;
 create TABLE grapher(
-  id BIGINT NOT NULL auto_increment,
   user_id BIGINT NOT NULL COMMENT '摄影师id',
   price int DEFAULT 0 NOT NULL COMMENT '身价',
   rating int DEFAULT 0 NOT NULL COMMENT '评级',
-  scope varchar(1024) COMMENT '约拍范围，服务城市，例如：北京、天津',
+  region varchar(1024) COMMENT '约拍范围，服务城市，例如：北京、天津',
   desire VARCHAR(1024) COMMENT '约拍意愿,擅长领域，例如：情侣写真、个人写真',
   status TINYINT NOT NULL DEFAULT -1 COMMENT '-1: unauthorized, 1: authorized',
+  create_time DATETIME COMMENT '添加时间',
+  PRIMARY KEY  (user_id)
+);
+# 摄影师套餐
+DROP TABLE IF EXISTS grapher_plan;
+CREATE TABLE grapher_plan(
+  id BIGINT NOT NULL auto_increment,
+  user_id BIGINT NOT NULL COMMENT '摄影师id',
+  shoot_num int DEFAULT 0 COMMENT '拍摄张数',
+  shoot_hour int DEFAULT 0 COMMENT '拍摄时长，小时数',
+  truing_num int DEFAULT 0 COMMENT '精修底片的张数',
+  print_num INT DEFAULT 0 COMMENT '相片冲印的张数',
+  clothing VARCHAR(256) COMMENT '服装',
+  makeup VARCHAR(256) COMMENT '化妆',
+  create_time DATETIME COMMENT '添加时间',
   PRIMARY KEY  (id)
 );
-
 # 摄影师身价表，记录历史身价
 DROP TABLE IF EXISTS grapher_price;
 CREATE TABLE grapher_price(
@@ -113,10 +129,10 @@ create table user_like(
 drop table if exists user_comment;
 create table user_comment(
   id bigint not null auto_increment,
+  user_id bigint not null comment '评论人id',
   object bigint not null comment '被评论的人id',
-  subject bigint not null comment '评论的人',
   parent bigint default 0 not null comment '父评论id',
-  centent text not null comment '评论正文',
+  content text not null comment '评论正文',
   time datetime comment '评论时间',
   PRIMARY KEY  (id)
 );
@@ -135,9 +151,11 @@ create table photo(
 # 对照片的点赞
 drop table if exists photo_like;
 create table photo_like(
+  id bigint not null auto_increment,
   photo_id bigint not null comment '被点赞的照片id',
   user_id bigint not null comment '哪个用户点的赞',
-  time datetime comment '点赞时间'
+  time datetime comment '点赞时间',
+  PRIMARY KEY  (id)
 );
 # 照片评论
 drop table if exists photo_comment;

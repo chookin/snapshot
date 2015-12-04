@@ -34,11 +34,11 @@ public class UserValidator {
     public void validateNotRegistered(User user){
         Validate.notEmpty(user.getName(), "用户名不能为空");
         validateUser(user);
-        if(user.getMobile() == null && StringUtils.isEmpty(user.getEmail())){
+        if(user.getPhone() == null && StringUtils.isEmpty(user.getEmail())){
             throw new IllegalArgumentException("注册时请指定email或手机号");
         }
-        if(user.getMobile() != null){
-            if(userRepository.findByMobile(user.getMobile()) != null){
+        if(user.getPhone() != null){
+            if(userRepository.findByPhone(user.getPhone()) != null){
                 throw new IllegalArgumentException("该手机号已被注册");
             }
         }else{
@@ -52,8 +52,8 @@ public class UserValidator {
     }
 
     static void validateUser(User user){
-        if(user.getMobile() != null){
-            ValidateKit.isMobile(user.getMobile().toString(), "手机号码格式错误");
+        if(user.getPhone() != null){
+            ValidateKit.isMobile(user.getPhone().toString(), "手机号码格式错误");
         }
         if(StringUtils.isNoneEmpty(user.getEmail())){
             ValidateKit.isEmail(user.getEmail(), "email格式错误");
