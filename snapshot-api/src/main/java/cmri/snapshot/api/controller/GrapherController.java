@@ -1,10 +1,7 @@
 package cmri.snapshot.api.controller;
 
 import cmri.snapshot.api.domain.*;
-import cmri.snapshot.api.repository.CameraRepository;
-import cmri.snapshot.api.repository.GrapherPlanRepository;
-import cmri.snapshot.api.repository.GrapherRepository;
-import cmri.snapshot.api.repository.UserRepository;
+import cmri.snapshot.api.repository.*;
 import cmri.utils.lang.JsonHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * Created by zhuyin on 12/1/15.
@@ -30,6 +28,8 @@ public class GrapherController {
     private GrapherPlanRepository planRepository;
     @Autowired
     private CameraRepository cameraRepository;
+    @Autowired
+    private PhotoRepository photoRepository;
     /**
      *
      * @param uid 用户ID
@@ -93,6 +93,7 @@ public class GrapherController {
         grapherRepository.save(grapher);
 
         GrapherPlan plan = new GrapherPlan();
+        plan.setUserId(uid);
         plan.setShootNum(shootNum);
         plan.setShootHour(shootHour);
         plan.setTruingNum(truingNum);
@@ -112,11 +113,20 @@ public class GrapherController {
                 ;
     }
 
-    @RequestMapping(value = "/camera/get", method = RequestMethod.POST)
+    @RequestMapping(value = "/cameras/get", method = RequestMethod.POST)
     public ResponseMessage getCamera(Long uid){
-        Camera camera = cameraRepository.findByUserId(uid);
+        List<Camera> cameras = cameraRepository.findByUserId(uid);
         return new ResponseMessage()
-                .set("camera", JsonHelper.toJson(camera))
+                .set("cameras", JsonHelper.toJson(cameras))
                 ;
     }
+
+    @RequestMapping(value = "/photos/get", method = RequestMethod.POST)
+    public ResponseMessage getPhotos(Long uid){
+        List<Photo> photos = photoRepository.findByUserId(uid);
+        return new ResponseMessage()
+                .set("photos", JsonHelper.toJson(photos))
+                ;
+    }
+
 }

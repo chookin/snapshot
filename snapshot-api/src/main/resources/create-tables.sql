@@ -78,7 +78,7 @@ CREATE TABLE camera(
   model varchar(128) NOT NULL COMMENT '器材型号',
   lens_model varchar(128) NOT NULL COMMENT '镜头型号',
   user_id BIGINT NOT NULL COMMENT '所属摄影师的id',
-  image VARCHAR(512) COMMENT '相机照片',
+  image VARCHAR(512) COMMENT '相机照片地址',
   create_time DATETIME COMMENT '添加时间',
   PRIMARY KEY  (id)
 );
@@ -136,7 +136,7 @@ create table user_comment(
   time datetime comment '评论时间',
   PRIMARY KEY  (id)
 );
-# 相片
+# 照片
 drop table if exists photo;
 create table photo(
   id bigint not null auto_increment,
@@ -144,7 +144,7 @@ create table photo(
   photo varchar(512) comment '照片地址',
   like_count int default 0 not null comment '点赞次数',
   comment_count int default 0 not null comment '评论次数',
-  TIME DATETIME COMMENT '照片上传的时间',
+  time DATETIME COMMENT '照片上传的时间',
   PRIMARY KEY  (id)
 );
 

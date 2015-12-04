@@ -51,11 +51,31 @@ public class GrapherControllerTest extends WebAppTest {
 
     @Test
     public void testGetPlan() throws Exception {
-
+        ResponseMessage response = rest.reset()
+                .setPath("grapher/plan/get")
+                .add("uid", ConfigManager.getLong("test.uid"))
+                .post();
+        log(response);
+        Assert.assertTrue(response.isSucceed());
     }
 
     @Test
     public void testGetCamera() throws Exception {
+        ResponseMessage response = rest.reset()
+                .setPath("grapher/cameras/get")
+                .add("uid", ConfigManager.getLong("test.uid"))
+                .post();
+        log(response);
+        Assert.assertTrue(response.isSucceed());
+    }
 
+    @Test
+    public void testGetPhoto() throws Exception {
+        ResponseMessage response = rest.reset()
+                .setPath("grapher/photos/get")
+                .add("uid", ConfigManager.getLong("test.uid"))
+                .post();
+        log(response);
+        Assert.assertTrue(response.isSucceed());
     }
 }
