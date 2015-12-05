@@ -38,14 +38,10 @@ public class PhotoLikeController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseMessage delete(long uid, long photoId){
         Photo photo = photoRepository.findOne(photoId);
-        photo.setLikeCount(photo.getLikeCount() + 1);
+        photo.setLikeCount(Math.max(photo.getLikeCount()-1, 0));
         photoRepository.save(photo);
 
-        PhotoLike like = new PhotoLike();
-        like.setUserId(uid);
-        like.setPhotoId(photoId);
-        like.setTime(new Timestamp(System.currentTimeMillis()));
-        photoLikeRepository.save(like);
+        photoLikeRepository.delete(uid, photoId);
         return new ResponseMessage();
     }
 }

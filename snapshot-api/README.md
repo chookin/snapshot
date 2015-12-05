@@ -14,8 +14,10 @@ snapshot-api
 
 1. Configure properties and make dirs:
     * Manual create the document root dir 'chu.server.documentRoot' configured by configuration file 'application.properties';
-    * Modify 'log4j.appender.logfile.File' of configuration file 'log4j.properties';
-    * Modify 'server.hostname' of configuration file 'app.properties' to the user ip.
+    * Modify 'log4j.appender.logfile.File' of log4j.properties;
+    * Modify 'server.hostname' of app.properties to the user ip.
+    * Modify 'spring.datasource.url' of application.properties.
+    * Modify "hibernate.connection.url" of persistence.xml.
 1. Configure and start mysql.
     * create configuration file.
     <pre>cp support-files/my-large.cnf ~/local/mysql/etc/my.cnf</pre>
@@ -43,14 +45,14 @@ snapshot-api
     socket          = /home/work/local/mysql/var/mysqld.sock
     port            = 3306
     basedir         = /home/work/local/mysql
-    datadir         =/home/work/data/mysql
+    datadir         = /home/work/data/mysql
     tmpdir          = /tmp
     skip-external-locking
-    key_buffer              = 16M
     max_allowed_packet      = 16M
     thread_stack            = 192K
     thread_cache_size       = 8
-    myisam-recover          = BACKUP
+    ###key_buffer              = 16M
+    ###myisam-recover          = BACKUP
     query_cache_limit       = 1M
     query_cache_size        = 16M
     expire_logs_days        = 10
@@ -69,7 +71,7 @@ snapshot-api
     [isamchk]
     key_buffer              = 16M
     </pre>
-    * init database. <pre>scripts/mysql_install_db --defaults-file=etc/my.cnf</pre>
+    * init database. <pre>scripts/mysql_install_db --defaults-file=etc/my.cnf</pre> or <pre>mysqld --initialize</pre>
     * start mysql, ensure the port is usable.<pre>bin/mysqld_safe  --defaults-file=etc/my.cnf &</pre>
     * set the root password. <pre>bin/mysqladmin --defaults-file=etc/my.cnf -u root password</pre>
     * view users, create database, and create user. 
@@ -150,6 +152,10 @@ Configuration problem:
 <pre>Unable to locate Spring NamespaceHandler for XML schema namespace [http://java.sun.com/xml/ns/persistence]</pre>
 It seems to be you are trying to load persistence.xml as a Spring configuration file (probably, you added it to the file list when calling constructor of FileSystemXmlApplicationContext). You shouldn't do it, because persistence.xml is not a Spring configuration file.
 It's a JPA configuration file, which should be placed into META-INF folder in your classpath.
+
+Update exceptions:
+<pre>org.springframework.dao.InvalidDataAccessApiUsageException: Executing an update/delete query; nested exception is javax.persistence.TransactionRequiredException: Executing an update/delete query</pre>
+Need use @Transactional.
 
 # appendix
 ## mysql

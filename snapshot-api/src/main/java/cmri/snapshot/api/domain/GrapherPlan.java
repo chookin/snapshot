@@ -11,8 +11,8 @@ import java.sql.Timestamp;
 public class GrapherPlan {
     private long id;
     private long userId;
-    private Integer shootNum;
-    private Integer shootHour;
+    private Integer shotNum;
+    private Integer shotHour;
     private Integer truingNum;
     private Integer printNum;
     private String clothing;
@@ -41,23 +41,23 @@ public class GrapherPlan {
     }
 
     @Basic
-    @Column(name = "shoot_num")
-    public Integer getShootNum() {
-        return shootNum;
+    @Column(name = "shot_num")
+    public Integer getShotNum() {
+        return shotNum;
     }
 
-    public void setShootNum(Integer shootNum) {
-        this.shootNum = shootNum;
+    public void setShotNum(Integer shootNum) {
+        this.shotNum = shootNum;
     }
 
     @Basic
-    @Column(name = "shoot_hour")
-    public Integer getShootHour() {
-        return shootHour;
+    @Column(name = "shot_hour")
+    public Integer getShotHour() {
+        return shotHour;
     }
 
-    public void setShootHour(Integer shootHour) {
-        this.shootHour = shootHour;
+    public void setShotHour(Integer shootHour) {
+        this.shotHour = shootHour;
     }
 
     @Basic
@@ -119,8 +119,8 @@ public class GrapherPlan {
 
         if (id != that.id) return false;
         if (userId != that.userId) return false;
-        if (shootNum != null ? !shootNum.equals(that.shootNum) : that.shootNum != null) return false;
-        if (shootHour != null ? !shootHour.equals(that.shootHour) : that.shootHour != null) return false;
+        if (shotNum != null ? !shotNum.equals(that.shotNum) : that.shotNum != null) return false;
+        if (shotHour != null ? !shotHour.equals(that.shotHour) : that.shotHour != null) return false;
         if (truingNum != null ? !truingNum.equals(that.truingNum) : that.truingNum != null) return false;
         if (printNum != null ? !printNum.equals(that.printNum) : that.printNum != null) return false;
         if (clothing != null ? !clothing.equals(that.clothing) : that.clothing != null) return false;
@@ -134,8 +134,8 @@ public class GrapherPlan {
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (int) (userId ^ (userId >>> 32));
-        result = 31 * result + (shootNum != null ? shootNum.hashCode() : 0);
-        result = 31 * result + (shootHour != null ? shootHour.hashCode() : 0);
+        result = 31 * result + (shotNum != null ? shotNum.hashCode() : 0);
+        result = 31 * result + (shotHour != null ? shotHour.hashCode() : 0);
         result = 31 * result + (truingNum != null ? truingNum.hashCode() : 0);
         result = 31 * result + (printNum != null ? printNum.hashCode() : 0);
         result = 31 * result + (clothing != null ? clothing.hashCode() : 0);

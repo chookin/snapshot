@@ -94,8 +94,8 @@ public class GrapherController {
 
         GrapherPlan plan = new GrapherPlan();
         plan.setUserId(uid);
-        plan.setShootNum(shootNum);
-        plan.setShootHour(shootHour);
+        plan.setShotNum(shootNum);
+        plan.setShotHour(shootHour);
         plan.setTruingNum(truingNum);
         plan.setPrintNum(printNum);
         plan.setClothing(clothing);

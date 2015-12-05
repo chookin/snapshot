@@ -7,7 +7,7 @@ import java.sql.Timestamp;
  * Created by zhuyin on 12/4/15.
  */
 @Entity
-@Table(name = "photo_like", schema = "", catalog = "snapshot")
+@Table(name = "photo_like")
 public class PhotoLike {
     private long id;
     private long photoId;

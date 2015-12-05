@@ -100,8 +100,8 @@ DROP TABLE IF EXISTS grapher_plan;
 CREATE TABLE grapher_plan(
   id BIGINT NOT NULL auto_increment,
   user_id BIGINT NOT NULL COMMENT '摄影师id',
-  shoot_num int DEFAULT 0 COMMENT '拍摄张数',
-  shoot_hour int DEFAULT 0 COMMENT '拍摄时长，小时数',
+  shot_num int DEFAULT 0 COMMENT '拍摄张数',
+  shot_hour int DEFAULT 0 COMMENT '拍摄时长，小时数',
   truing_num int DEFAULT 0 COMMENT '精修底片的张数',
   print_num INT DEFAULT 0 COMMENT '相片冲印的张数',
   clothing VARCHAR(256) COMMENT '服装',
@@ -147,6 +147,7 @@ create table photo(
   time DATETIME COMMENT '照片上传的时间',
   PRIMARY KEY  (id)
 );
+INSERT into photo(id, user_id, photo) VALUES(1, 1, 'path/p1');
 
 # 对照片的点赞
 drop table if exists photo_like;
@@ -154,6 +155,7 @@ create table photo_like(
   id bigint not null auto_increment,
   photo_id bigint not null comment '被点赞的照片id',
   user_id bigint not null comment '哪个用户点的赞',
+  action TINYINT NOT NULL DEFAULT 1 COMMENT '-1, 踩;1, 点赞',
   time datetime comment '点赞时间',
   PRIMARY KEY  (id)
 );
