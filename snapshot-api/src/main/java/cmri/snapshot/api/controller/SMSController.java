@@ -24,6 +24,9 @@ import java.util.Map;
 public class SMSController {
     protected final Logger LOG = LoggerFactory.getLogger(getClass());
 
+    /**
+     * 生成随机数
+     */
     String generateCode(){
         // int类型的最大值的常量可取的值为 2的31次方-1。理论上最大值是：2147483647
         int number = ConfigManager.getInt("sms.authCode.number");

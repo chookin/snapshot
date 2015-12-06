@@ -10,10 +10,20 @@ import java.sql.Timestamp;
 public class Photo {
     private long id;
     private long userId;
+    private Long worksId;
     private String photo;
     private int likeCount;
     private int commentCount;
     private Timestamp time;
+
+    public static Photo newOne(){
+        return new Photo()
+                .setTime(new Timestamp(System.currentTimeMillis()))
+                ;
+    }
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     @Id
     @Column(name = "id")
@@ -72,8 +82,9 @@ public class Photo {
         return time;
     }
 
-    public void setTime(Timestamp time) {
+    public Photo setTime(Timestamp time) {
         this.time = time;
+        return this;
     }
 
     @Override
@@ -102,5 +113,15 @@ public class Photo {
         result = 31 * result + commentCount;
         result = 31 * result + (time != null ? time.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "works_id")
+    public Long getWorksId() {
+        return worksId;
+    }
+
+    public void setWorksId(Long worksId) {
+        this.worksId = worksId;
     }
 }

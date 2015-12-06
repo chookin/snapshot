@@ -33,11 +33,13 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private UserRepository userRepository;
 
+    @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
         validate(request);
         return true;
     }
+
     void validate(HttpServletRequest request) {
         String sig = request.getParameter("sig");
         Validate.isTrue(StringUtils.isNotEmpty(sig), "para 'sig' is empty");
@@ -77,6 +79,7 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
             }
         }
     }
+
     void validate(String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         String mySig = genSig(httpMethod, url, paras);
         if(sig.equals(mySig)){
@@ -84,6 +87,7 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
         }
         throw new AuthException("Fail on validating signature");
     }
+
     User validateByUsername(String username, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         User user = userRepository.findByName(username);
         if(user == null)
@@ -97,12 +101,14 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
             throw new AuthException("No user of "+phoneNum);
         return validate(user, httpMethod, url, paras, sig);
     }
-    User validateByUid(Long uid, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
+
+    User validateByUid(long uid, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         User user = userRepository.findById(uid);
         if(user == null)
             throw new AuthException("No user of "+uid);
         return validate(user, httpMethod, url, paras, sig);
     }
+
     User validate(User user, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         String key = genKey(user.getPassword());
         String mySig = genSig(key, httpMethod, url, paras);
@@ -111,12 +117,15 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
         }
         return user;
     }
+
     public static String genKey(String password){
         return DigestUtils.md5Hex(password);
     }
+
     public static String genSig(String httpMethod, String url, TreeMap<String, Object> paras){
         return genSig(defaultKey, httpMethod, url, paras);
     }
+
     public static String genSig(String key, String httpMethod, String url, TreeMap<String, Object> paras){
         StringBuilder strb = new StringBuilder(httpMethod).append(url);
         for(Map.Entry<String, Object> entry: paras.entrySet()){

@@ -33,7 +33,7 @@ public class ImageController {
                 .set("url", WebMvcConfig.getUrl(filename))
                 ;
     }
-    @RequestMapping(value="/uploadMany", method = RequestMethod.POST)
+    @RequestMapping(value="/uploadMultiple", method = RequestMethod.POST)
     public ResponseMessage upload(HttpServletRequest request, @RequestParam(value = "imgs") MultipartFile[] files) throws IOException{
         List<String> filenames = new ArrayList<>();
         for(MultipartFile file: files){
@@ -44,6 +44,14 @@ public class ImageController {
                 .set("filenames", JsonHelper.toJson(filenames))
                 ;
     }
+
+    /**
+     * 上传照片到服务器
+     *
+     * @param request http 请求
+     * @param file 照片文件
+     * @throws IOException
+     */
     public static String uploadImg(HttpServletRequest request, MultipartFile file) throws IOException {
         String uploadPath = FilenameUtils.concat(ConfigManager.get("upload.basePath"), "image");
         return MultipartFileUploader.getInstance(request)

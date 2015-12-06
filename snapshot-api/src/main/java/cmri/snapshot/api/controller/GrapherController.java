@@ -28,9 +28,9 @@ public class GrapherController {
     private GrapherPlanRepository planRepository;
     @Autowired
     private CameraRepository cameraRepository;
-    @Autowired
-    private PhotoRepository photoRepository;
+
     /**
+     * 申请成为摄影师
      *
      * @param uid 用户ID
      * @param realName 真实姓名
@@ -42,7 +42,7 @@ public class GrapherController {
      * @param cameraImgPath 器材照片的服务器路径
      */
     @RequestMapping(value = "/toBecome", method = RequestMethod.POST)
-    public ResponseMessage toBecome(Long uid, String realName, String idNum, String idImgPath, String cameraId, String cameraModel, String lensModel, String cameraImgPath) {
+    public ResponseMessage toBecome(long uid, String realName, String idNum, String idImgPath, String cameraId, String cameraModel, String lensModel, String cameraImgPath) {
         Timestamp now = new Timestamp(System.currentTimeMillis());
         User user = userRepository.findById(uid);
         user.setRealName(realName);
@@ -68,6 +68,8 @@ public class GrapherController {
     }
 
     /**
+     * 修改摄影师的信息
+     *
      * @param uid 用户ID
      * @param newName 昵称
      * @param region 服务城市
@@ -80,7 +82,7 @@ public class GrapherController {
      * @param makeup 化妆
      */
     @RequestMapping(value = "/info/mod", method = RequestMethod.POST)
-    public ResponseMessage modInfo(Long uid, String newName, String region, String desire, int shootNum, int shootHour, int truingNum, int printNum, String clothing, String makeup){
+    public ResponseMessage modInfo(long uid, String newName, String region, String desire, int shootNum, int shootHour, int truingNum, int printNum, String clothing, String makeup){
         Timestamp now = new Timestamp(System.currentTimeMillis());
         User user = userRepository.findById(uid);
         user.setName(newName);
@@ -105,28 +107,25 @@ public class GrapherController {
         return new ResponseMessage();
     }
 
+    /**
+     * 获取指定摄影师的套餐详情
+     */
     @RequestMapping(value = "/plan/get", method = RequestMethod.POST)
-    public ResponseMessage getPlan(Long uid){
+    public ResponseMessage getPlan(long uid){
         GrapherPlan plan = planRepository.findByUserId(uid);
         return new ResponseMessage()
                 .set("plan", JsonHelper.toJson(plan))
                 ;
     }
 
+    /**
+     * 获取指定摄影师的器材详情
+     */
     @RequestMapping(value = "/cameras/get", method = RequestMethod.POST)
-    public ResponseMessage getCamera(Long uid){
+    public ResponseMessage getCamera(long uid){
         List<Camera> cameras = cameraRepository.findByUserId(uid);
         return new ResponseMessage()
                 .set("cameras", JsonHelper.toJson(cameras))
                 ;
     }
-
-    @RequestMapping(value = "/photos/get", method = RequestMethod.POST)
-    public ResponseMessage getPhotos(Long uid){
-        List<Photo> photos = photoRepository.findByUserId(uid);
-        return new ResponseMessage()
-                .set("photos", JsonHelper.toJson(photos))
-                ;
-    }
-
 }

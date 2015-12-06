@@ -15,10 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +41,7 @@ public class UserController {
     private AvatarDetailRepository avatarDetailRepository;
 
     /**
-     * 因为签名校验时已经使用了密码信息，因此不需要再传递密码的参数。
+     * 用户登录. 因为签名校验时已经使用了密码信息，因此不需要再传递密码的参数。
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseMessage login(Long phoneNum, String username) {
@@ -67,6 +64,9 @@ public class UserController {
         return new ResponseMessage();
     }
 
+    /**
+     * 用户注册
+     */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseMessage register(Long phoneNum, String username, String password, String authCode) {
         smsValidator.validateAuthCode(phoneNum, authCode);
@@ -79,8 +79,11 @@ public class UserController {
         return new ResponseMessage();
     }
 
+    /**
+     * 获取用户基本信息
+     */
     @RequestMapping(value = "/info/get", method = RequestMethod.POST)
-    public ResponseMessage getInfo(Long uid){
+    public ResponseMessage getInfo(long uid){
         User user = userRepository.findById(uid);
         return new ResponseMessage()
                 .set("username", user.getName())
@@ -94,7 +97,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/username/get", method = RequestMethod.POST)
-    public ResponseMessage getUsername(Long uid){
+    public ResponseMessage getUsername(long uid){
         // TODO use redis to cache
         String username = userRepository.findById(uid).getName();
         return new ResponseMessage()
@@ -102,7 +105,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/name/mod", method = RequestMethod.POST)
-    public ResponseMessage modName(Long uid, String newName){
+    public ResponseMessage modName(long uid, String newName){
         User user = userRepository.findById(uid);
         user.setName(newName);
         userRepository.save(user);
@@ -110,18 +113,19 @@ public class UserController {
     }
 
     @RequestMapping(value = "/password/mod", method = RequestMethod.POST)
-    public ResponseMessage modPassword(Long uid, String password, String authCode){
+    public ResponseMessage modPassword(long uid, String password, String authCode){
         User user = userRepository.findById(uid);
         smsValidator.validateAuthCode(user.getPhone(), authCode);
         user.setPassword(password);
         userRepository.save(user);
         return new ResponseMessage();
     }
+
     /**
-     * 提交头像修改
+     * 修改头像
      */
     @RequestMapping(value="/avatar/mod", method = RequestMethod.POST)
-    public ResponseMessage modAvatar(HttpServletRequest request, Long uid, @RequestParam(value = "img") MultipartFile file) throws Exception{
+    public ResponseMessage modAvatar(HttpServletRequest request, long uid, @RequestParam(value = "img") MultipartFile file) throws Exception{
         // save the source avatar image file, 原始尺寸
         String filename = ImageController.uploadImg(request, file);
         AvatarDetail origin = new AvatarDetail();
@@ -150,12 +154,4 @@ public class UserController {
                 .set("url", WebMvcConfig.getUrl(avatar))
                 ;
     }
-
-
-
-
-
-
-
-
 }

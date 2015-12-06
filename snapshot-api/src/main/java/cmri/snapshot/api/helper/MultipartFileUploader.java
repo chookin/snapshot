@@ -52,7 +52,7 @@ public class MultipartFileUploader {
      default $uploadPath is ConfigManager.get("upload.uploadPath");
      $extension is parsed from source multipartfile name, if fail to parse, then set to defaultExtension, which is set by call method setDefaultExtension().
      * @param file MultipartFile
-     * @return file name
+     * @return file name, relative to server context path.
      * @throws IOException
      */
     public String upload(MultipartFile file) throws IOException {

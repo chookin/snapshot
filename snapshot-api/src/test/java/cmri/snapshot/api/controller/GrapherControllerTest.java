@@ -68,14 +68,4 @@ public class GrapherControllerTest extends WebAppTest {
         log(response);
         Assert.assertTrue(response.isSucceed());
     }
-
-    @Test
-    public void testGetPhoto() throws Exception {
-        ResponseMessage response = rest.reset()
-                .setPath("grapher/photos/get")
-                .add("uid", ConfigManager.getLong("test.uid"))
-                .post();
-        log(response);
-        Assert.assertTrue(response.isSucceed());
-    }
 }

@@ -1,7 +1,10 @@
 package cmri.snapshot.api.domain;
 
+import cmri.snapshot.api.helper.ModelHelper;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by zhuyin on 12/3/15.
@@ -15,15 +18,29 @@ public class UserComment {
     private long parent;
     private String content;
     private Timestamp time;
-
+    private static final AtomicLong idGen = new AtomicLong();
+    static {
+        Long id = ModelHelper.getMaxId("works");
+        if(id != null) idGen.set(id);
+    }
+    public static UserComment newOne(){
+        return new UserComment()
+                .setId(nextId())
+                .setTime(new Timestamp(System.currentTimeMillis()))
+                ;
+    }
+    public static long nextId(){
+        return idGen.incrementAndGet();
+    }
     @Id
     @Column(name = "id")
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public UserComment setId(long id) {
         this.id = id;
+        return this;
     }
 
     @Basic
@@ -72,8 +89,9 @@ public class UserComment {
         return time;
     }
 
-    public void setTime(Timestamp time) {
+    public UserComment setTime(Timestamp time) {
         this.time = time;
+        return this;
     }
 
     @Override

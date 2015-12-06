@@ -26,9 +26,8 @@ public class GlobalExceptionHandler {
     protected final Logger LOG = LoggerFactory.getLogger(getClass());
 
     /**
-     * Convert a predefined exception to an HTTP Status code.
+     * 对于易定位故障原因的异常,只需传递错误内容给客户端,并且在日志中也只需记录错误内容.
      */
-
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ IllegalArgumentException.class, AuthException.class, HttpRequestMethodNotSupportedException.class})
     @ResponseBody
@@ -40,21 +39,29 @@ public class GlobalExceptionHandler {
         return response;
     }
 
+    /**
+     * 对于简单异常,只需传递错误内容给客户端,但在日志中需记录错误堆栈.
+     */
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ NullPointerException.class})
     @ResponseBody
     public ResponseMessage simpleError(HttpServletRequest request, Exception e) {
-        ResponseMessage response = new ResponseMessage(false, e.getMessage());
-        LOG.error(ServerHelper.getErrorDesc(ServerHelper.getDesc(request), response.getId()), e);
+        String requestDesc = ServerHelper.getDesc(request);
+        ResponseMessage response = new ResponseMessage(false, requestDesc + ". " + e.getMessage());
+        LOG.error(ServerHelper.getErrorDesc(requestDesc, response.getId()), e);
         return response;
     }
 
+    /**
+     * 对于其他异常,需传递错误堆栈给客户端,并在日志中记录错误堆栈.
+     */
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({ Exception.class})
     @ResponseBody
     public ResponseMessage error(HttpServletRequest request, Throwable e) {
-        ResponseMessage response = new ResponseMessage(false, e.toString() + "\t" + Arrays.toString(e.getStackTrace()));
-        LOG.error(ServerHelper.getErrorDesc(ServerHelper.getDesc(request), response.getId()), e);
+        String requestDesc = ServerHelper.getDesc(request);
+        ResponseMessage response = new ResponseMessage(false, requestDesc + ". " + e.toString() + "\t" + Arrays.toString(e.getStackTrace()));
+        LOG.error(ServerHelper.getErrorDesc(requestDesc, response.getId()), e);
         return response;
     }
 }

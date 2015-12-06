@@ -25,9 +25,9 @@ CREATE TABLE user (
   avatar varchar(512) COMMENT '头像的存储地址',
   register_time DATETIME COMMENT '注册时间',
   update_time DATETIME COMMENT '账户信息的修改时间',
-  order_count int DEFAULT 0 NOT NULL COMMENT '订单数',
-  appointment_count int DEFAULT 0 COMMENT '预约数',
-  collected_count int DEFAULT 0 NOT NULL COMMENT '被收藏数',
+#   order_count int DEFAULT 0 NOT NULL COMMENT '订单数',
+#   appointment_count int DEFAULT 0 COMMENT '预约数',
+#   collected_count int DEFAULT 0 NOT NULL COMMENT '被收藏数',
   # Must define 'id' as primary key, or else throw exception: Incorrect table definition; there can be only one auto column and it must be defined as a key
   PRIMARY KEY  (id)
 );
@@ -128,7 +128,7 @@ create table user_like(
 # 照片评论
 drop table if exists user_comment;
 create table user_comment(
-  id bigint not null auto_increment,
+  id bigint not null,
   user_id bigint not null comment '评论人id',
   object bigint not null comment '被评论的人id',
   parent bigint default 0 not null comment '父评论id',
@@ -136,16 +136,31 @@ create table user_comment(
   time datetime comment '评论时间',
   PRIMARY KEY  (id)
 );
-# 照片
-drop table if exists photo;
-create table photo(
-  id bigint not null auto_increment,
+# 作品
+DROP TABLE if EXISTS works;
+CREATE TABLE works(
+  id BIGINT NOT NULL,
   user_id bigint not null comment '上传照片的用户的id',
-  photo varchar(512) comment '照片地址',
+  name VARCHAR(64) NOT NULL COMMENT '作品名称',
+  location VARCHAR(128) COMMENT '拍摄地点',
   like_count int default 0 not null comment '点赞次数',
   comment_count int default 0 not null comment '评论次数',
-  time DATETIME COMMENT '照片上传的时间',
-  PRIMARY KEY  (id)
+  create_time DATETIME COMMENT '作品创建时间',
+  PRIMARY KEY (id)
+);
+INSERT into works(id, user_id, name) VALUES(1, 1, 'zhu');
+
+# 作品照片
+DROP TABLE if EXISTS photo;
+CREATE TABLE photo(
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  user_id BIGINT COMMENT '照片所属用户',
+  works_id BIGINT COMMENT '该照片所属作品的id',
+  photo VARCHAR(512) NOT NULL COMMENT '照片地址',
+  like_count int default 0 not null comment '点赞次数',
+  comment_count int default 0 not null comment '评论次数',
+  time DATETIME COMMENT '上传时间',
+  PRIMARY KEY (id)
 );
 INSERT into photo(id, user_id, photo) VALUES(1, 1, 'path/p1');
 
@@ -163,18 +178,29 @@ create table photo_like(
 drop table if exists photo_comment;
 create table photo_comment(
   id bigint not null auto_increment,
-  shot_id bigint not null comment '照片id',
+  photo_id bigint not null comment '照片id',
   user_id bigint not null comment '评论的人',
   parent bigint default 0 not null comment '父评论id',
   centent text comment '评论正文',
   time datetime comment '评论时间',
   PRIMARY KEY  (id)
 );
-# 约拍活动
-drop table if exists shot;
-create table shot(
+# 订单
+drop table if EXISTS shot_order;
+CREATE TABLE shot_order(
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  user_id BIGINT NOT NULL COMMENT '用户id',
+  grapher_id BIGINT NOT NULL COMMENT '摄影师id',
+  price int DEFAULT 0 NOT NULL COMMENT '订单价格',
+  start_time DATETIME COMMENT '时间',
+  create_time DATETIME COMMENT '订单创建时间',
+  PRIMARY KEY (id)
+);
+# 团拍活动
+drop table if exists group_shot;
+create table group_shot(
   id bigint not null auto_increment,
-  price int not null comment '价格',
+  price int DEFAULT 0 not null comment '价格',
   start_time datetime comment '活动开始时间',
   end_time datetime comment '活动结束时间',
   location varchar(512) default '' not null comment '拍摄的地点',
@@ -188,37 +214,39 @@ create table shot(
   registration_deadline datetime comment '报名截止时间',
   PRIMARY KEY  (id)
 );
-# 约拍活动的摄影师
-drop table if exists shot_grapher;
-create table shot_grapher(
-  shot_id bigint not null comment '约拍活动id',
-  grapher_id bigint not null comment '摄影师id'
+# 团拍活动的摄影师
+drop table if exists group_shot_grapher;
+create table group_shot_grapher(
+  id bigint not null auto_increment,
+  shot_id bigint not null comment '团拍活动id',
+  grapher_id bigint not null comment '摄影师id',
+  PRIMARY KEY  (id)
 );
-# 约拍活动的参加人员
-drop table if exists shot_enroll;
-create table shot_enroll(
-  shot_id bigint not null comment '约拍活动id',
+# 团拍活动的参加人员
+drop table if exists group_shot_enroll;
+create table group_shot_enroll(
+  shot_id bigint not null comment '团拍活动id',
   user_id bigint not null comment '参团人id',
   time datetime not null comment '报名的时间'
 );
-# 约拍活动的样板图片
-drop table if exists shot_poster;
-create table shot_poster(
-  shot_id bigint not null comment '约拍活动id',
-  photo varchar(512) comment '约拍海报图片'
+# 团拍活动的样板图片
+drop table if exists group_shot_poster;
+create table group_shot_poster(
+  shot_id bigint not null comment '团拍活动id',
+  photo varchar(512) comment '团拍海报图片'
 );
-# 对约拍的点赞
-drop table if exists shot_like;
-create table shot_like(
-  shot_id bigint not null comment '约拍活动id',
+# 对团拍的点赞
+drop table if exists group_shot_like;
+create table group_shot_like(
+  shot_id bigint not null comment '团拍活动id',
   user_id bigint not null comment '点赞的人',
   time datetime comment '点赞时间'
 );
-# 约拍评论
-drop table if exists shot_comment;
-create table shot_comment(
+# 团拍评论
+drop table if exists group_shot_comment;
+create table group_shot_comment(
   id bigint not null auto_increment,
-  shot_id bigint not null comment '约拍活动id',
+  shot_id bigint not null comment '团拍活动id',
   user_id bigint not null comment '评论的人',
   parent bigint default 0 not null comment '父评论id',
   centent text comment '评论正文',

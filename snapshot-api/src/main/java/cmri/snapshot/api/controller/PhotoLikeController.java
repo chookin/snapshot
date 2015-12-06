@@ -22,6 +22,13 @@ public class PhotoLikeController {
     private PhotoRepository photoRepository;
     @Autowired
     private PhotoLikeRepository photoLikeRepository;
+
+    /**
+     * 用户对照片点赞
+     *
+     * @param uid 哪个用户点赞
+     * @param photoId 对哪个照片点赞
+     */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseMessage add(long uid, long photoId){
         Photo photo = photoRepository.findOne(photoId);
@@ -35,6 +42,13 @@ public class PhotoLikeController {
         photoLikeRepository.save(like);
         return new ResponseMessage();
     }
+
+    /**
+     * 用户取消对照片点赞
+     *
+     * @param uid 哪个用户取消点赞
+     * @param photoId 被取消点赞的照片id
+     */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseMessage delete(long uid, long photoId){
         Photo photo = photoRepository.findOne(photoId);

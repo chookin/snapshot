@@ -18,6 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class ErrorController {
     protected final Logger LOG = LoggerFactory.getLogger(getClass());
+
+    /**
+     * 转换错误响应为ResponseMessage
+     */
     @RequestMapping(value = "/error", method = RequestMethod.POST)
     @ResponseBody
     public ResponseMessage error(HttpServletRequest request, HttpServletResponse response){
