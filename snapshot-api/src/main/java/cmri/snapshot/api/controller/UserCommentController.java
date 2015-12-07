@@ -49,7 +49,7 @@ public class UserCommentController {
     }
 
     /**
-     * 获取对指定用户的评论
+     * 获取对自己的评论
      */
     @RequestMapping(value = "/getAboutUser", method = RequestMethod.POST)
     public ResponseMessage getAboutUser(long uid){

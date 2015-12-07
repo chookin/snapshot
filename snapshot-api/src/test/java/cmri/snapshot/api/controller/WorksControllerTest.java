@@ -20,7 +20,6 @@ import static org.junit.Assert.*;
 public class WorksControllerTest extends WebAppTest{
 
     @Test
-    @Ignore
     public void testAddWork() throws Exception {
         FileSystemResource file1 = new FileSystemResource(new File(ConfigFileManager.dump("pic/sandy-2009.jpg")));
         FileSystemResource file2 = new FileSystemResource(new File(ConfigFileManager.dump("pic/yanzi.jpg")));

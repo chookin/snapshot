@@ -203,6 +203,7 @@ create table group_shot(
   price int DEFAULT 0 not null comment '价格',
   start_time datetime comment '活动开始时间',
   end_time datetime comment '活动结束时间',
+  registration_deadline datetime comment '报名截止时间',
   location varchar(512) default '' not null comment '拍摄的地点',
   service varchar(512) default '' not null comment '服务，如：>60张拍摄，30张精修',
   min_number int default 0 not null comment '最少参团人数或家庭数, inclusive',
@@ -210,8 +211,9 @@ create table group_shot(
   enrolled_number int default 0 not null comment '已报名的人数或家庭数',
   status TINYINT DEFAULT 0 NOT NULL COMMENT '订单状态: 0: 未开始, 1: 进行中; 2, 取消, 3:完成',
   descr varchar(2048) default '' not null comment '活动简介',
+  like_count int default 0 not null comment '点赞次数',
+  comment_count int default 0 not null comment '评论次数',
   create_time datetime comment '活动创建时间',
-  registration_deadline datetime comment '报名截止时间',
   PRIMARY KEY  (id)
 );
 # 团拍活动的摄影师

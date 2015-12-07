@@ -111,8 +111,8 @@ public class GrapherController {
      * 获取指定摄影师的套餐详情
      */
     @RequestMapping(value = "/plan/get", method = RequestMethod.POST)
-    public ResponseMessage getPlan(long uid){
-        GrapherPlan plan = planRepository.findByUserId(uid);
+    public ResponseMessage getPlan(long gid){
+        GrapherPlan plan = planRepository.findByUserId(gid);
         return new ResponseMessage()
                 .set("plan", JsonHelper.toJson(plan))
                 ;
@@ -122,10 +122,22 @@ public class GrapherController {
      * 获取指定摄影师的器材详情
      */
     @RequestMapping(value = "/cameras/get", method = RequestMethod.POST)
-    public ResponseMessage getCamera(long uid){
-        List<Camera> cameras = cameraRepository.findByUserId(uid);
+    public ResponseMessage getCamera(long gid){
+        List<Camera> cameras = cameraRepository.findByUserId(gid);
         return new ResponseMessage()
                 .set("cameras", JsonHelper.toJson(cameras))
+                ;
+    }
+
+    /**
+     * 获取摄影师的可预约日期
+     *
+     * @param gid 摄影师id
+     */
+    @RequestMapping(value = "/availableDate/get", method = RequestMethod.POST)
+    public ResponseMessage getAvailableDate(long gid){
+        // TODO: 15/12/7
+        return new ResponseMessage()
                 ;
     }
 }

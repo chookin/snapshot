@@ -54,6 +54,7 @@ public class GrapherControllerTest extends WebAppTest {
         ResponseMessage response = rest.reset()
                 .setPath("grapher/plan/get")
                 .add("uid", ConfigManager.getLong("test.uid"))
+                .add("gid", ConfigManager.getLong("test.uid"))
                 .post();
         log(response);
         Assert.assertTrue(response.isSucceed());
@@ -64,6 +65,7 @@ public class GrapherControllerTest extends WebAppTest {
         ResponseMessage response = rest.reset()
                 .setPath("grapher/cameras/get")
                 .add("uid", ConfigManager.getLong("test.uid"))
+                .add("gid", ConfigManager.getLong("test.uid"))
                 .post();
         log(response);
         Assert.assertTrue(response.isSucceed());

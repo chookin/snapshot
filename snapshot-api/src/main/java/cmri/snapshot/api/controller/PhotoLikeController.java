@@ -26,7 +26,7 @@ public class PhotoLikeController {
     /**
      * 用户对照片点赞
      *
-     * @param uid 哪个用户点赞
+     * @param uid 用户id
      * @param photoId 对哪个照片点赞
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -46,7 +46,7 @@ public class PhotoLikeController {
     /**
      * 用户取消对照片点赞
      *
-     * @param uid 哪个用户取消点赞
+     * @param uid 用户id
      * @param photoId 被取消点赞的照片id
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
