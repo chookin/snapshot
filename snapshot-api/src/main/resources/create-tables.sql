@@ -210,7 +210,7 @@ create table group_shot(
   max_number int default 0 not null comment '最大参团人数或家庭数, inclusive',
   enrolled_number int default 0 not null comment '已报名的人数或家庭数',
   status TINYINT DEFAULT 0 NOT NULL COMMENT '订单状态: 0: 未开始, 1: 进行中; 2, 取消, 3:完成',
-  descr varchar(2048) default '' not null comment '活动简介',
+  info varchar(2048) default '' not null comment '活动简介',
   like_count int default 0 not null comment '点赞次数',
   comment_count int default 0 not null comment '评论次数',
   create_time datetime comment '活动创建时间',
@@ -227,22 +227,28 @@ create table group_shot_grapher(
 # 团拍活动的参加人员
 drop table if exists group_shot_enroll;
 create table group_shot_enroll(
+  id bigint not null auto_increment,
   shot_id bigint not null comment '团拍活动id',
   user_id bigint not null comment '参团人id',
-  time datetime not null comment '报名的时间'
+  time datetime not null comment '报名的时间',
+  PRIMARY KEY  (id)
 );
 # 团拍活动的样板图片
 drop table if exists group_shot_poster;
 create table group_shot_poster(
+  id bigint not null auto_increment,
   shot_id bigint not null comment '团拍活动id',
-  photo varchar(512) comment '团拍海报图片'
+  photo varchar(512) comment '团拍海报图片',
+  PRIMARY KEY  (id)
 );
 # 对团拍的点赞
 drop table if exists group_shot_like;
 create table group_shot_like(
+  id bigint not null auto_increment,
   shot_id bigint not null comment '团拍活动id',
   user_id bigint not null comment '点赞的人',
-  time datetime comment '点赞时间'
+  time datetime comment '点赞时间',
+  PRIMARY KEY  (id)
 );
 # 团拍评论
 drop table if exists group_shot_comment;
@@ -251,7 +257,7 @@ create table group_shot_comment(
   shot_id bigint not null comment '团拍活动id',
   user_id bigint not null comment '评论的人',
   parent bigint default 0 not null comment '父评论id',
-  centent text comment '评论正文',
+  content text comment '评论正文',
   time datetime comment '评论时间',
   PRIMARY KEY  (id)
 );

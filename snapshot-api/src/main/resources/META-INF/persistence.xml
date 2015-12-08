@@ -11,7 +11,7 @@
             <!--must configured both in application.properties and persistence.xml, here is for c3p0 and there is for spring-->
             <property name="hibernate.connection.username" value="snap"/>
             <property name="hibernate.connection.password" value="snap_cm"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/snapshot?createDatabaseIfNotExist=true"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:23306/snapshot?createDatabaseIfNotExist=true"/>
 
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>

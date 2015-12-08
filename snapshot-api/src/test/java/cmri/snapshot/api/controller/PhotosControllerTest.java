@@ -9,7 +9,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Created by feifei on 15/12/6.
+ * Created by zhuyin on 15/12/6.
  */
 public class PhotosControllerTest extends WebAppTest {
 

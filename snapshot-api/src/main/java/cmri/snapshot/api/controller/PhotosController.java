@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * Created by feifei on 15/12/6.
+ * Created by zhuyin on 15/12/6.
  */
 @RestController
 @RequestMapping("/photos")

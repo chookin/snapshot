@@ -6,7 +6,6 @@ import cmri.snapshot.api.domain.Works;
 import cmri.snapshot.api.repository.PhotoRepository;
 import cmri.snapshot.api.repository.WorksRepository;
 import cmri.utils.lang.JsonHelper;
-import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by feifei on 15/12/6.
+ * Created by zhuyin on 15/12/6.
  */
 @RestController
 @RequestMapping("/works")
@@ -34,26 +33,11 @@ public class WorksController {
     /**
      * 添加作品
      *
-     * @param uid 用户id
-     * @param name 作品名称
-     * @param location 拍摄地点
-     */
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseMessage addWork(long uid, String name, String location){
-        Works works = saveWork(uid, name, location);
-        return new ResponseMessage()
-                .set("works", JsonHelper.toJson(works))
-                ;
-    }
-
-    /**
-     * 添加作品
-     *
      * @param request http请求
      * @param uid 用户id
      * @param name 作品名称
      * @param location 拍摄地点
-     * @param imgs 作品照片
+     * @param imgs 作品照片, 可不指定，即只是创建作品，暂不传照片
      * @throws IOException
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -61,12 +45,16 @@ public class WorksController {
     public ResponseMessage addWork(HttpServletRequest request, long uid, String name, String location,@RequestParam MultipartFile[] imgs) throws IOException {
         Works works = saveWork(uid, name, location);
 
-        List<Photo> photos = new ArrayList<>();
-        for(MultipartFile img: imgs){
-            photos.add(createPhoto(request, uid, works.getId(), img));
+        if(imgs == null) {
+            List<Photo> photos = new ArrayList<>();
+            for (MultipartFile img : imgs) {
+                photos.add(createPhoto(request, uid, works.getId(), img));
+            }
+            photoRepository.save(photos);
         }
-        photoRepository.save(photos);
-        return new ResponseMessage();
+        return new ResponseMessage()
+                .set("works", JsonHelper.toJson(works))
+                ;
     }
 
     /**
@@ -91,7 +79,7 @@ public class WorksController {
      */
     @RequestMapping(value = "/photos/delete", method = RequestMethod.POST)
     public ResponseMessage deletePhoto(long worksId, long photoId){
-        photoRepository.deteteByIdAndWorksId(photoId, worksId);
+        photoRepository.deleteByIdAndWorksId(photoId, worksId);
         return new ResponseMessage();
     }
 

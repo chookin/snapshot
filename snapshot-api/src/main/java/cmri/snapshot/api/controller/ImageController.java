@@ -25,6 +25,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/image")
 public class ImageController {
+    /**
+     * 上传图片文件
+     *
+     * @param request http 请求
+     * @param file 照片文件
+     * @throws IOException
+     */
     @RequestMapping(value="/upload", method = RequestMethod.POST)
     public ResponseMessage upload(HttpServletRequest request, @RequestParam(value = "img") MultipartFile file) throws IOException{
         String filename = uploadImg(request, file);
@@ -33,6 +40,7 @@ public class ImageController {
                 .set("url", WebMvcConfig.getUrl(filename))
                 ;
     }
+
     @RequestMapping(value="/uploadMultiple", method = RequestMethod.POST)
     public ResponseMessage upload(HttpServletRequest request, @RequestParam(value = "imgs") MultipartFile[] files) throws IOException{
         List<String> filenames = new ArrayList<>();
@@ -46,7 +54,7 @@ public class ImageController {
     }
 
     /**
-     * 上传照片到服务器
+     * 上传图片文件
      *
      * @param request http 请求
      * @param file 照片文件

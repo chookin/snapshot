@@ -16,5 +16,5 @@ public interface PhotoRepository extends CrudRepository<Photo, Long> {
     @Query("select p from Photo as p where p.userId=? and p.worksId=? order by p.time desc ")
     List<Photo> findByUserIdAndWorksId(long userId, Long worksId);
 
-    void deteteByIdAndWorksId(long id, long worksId);
+    void deleteByIdAndWorksId(long id, long worksId);
 }

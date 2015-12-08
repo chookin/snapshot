@@ -17,7 +17,7 @@ import java.util.List;
  * Created by zhuyin on 12/1/15.
  */
 @RestController
-@RequestMapping("/grapher")
+@RequestMapping("/photographer")
 public class GrapherController {
     protected final Logger LOG = LoggerFactory.getLogger(getClass());
     @Autowired

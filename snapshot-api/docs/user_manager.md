@@ -1,5 +1,5 @@
-# 基本帐户
-## 注册
+# 用户管理
+## 用户注册
 path: /user/register
 paras:
 
@@ -8,7 +8,8 @@ paras:
 * password, string, 用户原始密码经md5加密后的字符串
 * authCode, string, 手机验证码
 
-## 登录
+<strong>注意：</strong>请先调用手机验证马接口发送手机验证码。
+## 用户登录
 path: /user/login
 ### 基于用户名的登录
 paras:
@@ -23,29 +24,39 @@ paras:
 * phoneNum, string, 手机号码
 
 <pre>POST {phoneNum:phoneNum,date:$date,time:$time,sig:$signature}</pre>
-## 获取账号信息
+## 获取用户基本信息
 path: /user/info/get
 paras:
 
-* phoneNum, string, 手机号码
+* uid, long, 用户id
 
 response:
 
 ```
 {id=$id, succeed=true, message='', data={
+uid:$uid
 username:$name,
 phoneNum:$phoneNum,
+area:$area,
+avatar:$avatar,
 sex:$sex,
 }}
 ```
+
+## 获取用户名
+path: /user/name/mod
+paras:
+
+* uid, long, 用户id
+
 ## 修改用户名
 path: /user/name/mod
 paras:
 
-* phoneNum, string, 手机号码
+* uid, long, 用户id
 * newName, string, 新的用户名
 
-## 重置密码
+## 修改密码
 path: /user/password/mod
 paras:
 

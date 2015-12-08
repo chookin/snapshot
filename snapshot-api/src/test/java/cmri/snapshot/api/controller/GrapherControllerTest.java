@@ -16,7 +16,7 @@ public class GrapherControllerTest extends WebAppTest {
     @Test
     public void testToBecome() throws Exception {
         ResponseMessage response = rest.reset()
-                .setPath("grapher/toBecome")
+                .setPath("photographer/toBecome")
                 .add("uid", ConfigManager.getLong("test.uid"))
                 .add("realName", "test")
                 .add("idNum", "412921198701013399")
@@ -33,7 +33,7 @@ public class GrapherControllerTest extends WebAppTest {
     @Test
     public void testModInfo() throws Exception {
         ResponseMessage response = rest.reset()
-                .setPath("grapher/info/mod")
+                .setPath("photographer/info/mod")
                 .add("uid", ConfigManager.getLong("test.uid"))
                 .add("newName", "abc")
                 .add("region", "北京")
@@ -52,7 +52,7 @@ public class GrapherControllerTest extends WebAppTest {
     @Test
     public void testGetPlan() throws Exception {
         ResponseMessage response = rest.reset()
-                .setPath("grapher/plan/get")
+                .setPath("photographer/plan/get")
                 .add("uid", ConfigManager.getLong("test.uid"))
                 .add("gid", ConfigManager.getLong("test.uid"))
                 .post();
@@ -63,7 +63,7 @@ public class GrapherControllerTest extends WebAppTest {
     @Test
     public void testGetCamera() throws Exception {
         ResponseMessage response = rest.reset()
-                .setPath("grapher/cameras/get")
+                .setPath("photographer/cameras/get")
                 .add("uid", ConfigManager.getLong("test.uid"))
                 .add("gid", ConfigManager.getLong("test.uid"))
                 .post();

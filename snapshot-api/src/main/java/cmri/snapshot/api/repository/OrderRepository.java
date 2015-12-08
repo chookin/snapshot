@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 /**
- * Created by feifei on 15/12/5.
+ * Created by zhuyin on 15/12/5.
  */
 public interface OrderRepository extends CrudRepository<Order, Long> {
     @Query("select e from Order e where e.userId = ? order by e.id ")

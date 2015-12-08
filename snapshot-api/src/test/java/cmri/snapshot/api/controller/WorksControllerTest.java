@@ -5,17 +5,14 @@ import cmri.snapshot.api.domain.ResponseMessage;
 import cmri.utils.configuration.ConfigFileManager;
 import cmri.utils.configuration.ConfigManager;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.core.io.FileSystemResource;
 
 import java.io.File;
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
-
 /**
- * Created by feifei on 15/12/6.
+ * Created by zhuyin on 15/12/6.
  */
 public class WorksControllerTest extends WebAppTest{
 

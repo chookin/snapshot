@@ -86,18 +86,17 @@ public class UserController {
     public ResponseMessage getInfo(long uid){
         User user = userRepository.findById(uid);
         return new ResponseMessage()
+                .set("uid", String.valueOf(uid))
                 .set("username", user.getName())
                 .set("phoneNum", String.valueOf(user.getPhone()))
                 .set("area", String.valueOf(user.getArea()))
                 .set("avatar", user.getAvatar())
                 .set("sex", user.getSex())
-                .set("appointmentCount", String.valueOf(user.getAppointmentCount()))
-                .set("collectedCount", String.valueOf(user.getCollectedCount()))
                 ;
     }
 
-    @RequestMapping(value = "/username/get", method = RequestMethod.POST)
-    public ResponseMessage getUsername(long uid){
+    @RequestMapping(value = "/name/get", method = RequestMethod.POST)
+    public ResponseMessage getName(long uid){
         // TODO use redis to cache
         String username = userRepository.findById(uid).getName();
         return new ResponseMessage()

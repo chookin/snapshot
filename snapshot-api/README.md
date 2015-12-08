@@ -133,7 +133,7 @@ such as:
 Use spring mvc framework.
 
 # 接口规范
-[接口规范](./interface_specification.md)
+[接口规范](./docs/interface_specification.md)
 
 # test
 <pre>

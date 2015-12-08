@@ -118,9 +118,9 @@ public class UserControllerTest extends WebAppTest{
     }
 
     @Test
-    public void testGetUsername() throws Exception {
+    public void testGetName() throws Exception {
         ResponseMessage response = rest.reset()
-                .setPath("user/username/get")
+                .setPath("user/name/get")
                 .add("uid", ConfigManager.getLong("test.uid"))
                 .post();
         log(response);

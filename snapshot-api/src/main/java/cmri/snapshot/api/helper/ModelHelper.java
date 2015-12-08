@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.SQLException;
 
 /**
- * Created by feifei on 15/12/6.
+ * Created by zhuyin on 15/12/6.
  */
 public class ModelHelper {
     private static final Logger LOG = LoggerFactory.getLogger(ModelHelper.class);

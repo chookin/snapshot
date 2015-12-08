@@ -15,10 +15,6 @@ http://{domain}:{port}/{path}?{query_string}
 * 对于GET请求，{query_string}必须放在QUERY参数中传递，即放在“?”后面；
 * 对于POST请求，{query_string}放在POST参数中传递；
 
-# 请求方式
-
-* 对于非匿名访问，除了“基于用户名的登录”和“手机号解绑和重新绑定”需要使用“用户名”参数请求外，其他接口需使用“用户手机号”来标识请求的调用者。
-
 # 签名算法
 所有api均需签名。签名算法如下：
 
@@ -134,4 +130,6 @@ $sig = genSig($secret_key, $method, $url, $arrContent);
 其中，$id是web server实际返回的响应消息id。
 
 # 参考
+
 * [百度rest api规范](http://developer.baidu.com/wiki/index.php?title=docs/cplat/push/api)
+* [微信公众平台开发者文档](http://mp.weixin.qq.com/wiki/home/index.html)
