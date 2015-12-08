@@ -15,7 +15,7 @@ paras:
 <strong>注意：</strong>请使用[图片管理接口](./image_manager.md#上传图片文件)上传身份证照片及器材照片。
 
 ## 修改摄影师的信息
-path: /photographer/nfo/mod
+path: /photographer/info/mod
 paras:
 
 * uid, 用户ID
