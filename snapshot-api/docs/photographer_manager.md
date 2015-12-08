@@ -1,6 +1,7 @@
 # 摄影师帐户管理
 ## 申请成为摄影师
 path: /photographer/toBecome
+
 paras:
 
 * uid, long, 用户id
@@ -16,6 +17,7 @@ paras:
 
 ## 修改摄影师的信息
 path: /photographer/info/mod
+
 paras:
 
 * uid, 用户ID
@@ -31,6 +33,7 @@ paras:
 
 ## 获取指定摄影师的套餐详情
 path: /photographer/plan/get
+
 paras:
 
 * uid, 用户ID
@@ -38,6 +41,7 @@ paras:
 
 ## 获取指定摄影师的器材详情
 path: /photographer/cameras/get
+
 paras:
 
 * uid, 用户ID

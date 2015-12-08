@@ -1,6 +1,7 @@
 # 用户管理
 ## 用户注册
 path: /user/register
+
 paras:
 
 * phoneNum, string, 手机号码
@@ -26,6 +27,7 @@ paras:
 <pre>POST {phoneNum:phoneNum,date:$date,time:$time,sig:$signature}</pre>
 ## 获取用户基本信息
 path: /user/info/get
+
 paras:
 
 * uid, long, 用户id
@@ -44,13 +46,15 @@ sex:$sex,
 ```
 
 ## 获取用户名
-path: /user/name/mod
+path: /user/name/
+
 paras:
 
 * uid, long, 用户id
 
 ## 修改用户名
 path: /user/name/mod
+
 paras:
 
 * uid, long, 用户id
@@ -58,6 +62,7 @@ paras:
 
 ## 修改密码
 path: /user/password/mod
+
 paras:
 
 * phoneNum, string, 手机号码
@@ -66,6 +71,7 @@ paras:
 
 ## 修改头像
 path: /user/avatar/mod
+
 paras:
 
 * phoneNum, string, 手机号码
