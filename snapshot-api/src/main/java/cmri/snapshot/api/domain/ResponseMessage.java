@@ -21,6 +21,7 @@ public class ResponseMessage {
     private boolean succeed;
     private String message;
     private Map<String, String> data = new HashMap<>();
+    private long time = System.currentTimeMillis();
     public long getId(){
         return id;
     }
@@ -38,7 +39,13 @@ public class ResponseMessage {
     public String getMessage() {
         return message;
     }
-
+    public ResponseMessage setTime(long time){
+        this.time = time;
+        return this;
+    }
+    public long getTime() {
+        return time;
+    }
     public Map<String, String> getData() {
         return data;
     }
@@ -73,6 +80,7 @@ public class ResponseMessage {
                 ", succeed=" + succeed +
                 ", message='" + message + '\'' +
                 ", data=" + data +
+                ", time=" + time +
                 '}';
     }
 }

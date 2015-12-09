@@ -101,7 +101,8 @@ sig    | string   | 是 | 签名值
 * id字段，long型，由web server生成，返回给用户方便问题追查与定位;
 * succeed字段，bool型，标识是否HTTP API调用失败；
 * message字段表示HTTP API返回的提示信息，如当调用失败时的错误消息；
-* data属性是一个二级json，由n个包含key和value属性的对象组成；表示API返回的数据内容。
+* data属性是一个二级json，由n个包含key和value属性的对象组成；表示API返回的数据内容;
+* time, long型，web server生成响应消息的时间。
 
 格式：
 
@@ -110,15 +111,16 @@ sig    | string   | 是 | 签名值
   "id": 1,
   "succeed" : true  | false,
   "message" : "message...",
-  "data" : {para1:$para1,para2:$para2...}
+  "data" : {para1:$para1,para2:$para2...},
+  "time" : 1449647018735
 }
 ```
 
 例如：
 
 ```
-{id=1, succeed=true, message='', data={}}
-{id=2, succeed=false, message='签名校验失败', data={}}
+{id=1, succeed=true, message='', data={}, time=1449647018735}
+{id=2, succeed=false, message='签名校验失败', data={}, time=1449647019363}
 ```
 
 # 约定
@@ -126,9 +128,11 @@ sig    | string   | 是 | 签名值
 * 默认HTTP method为POST；
 * 默认在调用成功时，响应的json为：
 ```
-{id=$id, succeed=true, message='', data={}}
+{id=$id, succeed=true, message='', data={}, time=$time}
 ```
-其中，$id是web server实际返回的响应消息id。
+其中，
+    * $id是web server实际返回的响应消息id;
+    * $time是web server生成响应消息的时间。
 
 # 参考
 
