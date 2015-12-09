@@ -131,6 +131,7 @@ sig    | string   | 是 | 签名值
 {id=$id, succeed=true, message='', data={}, time=$time}
 ```
 其中，
+
     * $id是web server实际返回的响应消息id;
     * $time是web server生成响应消息的时间。
 
