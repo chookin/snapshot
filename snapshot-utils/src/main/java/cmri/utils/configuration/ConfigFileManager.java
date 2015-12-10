@@ -55,19 +55,21 @@ public class ConfigFileManager {
     }
 
     public static List<String> readLines(String filename) throws IOException {
-        InputStream in = getResourceFile(filename);
-        if(in == null){
-            throw new IOException("cannot load resource: "+filename);
-        }
-        List<String> lines = new ArrayList<>();
-        InputStreamReader reader = new InputStreamReader(in, "utf-8");
-        try (BufferedReader br = new BufferedReader(reader)) {
-            String line = br.readLine();
-            while (line != null) {
-                lines.add(line);
-                line = br.readLine();
+        try(InputStream in = getResourceFile(filename)) {
+            if (in == null) {
+                throw new IOException("cannot load resource: " + filename);
             }
+            List<String> lines = new ArrayList<>();
+            try(InputStreamReader reader = new InputStreamReader(in, "utf-8")) {
+                try (BufferedReader br = new BufferedReader(reader)) {
+                    String line = br.readLine();
+                    while (line != null) {
+                        lines.add(line);
+                        line = br.readLine();
+                    }
+                }
+            }
+            return lines;
         }
-        return lines;
     }
 }

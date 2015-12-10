@@ -186,27 +186,34 @@ public class ConfigManager {
         return new TreeMap<>();
     }
 
+    /**
+     * Streams represent resources which you must always clean up explicitly, by calling the close method.<br>
+     * One stream can be chained to another by passing it to the constructor of some second stream. When this second stream is closed, then it automatically closes the original underlying stream as well.<br>
+     * With the introduction of Java 7, there are now try-with-resource statements which will automatically close any declared resources when the try block exits.
+     */
     private static SortedMap<String, String> loadPropertiesFile(String filename) throws IOException {
         SortedMap<String, String> paras = new TreeMap<>();
         Properties dbProps = new Properties();
-        InputStream in = ConfigFileManager.getResourceFile(filename);
-        if(in == null){
+        try(InputStream in = ConfigFileManager.getResourceFile(filename)) {
+            if (in == null) {
+                return paras;
+            }
+            dbProps.load(in);
+            dbProps.entrySet().stream()
+                    .filter(entry -> entry.getKey() instanceof String && entry.getValue() instanceof String)
+                            //.filter(entry -> StringUtils.isEmpty((String) entry.getKey()) || StringUtils.isEmpty((String) entry.getValue()))
+                    .forEach(entry -> paras.put((String) entry.getKey(), (String) entry.getValue()));
             return paras;
         }
-        dbProps.load(in);
-        dbProps.entrySet().stream()
-                .filter(entry -> entry.getKey() instanceof String && entry.getValue() instanceof String)
-                        //.filter(entry -> StringUtils.isEmpty((String) entry.getKey()) || StringUtils.isEmpty((String) entry.getValue()))
-                .forEach(entry -> paras.put((String) entry.getKey(), (String) entry.getValue()));
-        return paras;
     }
 
     private static SortedMap<String, String> loadXmlFile(String filename) throws IOException, SAXException, ParserConfigurationException {
-        InputStream in = ConfigFileManager.getResourceFile(filename);
-        if(in == null){
-            return paras;
+        try(InputStream in = ConfigFileManager.getResourceFile(filename)) {
+            if (in == null) {
+                return paras;
+            }
+            return new XmlConfigFile(in).getProperties();
         }
-        return new XmlConfigFile(in).getProperties();
     }
 }
 
