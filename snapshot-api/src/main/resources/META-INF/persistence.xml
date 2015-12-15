@@ -11,7 +11,7 @@
             <!--must configured both in application.properties and persistence.xml, here is for c3p0 and there is for spring-->
             <property name="hibernate.connection.username" value="snap"/>
             <property name="hibernate.connection.password" value="snap_cm"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:23306/snapshot?createDatabaseIfNotExist=true"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:23306/snapshot?createDatabaseIfNotExist=true&amp;autoReconnect=true&amp;failOverReadOnly=false"/>
 
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
@@ -30,6 +30,8 @@
             <!--To fix error "SQLState: 08003", set testConnectionOnCheckout to true-->
             <!--http://blog.csdn.net/nethibernate/article/details/6658855-->
             <property name="hibernate.c3p0.testConnectionOnCheckout" value="true"/>
+            <property name="hibernate.c3p0.acquire_increment" value="1"/>
+            <property name="hibernate.c3p0.validate" value="true"/>
         </properties>
     </persistence-unit>
 </persistence>

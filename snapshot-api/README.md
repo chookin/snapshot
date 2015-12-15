@@ -60,6 +60,8 @@ snapshot-api
     collation-server        = utf8_unicode_ci
     init-connect            ='SET NAMES utf8'
     character-set-server    = utf8
+    # 设置连接的等待时间为21天
+    wait_timeout            = 1814400
     # Replication Master Server (default)
     # binary logging is required for replication
     server-id       = 1

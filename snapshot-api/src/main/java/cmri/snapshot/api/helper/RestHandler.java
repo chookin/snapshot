@@ -24,7 +24,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import javax.xml.transform.Source;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -179,7 +178,7 @@ public class RestHandler {
 
     MultiValueMap<String, Object> getParas() {
         MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-        map.setAll(paras.innerMap());
+        map.setAll(paras.get());
         return map;
     }
 

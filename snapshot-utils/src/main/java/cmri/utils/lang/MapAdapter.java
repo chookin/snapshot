@@ -53,7 +53,7 @@ public class MapAdapter<K extends Object, V extends Object> {
         this.innerMap.clear();
         return this;
     }
-    public Map<K,V> innerMap(){
+    public Map<K,V> get(){
         return innerMap;
     }
 
