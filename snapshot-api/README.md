@@ -28,7 +28,7 @@ snapshot-api
     # The following options will be passed to all MySQL clients
     [client]
     #password       = your_password
-    port            = 3306
+    port            = 23306
     socket          = /home/work/local/mysql/var/mysqld.sock   
     default-character-set=utf8
     # Here follows entries for some specific programs
@@ -37,13 +37,13 @@ snapshot-api
     nice            = 0       
     # The MySQL server
     [mysqld]
-    port            = 3306
+    port            = 23306
     socket          = /home/work/local/mysql/var/mysql.sock
     local-infile    = 0
     user            = work
     pid-file        = /home/work/local/mysql/var/mysqld.pid
     socket          = /home/work/local/mysql/var/mysqld.sock
-    port            = 3306
+    port            = 23306
     basedir         = /home/work/local/mysql
     datadir         = /home/work/data/mysql
     tmpdir          = /tmp
@@ -161,6 +161,34 @@ Need use @Transactional.
 
 # appendix
 ## mysql
+如果是mac,
+
+* 采用brew安装
+<pre>brew install mysql</pre>
+* 添加修改mysql配置
+<pre>mysqld --help --verbose | more (查看帮助, 按空格下翻)</pre>
+你会看到开始的这一行(表示配置文件默认读取顺序)
+<pre>
+Default options are read from the following files in the given order:
+/etc/my.cnf /etc/mysql/my.cnf /usr/local/etc/my.cnf ~/.my.cnf
+</pre>
+通常这些位置是没有配置文件的, 所以要自己建一个
+
+<pre>
+# 用这个可以找到样例.cnf
+ls $(brew --prefix mysql)/support-files/my-*
+# 拷贝到第一个默认读取目录
+cp /usr/local/opt/mysql/support-files/my-default.cnf /etc/my.cnf
+# 此后按需修改my.cnf
+</pre>
+
+* 操作
+可用使用mysql的脚本启停,也可借助brew
+<pre>
+brew services start mysql
+brew services stop mysql
+</pre>
+
 Notice:
 
 * Tinyint,占用1字节的存储空间,取值范围是：带符号的范围是-128到127.
