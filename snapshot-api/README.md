@@ -2,13 +2,12 @@
 snapshot-api is developed on jdk1.8, using spring mvc framework.
 
 # compile and package
-
-1. mvn install cmri-utils.
-<pre>mvn install -DskipTests</pre>
-2. Install the sms sdk jar into local maven repository.
+1. Install the sms sdk jar into local maven repository.
 <pre>mvn install:install-file -Dfile=lib/CCP_REST_SDK_JAVA_v2.7r.jar -DgroupId=com-cloopen-rest -DartifactId=rest-sdk -Dversion=1.0.0 -Dpackaging=jar -DgeneratePom=true </pre>
-3. compile.
+1. compile.
 <pre>mvn clean compile -DskipTests</pre>
+1. package
+<pre>mvn package -DskipTests</pre>
 
 # deploy
 
