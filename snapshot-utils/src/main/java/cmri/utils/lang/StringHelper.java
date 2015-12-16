@@ -40,6 +40,7 @@ public final class StringHelper {
      [^x]	匹配除了x以外的任意字符
      [^aeiou]	匹配除了aeiou这几个字母以外的任意字符
      [0-9] 指定一个范围,代表的含意与\d就是完全一致的：一位数字
+     使用字符'\'转义特殊字符
 
      group(0) contains whole matched string.
 

@@ -18,6 +18,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/materials")
 public class MaterialsController {
+    /**
+     * 该方法的签名不需要传入uid参数
+     */
     @RequestMapping(value = "homepages", method = RequestMethod.GET)
     public ResponseMessage homepages(){
         List<String> items = new ArrayList<>();

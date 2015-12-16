@@ -135,8 +135,8 @@ such as:
 
 # test
 <pre>
-curl http://111.13.47.169:8080/materials/homepages?sig=e7481c3a91ac55e6b2e7c3b111a3aadb\&time=1450193196206\&username=test
-curl http://111.13.47.169:8080/materials/categories?sig=87127b777f0ba7aabcc746d95e07e5ea\&time=1450193196206\&username=test
+curl http://111.13.47.169:8080/materials/homepages?sig=0ae7ea9680aeedfb77c2069fd14bd1fe\&time=1450193196206
+curl http://111.13.47.169:8080/materials/categories?sig=b80a4d1a5e4c7f536036421436612aaa\&time=1450193196206
 
 curl -d "username=test&time=1450231255519&sig=733690b34e95714079bf2874cf5fbd07" http://111.13.47.169:8080/user/login
 #curl -d "username=test&password=hi&phoneNum=13699996666" http://localhost:8080/user/register

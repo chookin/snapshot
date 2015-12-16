@@ -6,6 +6,7 @@ import cmri.snapshot.api.helper.ParasHelper;
 import cmri.snapshot.api.repository.UserRepository;
 import cmri.utils.configuration.ConfigManager;
 import cmri.utils.exception.AuthException;
+import cmri.utils.web.UrlHelper;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -29,7 +30,7 @@ import java.util.TreeMap;
 public class SigInterceptor extends HandlerInterceptorAdapter {
     protected static final Logger LOG = LoggerFactory.getLogger(SigInterceptor.class);
     public static final String defaultKey = ConfigManager.get("sig.defaultKey");
-
+    static String[] withoutAuthPaths = {"/user/register", "/authCode/send", "/captcha", "/materials"};
     @Autowired
     private UserRepository userRepository;
 
@@ -43,44 +44,60 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
     void validate(HttpServletRequest request) {
         String sig = request.getParameter("sig");
         Validate.isTrue(StringUtils.isNotEmpty(sig), "para 'sig' is empty");
-        String url = request.getRequestURL().toString();
-        if(url.endsWith("user/register") || url.endsWith("authCode/send") || url.endsWith("captcha")){
-            validate(request.getMethod(),
+        if(withoutAuth(request.getRequestURL().toString())){
+            validateWithoutAuth(request.getMethod(),
                     request.getRequestURL().toString(),
                     ParasHelper.getParas(request).getSorted(),
                     sig);
         }else{
-            String username = request.getParameter("username");
-            String phoneNum = request.getParameter("phoneNum");
-            String uid = request.getParameter("uid");
-            if(username != null){
-                Validate.isTrue(StringUtils.isNotEmpty(username), "para 'username' is empty");
-                validateByUsername(username,
-                        request.getMethod(),
-                        request.getRequestURL().toString(),
-                        ParasHelper.getParas(request).getSorted(),
-                        sig);
-            }else if(phoneNum != null){
-                Long myPhoneNum = Long.valueOf(phoneNum);
-                validateByPhoneNum(myPhoneNum,
-                        request.getMethod(),
-                        request.getRequestURL().toString(),
-                        ParasHelper.getParas(request).getSorted(),
-                        sig);
-            }else if(uid != null) {
-                Long myUid = Long.valueOf(uid);
-                validateByUid(myUid,
-                        request.getMethod(),
-                        request.getRequestURL().toString(),
-                        ParasHelper.getParas(request).getSorted(),
-                        sig);
-            }else{
-                throw new AuthException("please assign 'username', 'phoneNum' or 'uid'");
-            }
+           validateWithAuth(request, sig);
         }
     }
 
-    void validate(String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
+    /**
+     * Whether or not need validating user info.
+     * @return true if not need, or else false.
+     */
+    boolean withoutAuth(String url){
+        for(String path: withoutAuthPaths){
+            String myPath = UrlHelper.getPath(url);
+            if(myPath.startsWith(path)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void validateWithAuth(HttpServletRequest request, String sig){
+        String username = request.getParameter("username");
+        String phoneNum = request.getParameter("phoneNum");
+        String uid = request.getParameter("uid");
+        if(username != null){
+            Validate.isTrue(StringUtils.isNotEmpty(username), "para 'username' is empty");
+            validateByUsername(username,
+                    request.getMethod(),
+                    request.getRequestURL().toString(),
+                    ParasHelper.getParas(request).getSorted(),
+                    sig);
+        }else if(phoneNum != null){
+            Long myPhoneNum = Long.valueOf(phoneNum);
+            validateByPhoneNum(myPhoneNum,
+                    request.getMethod(),
+                    request.getRequestURL().toString(),
+                    ParasHelper.getParas(request).getSorted(),
+                    sig);
+        }else if(uid != null) {
+            Long myUid = Long.valueOf(uid);
+            validateByUid(myUid,
+                    request.getMethod(),
+                    request.getRequestURL().toString(),
+                    ParasHelper.getParas(request).getSorted(),
+                    sig);
+        }else{
+            throw new AuthException("please assign 'username', 'phoneNum' or 'uid'");
+        }
+    }
+    void validateWithoutAuth(String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         String mySig = genSig(httpMethod, url, paras);
         if(sig.equals(mySig)){
             return;
@@ -92,24 +109,24 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
         User user = userRepository.findByName(username);
         if(user == null)
             throw new AuthException("No user of "+username);
-        return validate(user, httpMethod, url, paras, sig);
+        return validateByUser(user, httpMethod, url, paras, sig);
     }
 
     User validateByPhoneNum(Long phoneNum, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         User user = userRepository.findByPhone(phoneNum);
         if(user == null)
             throw new AuthException("No user of "+phoneNum);
-        return validate(user, httpMethod, url, paras, sig);
+        return validateByUser(user, httpMethod, url, paras, sig);
     }
 
     User validateByUid(long uid, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         User user = userRepository.findById(uid);
         if(user == null)
             throw new AuthException("No user of "+uid);
-        return validate(user, httpMethod, url, paras, sig);
+        return validateByUser(user, httpMethod, url, paras, sig);
     }
 
-    User validate(User user, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
+    User validateByUser(User user, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         String key = genKey(user.getPassword());
         String mySig = genSig(key, httpMethod, url, paras);
         if(!sig.equals(mySig)) {

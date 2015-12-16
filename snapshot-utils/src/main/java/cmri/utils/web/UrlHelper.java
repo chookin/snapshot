@@ -148,6 +148,23 @@ public class UrlHelper {
         return StringHelper.parseRegex(url, "(^[a-zA-Z]+://)?(www.)?([\\w\\.]+)/*", 3);
     }
 
+    /**
+     * Get path, with no protocol, no query parameters. For examples, path of "http://snapshot:8080/materials/homepages?sig=0ae7ea9680aeedfb77c2069fd14bd1fe&time=1450193196206" is "/materials/homepages"
+     */
+    public static String getPath(String url){
+        if (url == null) {
+            return null;
+        }
+        /*
+        group 0, url
+        group 1, protocol
+        group 2, www
+        group 3, domain
+        group 4, path
+        group ..., query parameters
+         */
+        return StringHelper.parseRegex(url, "(^[a-zA-Z]+://)?(www.)?([\\w\\.]+)(/+[\\w\\.\\/]+)\\?*", 4);
+    }
     public static String getProtocol(String url) {
         return StringHelper.parseRegex(url, protocolRegex, 1);
     }

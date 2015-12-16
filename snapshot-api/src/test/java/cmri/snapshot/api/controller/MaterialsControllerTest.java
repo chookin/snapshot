@@ -2,6 +2,7 @@ package cmri.snapshot.api.controller;
 
 import cmri.snapshot.api.WebAppTest;
 import cmri.snapshot.api.domain.ResponseMessage;
+import cmri.snapshot.api.interceptor.SigInterceptor;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -16,7 +17,7 @@ public class MaterialsControllerTest extends WebAppTest {
     public void testHomepages() throws Exception {
         ResponseMessage response = rest.reset()
                 .setPath("materials/homepages")
-                .add("username", "test")
+                .setSecretKey(SigInterceptor.defaultKey)
                 .add("time", 1450193196206L)
                 .get();
         log(response);
@@ -27,7 +28,7 @@ public class MaterialsControllerTest extends WebAppTest {
     public void testPersonalHomepages() throws Exception {
         ResponseMessage response = rest.reset()
                 .setPath("materials/personalHomepages")
-                .add("username", "test")
+                .setSecretKey(SigInterceptor.defaultKey)
                 .add("time", 1450193196206L)
                 .get();
         log(response);
@@ -38,7 +39,7 @@ public class MaterialsControllerTest extends WebAppTest {
     public void testCategories() throws Exception {
         ResponseMessage response = rest.reset()
                 .setPath("materials/categories")
-                .add("username", "test")
+                .setSecretKey(SigInterceptor.defaultKey)
                 .add("time", 1450193196206L)
                 .get();
         log(response);
@@ -49,7 +50,7 @@ public class MaterialsControllerTest extends WebAppTest {
     public void testGroupShotDetails() throws Exception {
         ResponseMessage response = rest.reset()
                 .setPath("materials/groupShotDetails")
-                .add("username", "test")
+                .setSecretKey(SigInterceptor.defaultKey)
                 .add("time", 1450193196206L)
                 .get();
         log(response);

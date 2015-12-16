@@ -1,6 +1,7 @@
 package cmri.utils.web;
 
 import junit.framework.TestCase;
+import org.junit.Assert;
 
 /**
  * Created by zhuyin on 3/5/15.
@@ -27,11 +28,15 @@ public class UrlHelperTest extends TestCase {
         assertEquals("http", UrlHelper.getProtocol(simpleUrl));
     }
 
-    public void testGetDomain() {
+    public void testGetBaseDomain() {
         String url = "http://a.m.taobao.com/items/i42471538944.htm?sid=60338c63d854b9ef&abtest=4&rn=2bdac199debd8eb86b7234fc1d3c712e";
         assertEquals("a.m.taobao.com", UrlHelper.getBaseDomain(url));
     }
-
+    public void testGetPath(){
+        String url = "http://snapshot:8080/materials/homepages?sig=0ae7ea9680aeedfb77c2069fd14bd1fe&time=1450193196206";
+        String path = UrlHelper.getPath(url);
+        Assert.assertEquals("/materials/homepages", path);
+    }
     public void testGetFileName() {
         String url = "http://a.m.taobao.com/items/i42471538944.htm?sid=60338c63d854b9ef&abtest=4&rn=2bdac199debd8eb86b7234fc1d3c712e";
         String fileName = UrlHelper.getFilePath(url);

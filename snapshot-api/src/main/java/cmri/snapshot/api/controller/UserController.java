@@ -61,7 +61,11 @@ public class UserController {
                 .setTime(new Timestamp(System.currentTimeMillis()))
                 ;
         loginRepository.save(login);
-        return new ResponseMessage();
+        return new ResponseMessage()
+                .set("uid", String.valueOf(user.getId()))
+                .set("username", user.getName())
+                .set("phoneNum", String.valueOf(user.getPhone()))
+                ;
     }
 
     /**
