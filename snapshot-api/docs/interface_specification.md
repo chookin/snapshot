@@ -116,19 +116,12 @@ sig    | string   | 是 | 签名值
 }
 ```
 
-例如：
-
-```
-{id=1, succeed=true, message='', data={}, time=1449647018735}
-{id=2, succeed=false, message='签名校验失败', data={}, time=1449647019363}
-```
-
 # 约定
 
 * 默认HTTP method为POST；
 * 默认在调用成功时，响应的json为：
 ```
-{id=$id, succeed=true, message='', data={}, time=$time}
+{id:$id, succeed:true, message='', data:{}, time:$time}
 ```
 其中，
 
