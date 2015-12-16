@@ -139,10 +139,12 @@ Use spring mvc framework.
 
 # test
 <pre>
-curl -d "username=test&password=098f6bcd4621d373cade4e832627b4f6" http://localhost:8080/user/login
-curl -d "username=test&password=hi&phoneNum=13699996666&captcha=9yu8" http://localhost:8080/user/register
-curl -d "username=test&password=hi&phoneNum=13699996666" http://localhost:8080/user/register
-wget 'http://localhost:8080/captcha?width=145&height=36&fontSize=22'
+curl http://111.13.47.169:8080/materials/homepages?sig=e7481c3a91ac55e6b2e7c3b111a3aadb\&time=1450193196206\&username=test
+curl http://111.13.47.169:8080/materials/categories?sig=87127b777f0ba7aabcc746d95e07e5ea\&time=1450193196206\&username=test
+
+curl -d "username=test&time=1450231255519&sig=733690b34e95714079bf2874cf5fbd07" http://111.13.47.169:8080/user/login
+#curl -d "username=test&password=hi&phoneNum=13699996666" http://localhost:8080/user/register
+#wget 'http://localhost:8080/captcha?width=145&height=36&fontSize=22'
 </pre>
 
 # problems
