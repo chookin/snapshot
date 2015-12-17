@@ -26,16 +26,16 @@ public class UserCommentController {
      * 对其他用户进行评论
      *
      * @param uid 用户id
-     * @param object 其他用户的id
+     * @param userId 被评论用户的id
      * @param parent 父评论id
      * @param content 评论内容
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseMessage add(long uid, Long object, Long parent, String content){
-        Assert.notNull(object, "para 'object' is null");
+    public ResponseMessage add(long uid, Long userId, Long parent, String content){
+        Assert.notNull(userId, "para 'userId' is null");
         UserComment comment = UserComment.newOne();
         comment.setUserId(uid);
-        comment.setObject(object);
+        comment.setObject(userId);
         if(parent == null){
             comment.setParent(0);
         }else {
@@ -49,11 +49,11 @@ public class UserCommentController {
     }
 
     /**
-     * 获取对自己的评论
+     * 获取对用户的评论
      */
     @RequestMapping(value = "/getAboutUser", method = RequestMethod.POST)
-    public ResponseMessage getAboutUser(long uid){
-        List<UserComment> comments = userCommentRepository.findCommentsAboutUser(uid);
+    public ResponseMessage getAboutUser(long userId){
+        List<UserComment> comments = userCommentRepository.findCommentsAboutUser(userId);
         return new ResponseMessage()
                 .set("comments", JsonHelper.toJson(comments))
                 ;

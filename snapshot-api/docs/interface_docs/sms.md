@@ -1,4 +1,4 @@
-# 手机验证码
+# 手机验证码接口
 ## 发送手机验证码
 path：/sms/authCode/send
 

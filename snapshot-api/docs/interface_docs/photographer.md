@@ -1,4 +1,4 @@
-# 摄影师帐户管理
+# 摄影师帐户管理接口
 ## 申请成为摄影师
 path: /photographer/toBecome
 
@@ -20,29 +20,27 @@ path: /photographer/info/mod
 
 paras:
 
-* uid, 用户ID
-* newName, 昵称
-* region, 服务城市
-* desire, 擅长领域
-* shootNum, 拍摄张数
-* shootHour, 拍摄时长
-* truingNum, 精修底片的张数
-* printNum, 相片冲印的张数
-* clothing, 服装
-* makeup, 化妆
+* uid, long, 用户ID
+* newName, string, 昵称
+* region, string, 服务城市
+* desire, string, 擅长领域
+* shootNum, int, 拍摄张数
+* shootHour, int, 拍摄时长
+* truingNum, int, 精修底片的张数
+* printNum, int, 相片冲印的张数
+* clothing, string, 服装
+* makeup, string, 化妆
 
 ## 获取指定摄影师的套餐详情
 path: /photographer/plan/get
 
 paras:
 
-* uid, 用户ID
-* gid, 摄影师id
+* gid, long, 摄影师id
 
 ## 获取指定摄影师的器材详情
 path: /photographer/cameras/get
 
 paras:
 
-* uid, 用户ID
-* gid, 摄影师id
+* gid, long, 摄影师id

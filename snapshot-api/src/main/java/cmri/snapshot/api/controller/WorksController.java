@@ -118,8 +118,8 @@ public class WorksController {
      * 获取指定用户的作品集合
      */
     @RequestMapping(value = "/getUserWorks", method = RequestMethod.POST)
-    public ResponseMessage getUserWorks(long uid){
-        List<Works> works = worksRepository.findByUserId(uid);
+    public ResponseMessage getUserWorks(long userId){
+        List<Works> works = worksRepository.findByUserId(userId);
         return new ResponseMessage()
                 .set("works", JsonHelper.toJson(works))
                 ;

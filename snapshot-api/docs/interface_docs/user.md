@@ -1,4 +1,4 @@
-# 用户管理
+# 用户管理接口
 ## 用户注册
 path: /user/register
 
@@ -35,14 +35,16 @@ paras:
 response:
 
 ```
-{id=$id, succeed=true, message='', data={
-uid:$uid
-username:$name,
-phoneNum:$phoneNum,
-area:$area,
-avatar:$avatar,
-sex:$sex,
-}}
+{id=$id, succeed=true, message='',data={
+        uid:$uid
+        username:$name,
+        phoneNum:$phoneNum,
+        area:$area,
+        avatar:$avatar,
+        sex:$sex,
+    },
+time:$time
+}
 ```
 
 ## 获取用户名
