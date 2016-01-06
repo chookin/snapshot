@@ -56,7 +56,9 @@ public class MapAdapter<K extends Object, V extends Object> {
     public Map<K,V> get(){
         return innerMap;
     }
-
+    public int size(){
+        return innerMap.size();
+    }
     public MapAdapter<K,V> sort(){
         if (!(this.innerMap instanceof TreeMap)) {
             this.innerMap = new TreeMap<>(this.innerMap);
