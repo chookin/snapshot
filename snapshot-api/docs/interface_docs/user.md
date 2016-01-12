@@ -147,16 +147,13 @@ paras:
 response:
 
     {
-        id = 2,
+        id = 9,
         succeed = true,
         message = '',
         data = {
-            area = null,
-            uid = 1,
-            sex = null,
-            phoneNum = 13426198753,
-            avatar = upload/avatar/20160112/1-100-100.png,
-            username = test
+            filename = upload/avatar/20160112/1-100-100.png, # 头像文件的服务器地址
+            url = http://111.13.47.169:8080/upload/avatar/20160112/1-100-100.png # 头像的url
         },
-        time = 1452583841138
+        time = 1452583843248
     }
+
