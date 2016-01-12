@@ -19,6 +19,11 @@ public class ConfigFileManager {
             BASE_DIR = confDir;
         }
     }
+
+    /**
+     * 导出classpath文件到本地磁盘
+     * @throws IOException
+     */
     public static String dump(String filename) throws IOException {
         InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
         String myName = BASE_DIR + filename;
