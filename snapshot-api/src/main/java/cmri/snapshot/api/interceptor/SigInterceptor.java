@@ -30,7 +30,7 @@ import java.util.TreeMap;
 public class SigInterceptor extends HandlerInterceptorAdapter {
     protected static final Logger LOG = LoggerFactory.getLogger(SigInterceptor.class);
     public static final String defaultKey = ConfigManager.get("sig.defaultKey");
-    static String[] withoutAuthPaths = {"/user/register", "/authCode/send", "/captcha", "/materials"};
+    static String[] withoutAuthPaths = {"/user/register", "/sms/authCode", "/captcha", "/materials"};
     @Autowired
     private UserRepository userRepository;
 

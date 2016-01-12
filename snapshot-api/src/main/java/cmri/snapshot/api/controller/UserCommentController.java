@@ -51,7 +51,7 @@ public class UserCommentController {
     /**
      * 获取对用户的评论
      */
-    @RequestMapping(value = "/getAboutUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/getAboutUser", method = RequestMethod.GET)
     public ResponseMessage getAboutUser(long userId){
         List<UserComment> comments = userCommentRepository.findCommentsAboutUser(userId);
         return new ResponseMessage()

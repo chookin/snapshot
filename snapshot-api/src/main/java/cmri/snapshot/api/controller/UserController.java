@@ -86,7 +86,7 @@ public class UserController {
     /**
      * 获取用户基本信息
      */
-    @RequestMapping(value = "/info/get", method = RequestMethod.POST)
+    @RequestMapping(value = "/info/get", method = RequestMethod.GET)
     public ResponseMessage getInfo(long uid){
         User user = userRepository.findById(uid);
         return new ResponseMessage()
@@ -99,7 +99,7 @@ public class UserController {
                 ;
     }
 
-    @RequestMapping(value = "/name/get", method = RequestMethod.POST)
+    @RequestMapping(value = "/name/get", method = RequestMethod.GET)
     public ResponseMessage getName(long uid){
         // TODO use redis to cache
         String username = userRepository.findById(uid).getName();

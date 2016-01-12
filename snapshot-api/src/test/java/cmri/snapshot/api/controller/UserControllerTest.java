@@ -97,7 +97,7 @@ public class UserControllerTest extends WebAppTest{
         ResponseMessage response = rest.reset()
                 .setPath("user/info/get")
                 .add("uid", ConfigManager.getLong("test.uid"))
-                .post();
+                .get();
         log(response);
         Assert.assertTrue(response.isSucceed());
     }
@@ -122,7 +122,7 @@ public class UserControllerTest extends WebAppTest{
         ResponseMessage response = rest.reset()
                 .setPath("user/name/get")
                 .add("uid", ConfigManager.getLong("test.uid"))
-                .post();
+                .get();
         log(response);
         Assert.assertEquals("test", response.get("username"));
     }

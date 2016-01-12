@@ -28,6 +28,7 @@ paras:
 * photoId, long, 照片id
 
 ## 根据作品id获取作品
+method: Http.GET  
 path: /works/get
 
 paras:
@@ -35,6 +36,7 @@ paras:
 * worksId, long, 作品id
 
 ## 获取指定用户的作品集合
+method: Http.GET  
 path: /works/getUserWorks
 
 paras:

@@ -10,6 +10,7 @@ paras:
 * content, string, 评论内容
 
 ## 获取对用户的评论
+method: Http.GET  
 path：/userComment/getAboutUser
 
 paras:
