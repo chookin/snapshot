@@ -74,15 +74,19 @@ paras:
 
 response:
 
-    {id=$id, succeed=true, message='',data={
-            uid:$uid
-            username:$name,
-            phoneNum:$phoneNum,
-            area:$area,
-            avatar:$avatar,
-            sex:$sex,
+    {
+        id = 2,
+        succeed = true,
+        message = '',
+        data = {
+            area = null, # 所在地
+            uid = 1,
+            sex = null,
+            phoneNum = 13426198753,
+            avatar = upload/avatar/20160112/1-100-100.png, # 头像的存储地址
+            username = test
         },
-    time:$time
+        time = 1452583841138
     }
 
 ## 获取用户名
