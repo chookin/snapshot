@@ -6,8 +6,6 @@ import cmri.utils.configuration.ConfigManager;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by zhuyin on 12/4/15.
  */
@@ -55,7 +53,7 @@ public class GrapherControllerTest extends WebAppTest {
                 .setPath("photographer/plan/get")
                 .add("uid", ConfigManager.getLong("test.uid"))
                 .add("gid", ConfigManager.getLong("test.uid"))
-                .post();
+                .get();
         log(response);
         Assert.assertTrue(response.isSucceed());
     }
@@ -66,7 +64,7 @@ public class GrapherControllerTest extends WebAppTest {
                 .setPath("photographer/cameras/get")
                 .add("uid", ConfigManager.getLong("test.uid"))
                 .add("gid", ConfigManager.getLong("test.uid"))
-                .post();
+                .get();
         log(response);
         Assert.assertTrue(response.isSucceed());
     }

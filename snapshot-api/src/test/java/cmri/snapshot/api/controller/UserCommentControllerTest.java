@@ -7,8 +7,6 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by zhuyin on 12/4/15.
  */
@@ -31,7 +29,7 @@ public class UserCommentControllerTest extends WebAppTest{
                 .setPath("userComment/getAboutUser")
                 // todo update to user userId
                 .add("uid", ConfigManager.getLong("test.uid"))
-                .post();
+                .get();
         log(response);
         Assert.assertTrue(response.isSucceed());
     }

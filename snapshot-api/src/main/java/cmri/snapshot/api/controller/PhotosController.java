@@ -26,7 +26,7 @@ public class PhotosController {
      * @param uid 用户id
      * @param workId 作品id
      */
-    @RequestMapping(value = "/get", method = RequestMethod.POST)
+    @RequestMapping(value = "/get", method = RequestMethod.GET)
     public ResponseMessage getPhotos(long uid, Long workId){
         List<Photo> photos = workId==null? photoRepository.findByUserId(uid): photoRepository.findByUserIdAndWorksId(uid, workId);
         return new ResponseMessage()

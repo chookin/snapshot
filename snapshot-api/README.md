@@ -14,7 +14,7 @@ snapshot-api is developed on jdk1.8, using spring mvc framework.
 1. Configure properties and make dirs:
     * Manual create the document root dir 'chu.server.documentRoot' configured by configuration file 'application.properties';
     * Modify 'log4j.appender.logfile.File' of log4j.properties;
-    * Modify 'server.hostname' of app.properties to the user ip.
+    * Modify 'server.hostname' of app.properties to the server ip.
     * Modify 'spring.datasource.url' of application.properties.
     * Modify "hibernate.connection.url" of persistence.xml.
 1. Configure and start mysql.
@@ -103,6 +103,8 @@ snapshot-api is developed on jdk1.8, using spring mvc framework.
     #
     # Note that you must specify a directory here, not a file name.
     dir /home/zhuyin/data/redis/
+    # set password
+    requirepass p_r_9_@cmri
     </pre>
     
     * start 
