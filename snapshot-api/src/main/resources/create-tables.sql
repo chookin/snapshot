@@ -109,7 +109,7 @@ CREATE TABLE grapher_plan(
   create_time DATETIME COMMENT '添加时间',
   PRIMARY KEY  (id)
 );
-# 摄影师身价表，记录历史身价
+# 摄影师身价表 记录历史身价
 DROP TABLE IF EXISTS grapher_price;
 CREATE TABLE grapher_price(
   user_id BIGINT NOT NULL COMMENT '摄影师id',

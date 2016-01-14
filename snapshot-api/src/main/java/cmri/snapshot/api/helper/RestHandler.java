@@ -35,10 +35,7 @@ public class RestHandler {
     MapAdapter<String, Object> paras = new MapAdapter<>();
     String baseUrl = WebMvcConfig.baseUrl;
     String path;
-    /**
-     * 默认的key为账号‘test’的密码的2次md5值
-     */
-    String secretKey = SigInterceptor.genKey(DigestUtils.md5Hex(ConfigManager.get("test.password")));
+    String secretKey;
     String method = HttpConstant.Method.POST;
     HttpHeaders headers = new HttpHeaders();
 
@@ -85,6 +82,7 @@ public class RestHandler {
      * 重置所有参数
      */
     public RestHandler reset() {
+        this.secretKey = null;
         this.paras.clear();
         this.headers.clear();
         initHeader();
@@ -108,6 +106,10 @@ public class RestHandler {
     }
 
     public ResponseMessage post() {
+        if(this.secretKey == null){
+            // 设置key为账号‘test’的密码的2次md5值
+            this.secretKey = SigInterceptor.genKey(DigestUtils.md5Hex(ConfigManager.get("test.password")));
+        }
         updateSig();
         return justPost();
     }
@@ -121,6 +123,9 @@ public class RestHandler {
 
     public ResponseMessage get() {
         setMethod(HttpConstant.Method.GET);
+        if(this.secretKey == null) {
+            setSecretKey(SigInterceptor.defaultKey);
+        }
         updateSig();
         return getRestTemplate()
                 .getForObject(getUrl() + "?" + this.paras.join("=", "&"), ResponseMessage.class);

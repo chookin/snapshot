@@ -17,7 +17,6 @@ public class MaterialsControllerTest extends WebAppTest {
     public void testHomepages() throws Exception {
         ResponseMessage response = rest.reset()
                 .setPath("materials/homepages")
-                .setSecretKey(SigInterceptor.defaultKey)
                 .add("time", 1450193196206L)
                 .get();
         log(response);
@@ -28,7 +27,6 @@ public class MaterialsControllerTest extends WebAppTest {
     public void testPersonalHomepages() throws Exception {
         ResponseMessage response = rest.reset()
                 .setPath("materials/personalHomepages")
-                .setSecretKey(SigInterceptor.defaultKey)
                 .add("time", 1450193196206L)
                 .get();
         log(response);
@@ -39,7 +37,6 @@ public class MaterialsControllerTest extends WebAppTest {
     public void testCategories() throws Exception {
         ResponseMessage response = rest.reset()
                 .setPath("materials/categories")
-                .setSecretKey(SigInterceptor.defaultKey)
                 .add("time", 1450193196206L)
                 .get();
         log(response);
@@ -50,7 +47,6 @@ public class MaterialsControllerTest extends WebAppTest {
     public void testGroupShotDetails() throws Exception {
         ResponseMessage response = rest.reset()
                 .setPath("materials/groupShotDetails")
-                .setSecretKey(SigInterceptor.defaultKey)
                 .add("time", 1450193196206L)
                 .get();
         log(response);
