@@ -131,7 +131,7 @@ public class UserController {
     @RequestMapping(value="/avatar/mod", method = RequestMethod.POST)
     public ResponseMessage modAvatar(HttpServletRequest request, long uid, @RequestParam(value = "img") MultipartFile file) throws Exception{
         // save the source avatar image file, 原始尺寸
-        String filename = ImageController.uploadImg(request, file).getKey();
+        String filename = ImageController.uploadImg(request, file).getValue();
         AvatarDetail origin = new AvatarDetail();
         origin.setPhoto(filename);
         origin.setUserId(uid);
