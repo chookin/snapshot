@@ -92,8 +92,11 @@ public class WorksController {
         return works;
     }
 
+    /**
+     * 创建照片实例
+     */
     Photo createPhoto(HttpServletRequest request, long uid, long worksId, MultipartFile img) throws IOException {
-        String filename = ImageController.uploadImg(request, img);
+        String filename = ImageController.uploadImg(request, img).getKey();
         Photo photo = Photo.newOne();
         photo.setWorksId(worksId);
         photo.setUserId(uid);

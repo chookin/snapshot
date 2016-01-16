@@ -9,6 +9,7 @@ import cmri.snapshot.api.validator.SMSValidator;
 import cmri.snapshot.api.validator.UserValidator;
 import cmri.utils.configuration.ConfigManager;
 import cmri.utils.lang.JsonHelper;
+import cmri.utils.lang.Pair;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -130,7 +131,7 @@ public class UserController {
     @RequestMapping(value="/avatar/mod", method = RequestMethod.POST)
     public ResponseMessage modAvatar(HttpServletRequest request, long uid, @RequestParam(value = "img") MultipartFile file) throws Exception{
         // save the source avatar image file, 原始尺寸
-        String filename = ImageController.uploadImg(request, file);
+        String filename = ImageController.uploadImg(request, file).getKey();
         AvatarDetail origin = new AvatarDetail();
         origin.setPhoto(filename);
         origin.setUserId(uid);

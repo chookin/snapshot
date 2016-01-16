@@ -6,6 +6,7 @@ import cmri.snapshot.api.helper.ParasHelper;
 import cmri.snapshot.api.repository.UserRepository;
 import cmri.utils.configuration.ConfigManager;
 import cmri.utils.exception.AuthException;
+import cmri.utils.lang.JsonHelper;
 import cmri.utils.web.HttpConstant;
 import cmri.utils.web.UrlHelper;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -20,6 +21,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -48,18 +51,19 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
     void validate(HttpServletRequest request) {
         String sig = request.getParameter("sig");
         Validate.isTrue(StringUtils.isNotEmpty(sig), "para 'sig' is empty");
-        if(withoutAuth(request)){
+        if (withoutAuth(request)) {
             validateWithoutAuth(request.getMethod(),
                     request.getRequestURL().toString(),
                     ParasHelper.getParas(request).getSorted(),
                     sig);
-        }else{
-           validateWithAuth(request, sig);
+        } else {
+            validateWithAuth(request, sig);
         }
     }
 
     /**
      * Check whether or not need validating user info.
+     *
      * @return true if not need, or else false.
      */
     static boolean withoutAuth(HttpServletRequest request) {
@@ -79,38 +83,39 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
     /**
      * 从数据库查询用户信息，基于用户密码校验签名是否正确
      */
-    void validateWithAuth(HttpServletRequest request, String sig){
+    void validateWithAuth(HttpServletRequest request, String sig) {
         String username = request.getParameter("username");
         String phoneNum = request.getParameter("phoneNum");
         String uid = request.getParameter("uid");
-        if(username != null){
+        if (username != null) {
             Validate.isTrue(StringUtils.isNotEmpty(username), "para 'username' is empty");
             validateByUsername(username,
                     request.getMethod(),
                     request.getRequestURL().toString(),
                     ParasHelper.getParas(request).getSorted(),
                     sig);
-        }else if(phoneNum != null){
+        } else if (phoneNum != null) {
             Long myPhoneNum = Long.valueOf(phoneNum);
             validateByPhoneNum(myPhoneNum,
                     request.getMethod(),
                     request.getRequestURL().toString(),
                     ParasHelper.getParas(request).getSorted(),
                     sig);
-        }else if(uid != null) {
+        } else if (uid != null) {
             Long myUid = Long.valueOf(uid);
             validateByUid(myUid,
                     request.getMethod(),
                     request.getRequestURL().toString(),
                     ParasHelper.getParas(request).getSorted(),
                     sig);
-        }else{
+        } else {
             throw new AuthException("please assign 'username', 'phoneNum' or 'uid'");
         }
     }
+
     void validateWithoutAuth(String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         String mySig = genSig(defaultKey, httpMethod, url, paras);
-        if(sig.equals(mySig)){
+        if (sig.equals(mySig)) {
             return;
         }
         throw new AuthException("Fail on validating signature");
@@ -118,61 +123,68 @@ public class SigInterceptor extends HandlerInterceptorAdapter {
 
     User validateByUsername(String username, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         User user = userRepository.findByName(username);
-        if(user == null)
-            throw new AuthException("No user of "+username);
+        if (user == null)
+            throw new AuthException("No user of " + username);
         return validateByUser(user, httpMethod, url, paras, sig);
     }
 
     User validateByPhoneNum(Long phoneNum, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         User user = userRepository.findByPhone(phoneNum);
-        if(user == null)
-            throw new AuthException("No user of "+phoneNum);
+        if (user == null)
+            throw new AuthException("No user of " + phoneNum);
         return validateByUser(user, httpMethod, url, paras, sig);
     }
 
     User validateByUid(long uid, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         User user = userRepository.findById(uid);
-        if(user == null)
-            throw new AuthException("No user of "+uid);
+        if (user == null)
+            throw new AuthException("No user of " + uid);
         return validateByUser(user, httpMethod, url, paras, sig);
     }
 
     User validateByUser(User user, String httpMethod, String url, TreeMap<String, Object> paras, String sig) {
         String mySig = genSig(genKey(user.getPassword()), httpMethod, url, paras);
-        if(!sig.equals(mySig)) {
+        if (!sig.equals(mySig)) {
             throw new AuthException("Fail on validating signature");
         }
         return user;
     }
 
-    public static String genKey(String password){
+    public static String genKey(String password) {
         return DigestUtils.md5Hex(password);
     }
 
-    public static String genSig(String key, String httpMethod, String url, TreeMap<String, Object> paras){
+    public static String genSig(String key, String httpMethod, String url, TreeMap<String, Object> paras) {
         StringBuilder strb = new StringBuilder(httpMethod).append(url);
-        for(Map.Entry<String, Object> entry: paras.entrySet()){
-            if(entry.getValue() instanceof FileSystemResource){
+        for (Map.Entry<String, Object> entry : paras.entrySet()) {
+            if (entry.getValue() instanceof FileSystemResource) {
                 continue;
             }
-            if(entry.getKey().equals("sig")){
+            if (entry.getKey().equals("sig")) {
                 continue;
             }
             strb.append(entry.getKey())
-                    .append("=")
-                    .append(entry.getValue());
+                    .append("=");
+            if(entry.getValue() instanceof String){
+                strb.append(entry.getValue());
+            }else {
+                // JsonHelper.toJson 会自动地给字符串类型的添加""
+                strb.append(JsonHelper.toJson(entry.getValue()));
+            }
         }
         strb.append(key);
-       return genSig(strb.toString());
+        return genSig(strb.toString());
     }
 
-    public static String genSig(String str){
-        LOG.trace("gen sig for "+ str);
-        return DigestUtils.md5Hex(str);
+    public static String genSig(String str) {
+        String sig;
+        sig = DigestUtils.md5Hex(str);
 //        try {
-//            return DigestUtils.md5Hex(URLEncoder.encode(str, "utf-8"));
+//            sig = DigestUtils.md5Hex(URLEncoder.encode(str, "utf-8"));
 //        } catch (UnsupportedEncodingException e) {
 //            throw new RuntimeException("Broken VM does not support UTF-8");
 //        }
+        LOG.trace("gen sig for " + str + ", generated sig is " + sig);
+        return sig;
     }
 }

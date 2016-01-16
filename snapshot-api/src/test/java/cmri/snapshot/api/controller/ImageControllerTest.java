@@ -21,7 +21,25 @@ public class ImageControllerTest extends WebAppTest{
                 .setPath("image/upload")
                 .add("uid", ConfigManager.getLong("test.uid"))
                 .add("img", new FileSystemResource(new File(file)))
+                        // .add("title", "test")
                 .post();
+        log(response);
+        Assert.assertTrue(response.isSucceed());
+    }
+    @Test
+    public void testGet() throws Exception {
+        ResponseMessage response = rest.reset()
+                .setPath("image/get")
+                .get();
+        log(response);
+        Assert.assertTrue(response.isSucceed());
+    }
+    @Test
+    public void testGetSince() throws Exception {
+        ResponseMessage response = rest.reset()
+                .setPath("image/get")
+                .add("since", "1452069197084")
+                .get();
         log(response);
         Assert.assertTrue(response.isSucceed());
     }
