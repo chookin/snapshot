@@ -45,7 +45,7 @@ public class SpecialShotController {
             return new ResponseMessage(false, "no special_shot of "+shotId);
         }
         List<SpecialShotStills> stills = stillsRepository.findByShotId(shot.getId());
-        List<String> pics = stills.stream().map(item -> WebMvcConfig.getUrl(item.getPic())).collect(Collectors.toList());
+        List<String> picUrls = stills.stream().map(item -> WebMvcConfig.getUrl(item.getPic())).collect(Collectors.toList());
 
         List<SpecialShotGrapher> graphers = specialShotGrapherRepository.findByShotId(shotId);
         Map<Long, String> graphersMap = new HashMap<>();
@@ -55,7 +55,7 @@ public class SpecialShotController {
         }
         return new ResponseMessage()
                 .set("shotId", String.valueOf(shot.getId()))
-                .set("pics", JsonHelper.toJson(pics))
+                .set("picUrls", JsonHelper.toJson(picUrls))
                 .set("price", String.valueOf(shot.getPrice()))
                 .set("title", shot.getTitle())
                 .set("intro", shot.getIntro())

@@ -1,9 +1,11 @@
 package cmri.snapshot.api.controller;
 
+import cmri.snapshot.api.WebMvcConfig;
 import cmri.snapshot.api.domain.ResponseMessage;
 import cmri.snapshot.api.domain.SpecialShot;
+import cmri.snapshot.api.domain.SpecialShotStills;
 import cmri.snapshot.api.repository.SpecialShotRepository;
-import cmri.utils.lang.JsonHelper;
+import cmri.snapshot.api.repository.SpecialShotStillsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +21,8 @@ import java.util.List;
 public class HomePageController {
     @Autowired
     SpecialShotRepository specialShotRepository;
+    @Autowired
+    SpecialShotStillsRepository specialShotStillsRepository;
     /**
      * 推荐位广告，推荐特色服务
      * @param uid 用户id，可选
@@ -28,8 +32,22 @@ public class HomePageController {
     @RequestMapping(value = "/recommendedSpecialShot", method = RequestMethod.GET)
     public ResponseMessage getRecommendedSpecialShot(Long uid, Double longitude, Double latitude){
         Iterable<SpecialShot> shots = specialShotRepository.findAll();
+        SpecialShot shot = shots.iterator().next();
+        if(shot == null) {
+            return new ResponseMessage(false, "no special shot");
+        }
+        List<SpecialShotStills> pics = specialShotStillsRepository.findByShotId(shot.getId());
+        String picUrl = "";
+        if(!pics.isEmpty()){
+            picUrl = pics.get(0).getPic();
+            picUrl = WebMvcConfig.getUrl(picUrl);
+        }
         return new ResponseMessage()
-                .set("shots", JsonHelper.toJson(shots))
+                .set("shotId", String.valueOf(shot.getId()))
+                .set("title", shot.getTitle())
+                .set("intro", shot.getIntro())
+                .set("picUrl", picUrl)
+                .set("price", String.valueOf(shot.getPrice()))
                 ;
     }
 
