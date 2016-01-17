@@ -24,7 +24,14 @@ public class HomePageControllerTest extends WebAppTest{
     }
 
     @Test
-    public void testGetRecommendedPhotographers() throws Exception {
-
+    public void testGetRecommendedShots() throws Exception {
+        ResponseMessage response = rest.reset()
+                .setPath("home/recommendedShots")
+                .add("uid", ConfigManager.getLong("test.uid"))
+                .add("page", 0)
+                .add("step", 5)
+                .get();
+        log(response);
+        Assert.assertTrue(response.isSucceed());
     }
 }

@@ -28,7 +28,7 @@ public class SpecialShot {
     private static final AtomicLong idGen = new AtomicLong();
 
     static {
-        Long id = ModelHelper.getMaxId("works");
+        Long id = ModelHelper.getMaxId("special_shot");
         if (id != null) idGen.set(id);
     }
 

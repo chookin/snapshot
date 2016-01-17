@@ -3,11 +3,11 @@ package cmri.snapshot.api.domain;
 import javax.persistence.*;
 
 /**
- * Created by zhuyin on 1/15/16.
+ * Created by zhuyin on 1/17/16.
  */
 @Entity
-@Table(name = "special_shot_stills", schema = "", catalog = "snapshot")
-public class SpecialShotStills {
+@Table(name = "shot_still")
+public class ShotStill {
     private long id;
     private long shotId;
     private String pic;
@@ -48,11 +48,11 @@ public class SpecialShotStills {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SpecialShotStills that = (SpecialShotStills) o;
+        ShotStill shotStill = (ShotStill) o;
 
-        if (id != that.id) return false;
-        if (shotId != that.shotId) return false;
-        if (pic != null ? !pic.equals(that.pic) : that.pic != null) return false;
+        if (id != shotStill.id) return false;
+        if (shotId != shotStill.shotId) return false;
+        if (pic != null ? !pic.equals(shotStill.pic) : shotStill.pic != null) return false;
 
         return true;
     }

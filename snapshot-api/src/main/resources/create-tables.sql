@@ -123,7 +123,28 @@ CREATE TABLE grapher_price(
   FOREIGN KEY (user_id) REFERENCES user(id) on UPDATE CASCADE on DELETE CASCADE
 );
 
+# 摄影活动发布
+DROP TABLE if EXISTS shot_release;
+CREATE TABLE shot_release(
+  id bigint not null,
+  grapher_id BIGINT NOT NULL COMMENT '摄影师id',
+  location varchar(512) comment '拍摄的地点，可以与摄影师的常驻地点不同',
+  like_count int default 0 not null comment '点赞次数',
+  comment_count int default 0 not null comment '评论次数',
+  release_time DATETIME COMMENT '活动的发布时间',
+  appointment_count int DEFAULT 0 NOT NULL COMMENT '预约数量',
+  PRIMARY KEY (id),
+  FOREIGN KEY (grapher_id) REFERENCES grapher(user_id) ON UPDATE CASCADE ON DELETE CASCADE
+);
 
+DROP TABLE IF EXISTS shot_still;
+CREATE TABLE shot_still(
+  id bigint not null auto_increment,
+  shot_id bigint not null comment '活动id',
+  pic varchar(512) comment '剧照照片地址',
+  PRIMARY KEY  (id),
+  FOREIGN KEY (shot_id) REFERENCES shot_release(id) on UPDATE CASCADE on DELETE CASCADE
+);
 # 对用户的点赞
 drop table if exists user_like;
 create table user_like(
@@ -222,8 +243,8 @@ CREATE TABLE special_shot(
   comment_count int default 0 not null comment '评论次数',
   PRIMARY KEY (id)
 );
-DROP TABLE IF EXISTS special_shot_stills;
-CREATE TABLE special_shot_stills(
+DROP TABLE IF EXISTS special_shot_still;
+CREATE TABLE special_shot_still(
   id bigint not null auto_increment,
   shot_id bigint not null comment '特色服务活动id',
   pic varchar(512) comment '照片地址',

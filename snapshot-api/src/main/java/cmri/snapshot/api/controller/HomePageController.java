@@ -1,17 +1,19 @@
 package cmri.snapshot.api.controller;
 
 import cmri.snapshot.api.WebMvcConfig;
-import cmri.snapshot.api.domain.ResponseMessage;
-import cmri.snapshot.api.domain.SpecialShot;
-import cmri.snapshot.api.domain.SpecialShotStills;
-import cmri.snapshot.api.repository.SpecialShotRepository;
-import cmri.snapshot.api.repository.SpecialShotStillsRepository;
+import cmri.snapshot.api.domain.*;
+import cmri.snapshot.api.repository.*;
+import cmri.utils.lang.JsonHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhuyin on 1/14/16.
@@ -22,7 +24,15 @@ public class HomePageController {
     @Autowired
     SpecialShotRepository specialShotRepository;
     @Autowired
-    SpecialShotStillsRepository specialShotStillsRepository;
+    SpecialShotStillRepository specialShotStillRepository;
+    @Autowired
+    ShotReleaseRepository shotReleaseRepository;
+    @Autowired
+    ShotStillRepository shotStillRepository;
+    @Autowired
+    GrapherRepository grapherRepository;
+    @Autowired
+    UserRepository userRepository;
     /**
      * 推荐位广告，推荐特色服务
      * @param uid 用户id，可选
@@ -36,7 +46,7 @@ public class HomePageController {
         if(shot == null) {
             return new ResponseMessage(false, "no special shot");
         }
-        List<SpecialShotStills> pics = specialShotStillsRepository.findByShotId(shot.getId());
+        List<SpecialShotStill> pics = specialShotStillRepository.findByShotId(shot.getId());
         String picUrl = "";
         if(!pics.isEmpty()){
             picUrl = pics.get(0).getPic();
@@ -56,10 +66,33 @@ public class HomePageController {
      * @param uid 用户id，可选
      * @param longitude 经度，double，可选
      * @param latitude 维度，double，可选
+     * @param page 请求的页数
+     * @param step 每页多少条
      */
-    @RequestMapping(value = "/recommendedPhotographers", method = RequestMethod.GET)
-    public ResponseMessage getRecommendedPhotographers(Long uid, Double longitude, Double latitude){
+    @RequestMapping(value = "/recommendedShots", method = RequestMethod.GET)
+    public ResponseMessage getRecommendedShots(Long uid, Double longitude, Double latitude, Integer page, Integer step){
+        Iterable<ShotRelease> shotReleases = shotReleaseRepository.findAll(new PageRequest(page, step));
+        List<Map<String,String>> items = new ArrayList<>();
+        for(ShotRelease shot: shotReleases){
+            Map<String, String> map = new HashMap<>();
+            User user = userRepository.findById(shot.getGrapherId());
+            List<ShotStill> stills = shotStillRepository.findByShotId(shot.getId());
+            if(stills.size() > 0){
+                map.put("picUrl", WebMvcConfig.getUrl(stills.get(0).getPic()));
+            }
+            map.put("avatarUrl", WebMvcConfig.getUrl(user.getAvatar()));
+            map.put("nickname", user.getName());
+            map.put("publishDate", String.valueOf(shot.getReleaseTime()));
+            map.put("appointmentCount", String.valueOf(shot.getAppointmentCount()));
+            map.put("likeCount", String.valueOf(shot.getLikeCount()));
+            map.put("commentsCount", String.valueOf(shot.getCommentCount()));
+            map.put("location", shot.getLocation());
+            map.put("photographerId", String.valueOf(user.getId()));
+
+            items.add(map);
+        }
         return new ResponseMessage()
+                .set("items", JsonHelper.toJson(items))
                 ;
     }
 }

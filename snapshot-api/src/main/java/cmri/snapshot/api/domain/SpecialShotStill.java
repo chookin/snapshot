@@ -3,17 +3,18 @@ package cmri.snapshot.api.domain;
 import javax.persistence.*;
 
 /**
- * Created by zhuyin on 12/8/15.
+ * Created by zhuyin on 1/15/16.
  */
 @Entity
-@Table(name = "group_shot_poster")
-public class GroupShotPoster {
+@Table(name = "special_shot_still")
+public class SpecialShotStill {
     private long id;
     private long shotId;
-    private String photo;
+    private String pic;
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
     }
@@ -33,13 +34,13 @@ public class GroupShotPoster {
     }
 
     @Basic
-    @Column(name = "photo")
-    public String getPhoto() {
-        return photo;
+    @Column(name = "pic")
+    public String getPic() {
+        return pic;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 
     @Override
@@ -47,11 +48,11 @@ public class GroupShotPoster {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        GroupShotPoster that = (GroupShotPoster) o;
+        SpecialShotStill that = (SpecialShotStill) o;
 
         if (id != that.id) return false;
         if (shotId != that.shotId) return false;
-        if (photo != null ? !photo.equals(that.photo) : that.photo != null) return false;
+        if (pic != null ? !pic.equals(that.pic) : that.pic != null) return false;
 
         return true;
     }
@@ -60,7 +61,7 @@ public class GroupShotPoster {
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (int) (shotId ^ (shotId >>> 32));
-        result = 31 * result + (photo != null ? photo.hashCode() : 0);
+        result = 31 * result + (pic != null ? pic.hashCode() : 0);
         return result;
     }
 }

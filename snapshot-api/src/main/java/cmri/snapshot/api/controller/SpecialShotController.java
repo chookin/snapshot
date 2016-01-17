@@ -32,7 +32,7 @@ public class SpecialShotController {
     @Autowired
     SpecialShotGrapherRepository specialShotGrapherRepository;
     @Autowired
-    SpecialShotStillsRepository stillsRepository;
+    SpecialShotStillRepository stillsRepository;
     @Autowired
     GrapherRepository grapherRepository;
     @Autowired
@@ -44,7 +44,7 @@ public class SpecialShotController {
         if(shot == null){
             return new ResponseMessage(false, "no special_shot of "+shotId);
         }
-        List<SpecialShotStills> stills = stillsRepository.findByShotId(shot.getId());
+        List<SpecialShotStill> stills = stillsRepository.findByShotId(shot.getId());
         List<String> picUrls = stills.stream().map(item -> WebMvcConfig.getUrl(item.getPic())).collect(Collectors.toList());
 
         List<SpecialShotGrapher> graphers = specialShotGrapherRepository.findByShotId(shotId);
@@ -83,7 +83,7 @@ public class SpecialShotController {
      * @throws IOException
      */
     @RequestMapping(value = "create", method = RequestMethod.POST)
-    public ResponseMessage create(long uid, HttpServletRequest request, String title, String intro, int price, String summary, String location, String service, String sculpt, String grapherIds ) throws IOException {
+    public ResponseMessage create(HttpServletRequest request, long uid, String title, String intro, int price, String summary, String location, String service, String sculpt, String grapherIds ) throws IOException {
         SpecialShot shot = SpecialShot.newOne();
         shot.setTitle(title);
         shot.setIntro(intro);
@@ -101,7 +101,7 @@ public class SpecialShotController {
             Map<String, MultipartFile> stills = mulRequest.getFileMap();
             for(Map.Entry<String, MultipartFile> entry: stills.entrySet()) {
                 Pair<String, String> pair = ImageController.uploadImg(request, entry.getValue());
-                SpecialShotStills entity = new SpecialShotStills();
+                SpecialShotStill entity = new SpecialShotStill();
                 entity.setShotId(shot.getId());
                 entity.setPic(pair.getValue());
                 stillsRepository.save(entity);
