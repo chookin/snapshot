@@ -48,7 +48,6 @@ public class SMSController {
         String code = generateCode();
         int expireMinutes = ConfigManager.getInt("sms.authCode.expireMinutes");
         sendAuthCode(phoneNum, code, expireMinutes);
-        RedisHandler.instance().set(getAuthCodeId(phoneNum), code, expireMinutes * 60);
         return new ResponseMessage();
     }
     CCPRestSDK getServer(){
@@ -77,5 +76,6 @@ public class SMSController {
             //异常返回输出错误码和错误信息
             throw new AuthException("Fail to send message, error code:" + result.get("statusCode") +" msg:"+result.get("statusMsg"));
         }
+        RedisHandler.instance().set(getAuthCodeId(phoneNum), code, expireMinutes * 60);
     }
 }

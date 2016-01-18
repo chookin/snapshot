@@ -53,7 +53,7 @@ public class UserController {
             Assert.notNull(phoneNum, "please assign 'username' or 'phoneNum' to login");
             user = userRepository.findByPhone(phoneNum);
         }
-        LOG.info("user '" + user.getName() + "' login");
+        LOG.info("user '" + user.getId() + "' login");
 
         // save login detail to 'login' table
         // TODO add login ip address
@@ -79,7 +79,7 @@ public class UserController {
                 .setRegisterTime(new Timestamp(System.currentTimeMillis()))
                 ;
         userValidator.validateNotRegistered(user);
-        LOG.info("user '" + user.getName() + "' register");
+        LOG.info("user '" + user.getPhone() + "' register");
         userRepository.save(user);
         return new ResponseMessage();
     }

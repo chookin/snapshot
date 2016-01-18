@@ -21,7 +21,7 @@ public class Application {
     static {
         // configure log4j to log to custom file at runtime. In the java program directly by setting a system property (BEFORE you make any calls to log4j).
         try {
-            String suffix = InetAddress.getLocalHost().getHostName() + "-" + TimeHelper.toString(new Date(), "yyyyMMddHH");
+            String suffix = InetAddress.getLocalHost().getHostName() + "-" + TimeHelper.toString(new Date(), "yyyyMMdd");
             String actionName = System.getProperty("action");
             System.setProperty("hostname.time", actionName == null ? suffix : (actionName + "-" + suffix));
         } catch (UnknownHostException e) {

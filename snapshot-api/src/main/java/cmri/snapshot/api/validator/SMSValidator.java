@@ -13,9 +13,9 @@ public class SMSValidator {
     public void validateAuthCode(long phoneNum, String authCode){
         String id = SMSController.getAuthCodeId(phoneNum);
         String code = RedisHandler.instance().get(id);
-        Validate.notEmpty(code, "验证码错误");
+        Validate.notEmpty(code, "Please resend auth code");
         if (!code.equalsIgnoreCase(authCode)) {
-            throw new IllegalArgumentException("验证码错误");
+            throw new IllegalArgumentException("Auth code error");
         }
         RedisHandler.instance().del(id);
     }
