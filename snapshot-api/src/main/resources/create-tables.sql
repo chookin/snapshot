@@ -113,14 +113,18 @@ CREATE TABLE grapher_plan(
   PRIMARY KEY  (id),
   FOREIGN KEY (user_id) REFERENCES user(id) on UPDATE CASCADE on DELETE CASCADE
 );
+
 # 摄影师身价表 记录历史身价
-DROP TABLE IF EXISTS grapher_price;
-CREATE TABLE grapher_price(
-  user_id BIGINT NOT NULL COMMENT '摄影师id',
-  price int DEFAULT 0 NOT NULL COMMENT '身价',
-  time DATETIME COMMENT '时间',
-  PRIMARY KEY (user_id),
-  FOREIGN KEY (user_id) REFERENCES user(id) on UPDATE CASCADE on DELETE CASCADE
+DROP TABLE IF EXISTS grapher_price_history;
+CREATE TABLE grapher_price_history(
+  id BIGINT NOT NULL auto_increment,
+  grapher_id BIGINT NOT NULL COMMENT '摄影师id',
+  price int DEFAULT 0 NOT NULL COMMENT '身价，单位元',
+  month int COMMENT '月份,由‘该身价值的计算时间’计算得到',
+  time DATETIME COMMENT '该身价值的计算时间',
+  PRIMARY KEY (id),
+  UNIQUE (grapher_id, month),
+  FOREIGN KEY (grapher_id) REFERENCES grapher(user_id) on UPDATE CASCADE on DELETE CASCADE
 );
 
 # 摄影活动发布

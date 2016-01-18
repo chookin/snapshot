@@ -6,12 +6,14 @@ import cmri.utils.lang.JsonHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by zhuyin on 12/1/15.
@@ -28,6 +30,8 @@ public class GrapherController {
     private GrapherPlanRepository planRepository;
     @Autowired
     private CameraRepository cameraRepository;
+    @Autowired
+    private GrapherPriceHistoryRepository grapherPriceHistoryRepository;
 
     /**
      * 申请成为摄影师
@@ -67,6 +71,29 @@ public class GrapherController {
         return new ResponseMessage();
     }
 
+    @RequestMapping(value = "info/get", method = RequestMethod.GET)
+    public ResponseMessage getInfo(long gid){
+        Grapher grapher = grapherRepository.findByUserId(gid);
+        User user = userRepository.findById(gid);
+        List<GrapherPriceHistory> prices = grapherPriceHistoryRepository.findByGrapherId(gid, new PageRequest(0, 12, new Sort(Sort.Direction.DESC, "time")));
+        List<Map<String,String>> priceTendency = new ArrayList<>();
+        for(GrapherPriceHistory price: prices){
+            Map<String, String> entity = new HashMap<>();
+            priceTendency.add(entity);
+            entity.put("month", String.valueOf(price.getMonth()));
+            entity.put("price", String.valueOf(price.getPrice()));
+        }
+        return new ResponseMessage()
+                .set("priceTendency", JsonHelper.toJson(priceTendency))
+                .set("photographerId", String.valueOf(gid))
+                .set("serveCity", grapher.getRegion())
+                .set("skill", grapher.getDesire())
+                .set("intro", user.getProfile())
+                .set("appointmentCount", String.valueOf(9))
+                .set("collectCount", String.valueOf(10))
+                .set("likeCount", String.valueOf(31))
+                ;
+    }
     /**
      * 修改摄影师的信息
      *

@@ -48,10 +48,11 @@ public class SpecialShotController {
         List<String> picUrls = stills.stream().map(item -> WebMvcConfig.getUrl(item.getPic())).collect(Collectors.toList());
 
         List<SpecialShotGrapher> graphers = specialShotGrapherRepository.findByShotId(shotId);
-        Map<Long, String> graphersMap = new HashMap<>();
+        Map<String, String> graphersMap = new HashMap<>();
         for(SpecialShotGrapher grapher: graphers){
             User user = userRepository.findById(grapher.getGrapherId());
-            graphersMap.put(user.getId(), WebMvcConfig.getUrl(user.getAvatar()));
+            graphersMap.put("uid", String.valueOf(user.getId()));
+            graphersMap.put("avatar", WebMvcConfig.getUrl(user.getAvatar()));
         }
         return new ResponseMessage()
                 .set("shotId", String.valueOf(shot.getId()))

@@ -29,6 +29,16 @@ public class GrapherControllerTest extends WebAppTest {
     }
 
     @Test
+    public void testGetInfo() throws Exception {
+        ResponseMessage response = rest.reset()
+                .setPath("photographer/info/get")
+                .add("gid", ConfigManager.getLong("test.uid"))
+                .get();
+        log(response);
+        Assert.assertTrue(response.isSucceed());
+    }
+
+    @Test
     public void testModInfo() throws Exception {
         ResponseMessage response = rest.reset()
                 .setPath("photographer/info/mod")
