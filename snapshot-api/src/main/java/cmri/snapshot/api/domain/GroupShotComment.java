@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 public class GroupShotComment {
     private long id;
     private long shotId;
-    private long userId;
+    private long commentatorId;
     private long parent;
     private String content;
     private Timestamp time;
@@ -37,13 +37,13 @@ public class GroupShotComment {
     }
 
     @Basic
-    @Column(name = "user_id")
-    public long getUserId() {
-        return userId;
+    @Column(name = "commentator_id")
+    public long getCommentatorId() {
+        return commentatorId;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setCommentatorId(long commentatorId) {
+        this.commentatorId = commentatorId;
     }
 
     @Basic
@@ -85,7 +85,7 @@ public class GroupShotComment {
 
         if (id != that.id) return false;
         if (shotId != that.shotId) return false;
-        if (userId != that.userId) return false;
+        if (commentatorId != that.commentatorId) return false;
         if (parent != that.parent) return false;
         if (content != null ? !content.equals(that.content) : that.content != null) return false;
         if (time != null ? !time.equals(that.time) : that.time != null) return false;
@@ -97,7 +97,7 @@ public class GroupShotComment {
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (int) (shotId ^ (shotId >>> 32));
-        result = 31 * result + (int) (userId ^ (userId >>> 32));
+        result = 31 * result + (int) (commentatorId ^ (commentatorId >>> 32));
         result = 31 * result + (int) (parent ^ (parent >>> 32));
         result = 31 * result + (content != null ? content.hashCode() : 0);
         result = 31 * result + (time != null ? time.hashCode() : 0);

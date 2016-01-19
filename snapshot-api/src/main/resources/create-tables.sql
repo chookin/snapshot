@@ -162,7 +162,7 @@ create table user_like(
 drop table if exists user_comment;
 create table user_comment(
   id bigint not null,
-  user_id bigint not null comment '评论人id',
+  commentator_id bigint not null comment '评论人id',
   object bigint not null comment '被评论的人id',
   parent bigint default 0 not null comment '父评论id',
   content text not null comment '评论正文',
@@ -344,7 +344,7 @@ drop table if exists group_shot_comment;
 create table group_shot_comment(
   id bigint not null auto_increment,
   shot_id bigint not null comment '团拍活动id',
-  user_id bigint not null comment '评论的人',
+  commentator_id bigint not null comment '评论的人',
   parent bigint default 0 not null comment '父评论id',
   content text comment '评论正文',
   time datetime comment '评论时间',

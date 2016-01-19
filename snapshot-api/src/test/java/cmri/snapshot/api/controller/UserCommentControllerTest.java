@@ -16,19 +16,20 @@ public class UserCommentControllerTest extends WebAppTest{
         ResponseMessage response = rest.reset()
                 .setPath("userComment/add")
                 .add("uid", ConfigManager.getLong("test.uid"))
-                .add("object", ConfigManager.getLong("test.uid"))
+                .add("userId", ConfigManager.getLong("test.uid") )
                 .add("content", "hi~~")
                 .post();
         log(response);
         Assert.assertTrue(response.isSucceed());
     }
 
-    @Ignore
+    @Test
     public void testGetAboutUser() throws Exception {
         ResponseMessage response = rest.reset()
                 .setPath("userComment/getAboutUser")
-                // todo update to user userId
-                .add("uid", ConfigManager.getLong("test.uid"))
+                .add("userId", ConfigManager.getLong("test.uid"))
+                .add("page", 0)
+                .add("step", 12)
                 .get();
         log(response);
         Assert.assertTrue(response.isSucceed());

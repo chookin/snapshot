@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Table(name = "user_comment")
 public class UserComment {
     private long id;
-    private long userId;
+    private long commentatorId;
     private long object;
     private long parent;
     private String content;
@@ -44,13 +44,13 @@ public class UserComment {
     }
 
     @Basic
-    @Column(name = "user_id")
-    public long getUserId() {
-        return userId;
+    @Column(name = "commentator_id")
+    public long getCommentatorId() {
+        return commentatorId;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setCommentatorId(long commentatorId) {
+        this.commentatorId = commentatorId;
     }
 
     @Basic
@@ -102,7 +102,7 @@ public class UserComment {
         UserComment that = (UserComment) o;
 
         if (id != that.id) return false;
-        if (userId != that.userId) return false;
+        if (commentatorId != that.commentatorId) return false;
         if (object != that.object) return false;
         if (parent != that.parent) return false;
         if (content != null ? !content.equals(that.content) : that.content != null) return false;
@@ -114,7 +114,7 @@ public class UserComment {
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (int) (userId ^ (userId >>> 32));
+        result = 31 * result + (int) (commentatorId ^ (commentatorId >>> 32));
         result = 31 * result + (int) (object ^ (object >>> 32));
         result = 31 * result + (int) (parent ^ (parent >>> 32));
         result = 31 * result + (content != null ? content.hashCode() : 0);
