@@ -149,29 +149,11 @@ CREATE TABLE shot_still(
   PRIMARY KEY  (id),
   FOREIGN KEY (shot_id) REFERENCES shot_release(id) on UPDATE CASCADE on DELETE CASCADE
 );
-# 对用户的点赞
-drop table if exists user_like;
-create table user_like(
-  id bigint not null AUTO_INCREMENT,
-  object bigint not null comment '被点赞的人id',
-  subject bigint not null comment '哪个用户点的赞',
-  time datetime comment '点赞时间',
-  PRIMARY KEY (id)
-);
-# 照片评论
-drop table if exists user_comment;
-create table user_comment(
-  id bigint not null,
-  commentator_id bigint not null comment '评论人id',
-  object bigint not null comment '被评论的人id',
-  parent bigint default 0 not null comment '父评论id',
-  content text not null comment '评论正文',
-  time datetime comment '评论时间',
-  PRIMARY KEY  (id)
-);
+
+
 # 作品
-DROP TABLE if EXISTS works;
-CREATE TABLE works(
+DROP TABLE if EXISTS work;
+CREATE TABLE work(
   id BIGINT NOT NULL,
   user_id bigint not null comment '上传照片的用户的id',
   name VARCHAR(64) NOT NULL COMMENT '作品名称',
@@ -181,14 +163,14 @@ CREATE TABLE works(
   create_time DATETIME COMMENT '作品创建时间',
   PRIMARY KEY (id)
 );
-INSERT into works(id, user_id, name) VALUES(1, 1, 'zhu');
+INSERT into work(id, user_id, name) VALUES(1, 1, 'zhu');
 
 # 作品照片
 DROP TABLE if EXISTS photo;
 CREATE TABLE photo(
   id BIGINT NOT NULL AUTO_INCREMENT,
   user_id BIGINT COMMENT '照片所属用户',
-  works_id BIGINT COMMENT '该照片所属作品的id',
+  work_id BIGINT COMMENT '该照片所属作品的id',
   photo VARCHAR(512) NOT NULL COMMENT '照片地址',
   like_count int default 0 not null comment '点赞次数',
   comment_count int default 0 not null comment '评论次数',
@@ -197,26 +179,6 @@ CREATE TABLE photo(
 );
 INSERT into photo(id, user_id, photo) VALUES(1, 1, 'path/p1');
 
-# 对照片的点赞
-drop table if exists photo_like;
-create table photo_like(
-  id bigint not null auto_increment,
-  photo_id bigint not null comment '被点赞的照片id',
-  user_id bigint not null comment '哪个用户点的赞',
-  time datetime comment '点赞时间',
-  PRIMARY KEY  (id)
-);
-# 照片评论
-drop table if exists photo_comment;
-create table photo_comment(
-  id bigint not null auto_increment,
-  photo_id bigint not null comment '照片id',
-  user_id bigint not null comment '评论的人',
-  parent bigint default 0 not null comment '父评论id',
-  centent text comment '评论正文',
-  time datetime comment '评论时间',
-  PRIMARY KEY  (id)
-);
 # 订单
 drop table if EXISTS shot_order;
 CREATE TABLE shot_order(
@@ -265,24 +227,7 @@ CREATE TABLE special_shot_grapher(
   FOREIGN KEY (shot_id) REFERENCES special_shot(id) on UPDATE CASCADE on DELETE CASCADE,
   FOREIGN KEY (grapher_id) REFERENCES grapher(user_id) on UPDATE CASCADE on DELETE CASCADE
 );
-drop table if exists special_shot_like;
-create table special_shot_like(
-  id bigint not null auto_increment,
-  shot_id bigint not null comment '活动id',
-  user_id bigint not null comment '点赞的人',
-  time datetime comment '点赞时间',
-  PRIMARY KEY  (id)
-);
-drop table if exists special_shot_comment;
-create table special_shot_comment(
-  id bigint not null auto_increment,
-  shot_id bigint not null comment '活动id',
-  user_id bigint not null comment '评论的人',
-  parent bigint default 0 not null comment '父评论id',
-  content text comment '评论正文',
-  time datetime comment '评论时间',
-  PRIMARY KEY  (id)
-);
+
 # 团拍活动
 drop table if exists group_shot;
 create table group_shot(
@@ -330,26 +275,6 @@ create table group_shot_poster(
   photo varchar(512) comment '团拍海报图片',
   PRIMARY KEY  (id)
 );
-# 对团拍的点赞
-drop table if exists group_shot_like;
-create table group_shot_like(
-  id bigint not null auto_increment,
-  shot_id bigint not null comment '团拍活动id',
-  user_id bigint not null comment '点赞的人',
-  time datetime comment '点赞时间',
-  PRIMARY KEY  (id)
-);
-# 团拍评论
-drop table if exists group_shot_comment;
-create table group_shot_comment(
-  id bigint not null auto_increment,
-  shot_id bigint not null comment '团拍活动id',
-  commentator_id bigint not null comment '评论的人',
-  parent bigint default 0 not null comment '父评论id',
-  content text comment '评论正文',
-  time datetime comment '评论时间',
-  PRIMARY KEY  (id)
-);
 
 # 图片
 DROP TABLE IF EXISTS pic;
@@ -358,5 +283,27 @@ CREATE TABLE pic (
   title varchar(64) COMMENT '标题',
   path varchar(512) NOT NULL COMMENT '图片的服务端存储地址',
   upload_time DATETIME COMMENT '上传时间',
+  PRIMARY KEY  (id)
+);
+
+DROP TABLE IF EXISTS comments;
+CREATE TABLE comments(
+  id bigint not null,
+  object_id bigint not null comment '被评论对象的id',
+  commentator_id bigint not null comment '评论的人',
+  parent bigint default 0 not null comment '父评论id',
+  content text comment '评论正文',
+  type TINYINT not NULL COMMENT '评论对象的类型',
+  time datetime comment '评论时间',
+  PRIMARY KEY  (id)
+);
+
+DROP TABLE IF EXISTS likes;
+CREATE TABLE likes(
+  id bigint not null auto_increment,
+  object_id bigint not null comment '被点赞对象的id',
+  commentator_id bigint not null comment '点赞的人',
+  type TINYINT not NULL COMMENT '点赞对象的类型',
+  time datetime comment '点赞时间',
   PRIMARY KEY  (id)
 );

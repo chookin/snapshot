@@ -14,29 +14,31 @@ import java.util.ArrayList;
 /**
  * Created by zhuyin on 15/12/6.
  */
-public class WorksControllerTest extends WebAppTest{
+public class WorkControllerTest extends WebAppTest{
 
     @Test
     public void testAddWork() throws Exception {
         FileSystemResource file1 = new FileSystemResource(new File(ConfigFileManager.dump("pic/sandy-2009.jpg")));
         FileSystemResource file2 = new FileSystemResource(new File(ConfigFileManager.dump("pic/yanzi.jpg")));
-        // FileSystemResource[] imgs = {file1,file2};
-        ArrayList<FileSystemResource> imgs = new ArrayList<>();
-        imgs.add(file1);
-        imgs.add(file2);
         ResponseMessage response = rest.reset()
-                .setPath("works/add")
+                .setPath("work/add")
                 .add("uid", ConfigManager.getLong("test.uid"))
                 .add("name", "work_sandy")
-                .add("location", "BeiJing")
-                .add("imgs", file1)
+                .add("location", "Beijing")
+                .add("file1", file1)
+                .add("file2", file2)
                 .post();
         log(response);
         Assert.assertTrue(response.isSucceed());
     }
 
     @Test
-    public void testGetWorks() throws Exception {
-
+    public void testGetWork() throws Exception {
+        ResponseMessage response = rest.reset()
+                .setPath("work/getWorks")
+                .add("gid", ConfigManager.getLong("test.uid"))
+                .get();
+        log(response);
+        Assert.assertTrue(response.isSucceed());
     }
 }

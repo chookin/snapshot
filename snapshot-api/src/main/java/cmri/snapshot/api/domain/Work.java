@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * Created by zhuyin on 15/12/6.
  */
 @Entity
-public class Works {
+public class Work {
     private long id;
     private long userId;
     private String name;
@@ -23,11 +23,11 @@ public class Works {
     private Timestamp createTime;
     private static final AtomicLong idGen = new AtomicLong();
     static {
-        Long id = ModelHelper.getMaxId("works");
+        Long id = ModelHelper.getMaxId("work");
         if(id != null) idGen.set(id);
     }
-    public static Works newOne(){
-        return new Works()
+    public static Work newOne(){
+        return new Work()
                 .setId(nextId())
                 .setCreateTime(new Timestamp(System.currentTimeMillis()));
     }
@@ -40,7 +40,7 @@ public class Works {
         return id;
     }
 
-    public Works setId(long id) {
+    public Work setId(long id) {
         this.id = id;
         return this;
     }
@@ -101,7 +101,7 @@ public class Works {
         return createTime;
     }
 
-    public Works setCreateTime(Timestamp createTime) {
+    public Work setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
         return this;
     }
@@ -111,15 +111,15 @@ public class Works {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Works works = (Works) o;
+        Work work = (Work) o;
 
-        if (id != works.id) return false;
-        if (userId != works.userId) return false;
-        if (likeCount != works.likeCount) return false;
-        if (commentCount != works.commentCount) return false;
-        if (name != null ? !name.equals(works.name) : works.name != null) return false;
-        if (location != null ? !location.equals(works.location) : works.location != null) return false;
-        if (createTime != null ? !createTime.equals(works.createTime) : works.createTime != null) return false;
+        if (id != work.id) return false;
+        if (userId != work.userId) return false;
+        if (likeCount != work.likeCount) return false;
+        if (commentCount != work.commentCount) return false;
+        if (name != null ? !name.equals(work.name) : work.name != null) return false;
+        if (location != null ? !location.equals(work.location) : work.location != null) return false;
+        if (createTime != null ? !createTime.equals(work.createTime) : work.createTime != null) return false;
 
         return true;
     }

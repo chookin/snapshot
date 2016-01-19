@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 public class Photo {
     private long id;
     private long userId;
-    private Long worksId;
+    private Long workId;
     private String photo;
     private int likeCount;
     private int commentCount;
@@ -116,12 +116,12 @@ public class Photo {
     }
 
     @Basic
-    @Column(name = "works_id")
-    public Long getWorksId() {
-        return worksId;
+    @Column(name = "work_id")
+    public Long getWorkId() {
+        return workId;
     }
 
-    public void setWorksId(Long worksId) {
-        this.worksId = worksId;
+    public void setWorkId(Long workId) {
+        this.workId = workId;
     }
 }

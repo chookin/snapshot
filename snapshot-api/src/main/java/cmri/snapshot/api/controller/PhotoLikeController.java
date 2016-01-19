@@ -1,9 +1,7 @@
 package cmri.snapshot.api.controller;
 
-import cmri.snapshot.api.domain.Photo;
-import cmri.snapshot.api.domain.PhotoLike;
-import cmri.snapshot.api.domain.ResponseMessage;
-import cmri.snapshot.api.repository.PhotoLikeRepository;
+import cmri.snapshot.api.domain.*;
+import cmri.snapshot.api.repository.LikesRepository;
 import cmri.snapshot.api.repository.PhotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +19,7 @@ public class PhotoLikeController {
     @Autowired
     private PhotoRepository photoRepository;
     @Autowired
-    private PhotoLikeRepository photoLikeRepository;
+    private LikesRepository likeRepository;
 
     /**
      * 用户对照片点赞
@@ -35,11 +33,12 @@ public class PhotoLikeController {
         photo.setLikeCount(photo.getLikeCount() + 1);
         photoRepository.save(photo);
 
-        PhotoLike like = new PhotoLike();
-        like.setUserId(uid);
-        like.setPhotoId(photoId);
+        Likes like = new Likes();
+        like.setCommentatorId(uid);
+        like.setObjectId(photoId);
+        like.setType(CommentObject.Photo.getVal());
         like.setTime(new Timestamp(System.currentTimeMillis()));
-        photoLikeRepository.save(like);
+        likeRepository.save(like);
         return new ResponseMessage();
     }
 
@@ -55,7 +54,7 @@ public class PhotoLikeController {
         photo.setLikeCount(Math.max(photo.getLikeCount()-1, 0));
         photoRepository.save(photo);
 
-        photoLikeRepository.delete(uid, photoId);
+        likeRepository.delete(uid, photoId);
         return new ResponseMessage();
     }
 }

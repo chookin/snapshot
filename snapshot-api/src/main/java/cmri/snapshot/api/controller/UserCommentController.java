@@ -1,10 +1,8 @@
 package cmri.snapshot.api.controller;
 
 import cmri.snapshot.api.WebMvcConfig;
-import cmri.snapshot.api.domain.ResponseMessage;
-import cmri.snapshot.api.domain.User;
-import cmri.snapshot.api.domain.UserComment;
-import cmri.snapshot.api.repository.UserCommentRepository;
+import cmri.snapshot.api.domain.*;
+import cmri.snapshot.api.repository.CommentsRepository;
 import cmri.snapshot.api.repository.UserRepository;
 import cmri.utils.lang.JsonHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +28,7 @@ public class UserCommentController {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    UserCommentRepository userCommentRepository;
+    CommentsRepository commentsRepository;
 
     /**
      * 对其他用户进行评论
@@ -43,9 +41,10 @@ public class UserCommentController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseMessage add(long uid, Long userId, Long parent, String content){
         Assert.notNull(userId, "para 'userId' is null");
-        UserComment comment = UserComment.newOne();
+        Comments comment = Comments.newOne();
         comment.setCommentatorId(uid);
-        comment.setObject(userId);
+        comment.setObjectId(userId);
+        comment.setType(CommentObject.User.getVal());
         if(parent == null){
             comment.setParent(0);
         }else {
@@ -53,7 +52,7 @@ public class UserCommentController {
         }
         comment.setContent(content);
         comment.setTime(new Timestamp(System.currentTimeMillis()));
-        userCommentRepository.save(comment);
+        commentsRepository.save(comment);
         return new ResponseMessage()
                 .set("comment", JsonHelper.toJson(comment));
     }
@@ -66,9 +65,9 @@ public class UserCommentController {
      */
     @RequestMapping(value = "/getAboutUser", method = RequestMethod.GET)
     public ResponseMessage getAboutUser(long userId, int page, int step){
-        List<UserComment> comments = userCommentRepository.findByObject(userId, new PageRequest(page, step, new Sort(Sort.Direction.DESC, "time")));
+        List<Comments> comments = commentsRepository.findByObjectId(userId, new PageRequest(page, step, new Sort(Sort.Direction.DESC, "time")));
         List<Map<String, String>> myComments = new ArrayList<>();
-        for(UserComment comment: comments){
+        for(Comments comment: comments){
             User commentator = userRepository.findById(comment.getCommentatorId());
             Map<String, String> myComment = new HashMap<>();
             myComments.add(myComment);
