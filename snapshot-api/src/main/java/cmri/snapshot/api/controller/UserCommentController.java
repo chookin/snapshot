@@ -14,10 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by zhuyin on 12/4/15.
@@ -53,6 +50,7 @@ public class UserCommentController {
         comment.setContent(content);
         comment.setTime(new Timestamp(System.currentTimeMillis()));
         commentsRepository.save(comment);
+        // todo increment user comment count;
         return new ResponseMessage()
                 .set("comment", JsonHelper.toJson(comment));
     }
@@ -69,7 +67,7 @@ public class UserCommentController {
         List<Map<String, String>> myComments = new ArrayList<>();
         for(Comments comment: comments){
             User commentator = userRepository.findById(comment.getCommentatorId());
-            Map<String, String> myComment = new HashMap<>();
+            Map<String, String> myComment = new TreeMap<>();
             myComments.add(myComment);
             myComment.put("commentatorId", String.valueOf(commentator.getId()));
             myComment.put("avatar", WebMvcConfig.getUrl(commentator.getAvatar()));

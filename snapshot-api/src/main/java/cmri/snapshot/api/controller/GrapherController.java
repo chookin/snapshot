@@ -78,7 +78,7 @@ public class GrapherController {
         List<GrapherPriceHistory> prices = grapherPriceHistoryRepository.findByGrapherId(gid, new PageRequest(0, 12, new Sort(Sort.Direction.DESC, "time")));
         List<Map<String,String>> priceTendency = new ArrayList<>();
         for(GrapherPriceHistory price: prices){
-            Map<String, String> entity = new HashMap<>();
+            Map<String, String> entity = new TreeMap<>();
             priceTendency.add(entity);
             entity.put("month", String.valueOf(price.getMonth()));
             entity.put("price", String.valueOf(price.getPrice()));

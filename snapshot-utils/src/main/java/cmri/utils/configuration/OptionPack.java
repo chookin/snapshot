@@ -43,7 +43,7 @@ public class OptionPack {
         if(args == null){
             return this;
         }
-        Map<String, String> myOptions = new HashMap<>();
+        Map<String, String> myOptions = new TreeMap<>();
         for (String arg : args) {
             String myArg;
             String val = "";

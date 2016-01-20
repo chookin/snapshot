@@ -161,7 +161,7 @@ public class WorkController {
         List<Work> works = workRepository.findByUserId(gid, pageable);
         List<Map<String,String>> myWorks = new ArrayList<>();
         for(Work work: works){
-            Map<String,String> myWork = new HashMap<>();
+            Map<String,String> myWork = new TreeMap<>();
             myWork.put("workId", String.valueOf(work.getId()));
             List<Photo> photos = photoRepository.findByWorkId(work.getId());
             List<String> photoUrls = photos.stream().map(p -> WebMvcConfig.getUrl(p.getPhoto())).collect(Collectors.toList());

@@ -20,17 +20,6 @@ import static org.junit.Assert.*;
  * Created by zhuyin on 1/15/16.
  */
 public class SpecialShotControllerTest extends WebAppTest {
-
-    @Test
-    public void testGetDetail() throws Exception {
-        ResponseMessage response = rest.reset()
-                .setPath("specialShot/detail")
-                .add("shotId", 1)
-                .get();
-        log(response);
-        Assert.assertTrue(response.isSucceed());
-    }
-
     @Test
     public void testCreate() throws Exception {
         List<Long> grapherIds = new ArrayList<>();
@@ -50,6 +39,28 @@ public class SpecialShotControllerTest extends WebAppTest {
                 .add("pic1", pic1)
                 .add("pic2", pic2)
                 .post();
+        log(response);
+        Assert.assertTrue(response.isSucceed());
+    }
+
+    @Test
+    public void testGet(){
+        ResponseMessage response = rest.reset()
+                .setPath("specialShot/get")
+                .add("uid", ConfigManager.getLong("test.uid"))
+                .add("page", 0)
+                .add("step", 5)
+                .get();
+        log(response);
+        Assert.assertTrue(response.isSucceed());
+    }
+
+    @Test
+    public void testGetDetail() throws Exception {
+        ResponseMessage response = rest.reset()
+                .setPath("specialShot/detail")
+                .add("shotId", 1)
+                .get();
         log(response);
         Assert.assertTrue(response.isSucceed());
     }

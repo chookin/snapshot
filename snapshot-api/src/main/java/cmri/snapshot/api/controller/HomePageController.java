@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by zhuyin on 1/14/16.
@@ -74,7 +71,7 @@ public class HomePageController {
         Iterable<ShotRelease> shotReleases = shotReleaseRepository.findAll(new PageRequest(page, step));
         List<Map<String,String>> items = new ArrayList<>();
         for(ShotRelease shot: shotReleases){
-            Map<String, String> map = new HashMap<>();
+            Map<String, String> map = new TreeMap<>();
             User user = userRepository.findById(shot.getGrapherId());
             List<ShotStill> stills = shotStillRepository.findByShotId(shot.getId());
             if(stills.size() > 0){

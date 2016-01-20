@@ -1,7 +1,7 @@
 package cmri.snapshot.api.domain;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -20,7 +20,7 @@ public class ResponseMessage {
     private long id;
     private boolean succeed;
     private String message;
-    private Map<String, String> data = new HashMap<>();
+    private Map<String, String> data = new TreeMap<>();
     private long time = System.currentTimeMillis();
     public long getId(){
         return id;

@@ -8,6 +8,8 @@ import cmri.utils.lang.Pair;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,9 +18,7 @@ import org.springframework.web.multipart.support.StandardMultipartHttpServletReq
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -32,44 +32,12 @@ public class SpecialShotController {
     @Autowired
     SpecialShotGrapherRepository specialShotGrapherRepository;
     @Autowired
-    SpecialShotStillRepository stillsRepository;
+    SpecialShotStillRepository specialShotStillRepository;
     @Autowired
     GrapherRepository grapherRepository;
     @Autowired
     UserRepository userRepository;
 
-    @RequestMapping(value = "detail", method = RequestMethod.GET)
-    public ResponseMessage getDetail(long shotId){
-        SpecialShot shot = specialShotRepository.findOne(shotId);
-        if(shot == null){
-            return new ResponseMessage(false, "no special_shot of "+shotId);
-        }
-        List<SpecialShotStill> stills = stillsRepository.findByShotId(shot.getId());
-        List<String> picUrls = stills.stream().map(item -> WebMvcConfig.getUrl(item.getPic())).collect(Collectors.toList());
-
-        List<SpecialShotGrapher> graphers = specialShotGrapherRepository.findByShotId(shotId);
-        Map<String, String> graphersMap = new HashMap<>();
-        for(SpecialShotGrapher grapher: graphers){
-            User user = userRepository.findById(grapher.getGrapherId());
-            graphersMap.put("uid", String.valueOf(user.getId()));
-            graphersMap.put("avatar", WebMvcConfig.getUrl(user.getAvatar()));
-        }
-        return new ResponseMessage()
-                .set("shotId", String.valueOf(shot.getId()))
-                .set("picUrls", JsonHelper.toJson(picUrls))
-                .set("price", String.valueOf(shot.getPrice()))
-                .set("title", shot.getTitle())
-                .set("intro", shot.getIntro())
-                .set("summary", shot.getSummary())
-                .set("date", String.valueOf(shot.getTime()))
-                .set("location", shot.getLocation())
-                .set("service", shot.getService())
-                .set("sculpt", shot.getSculpt())
-                .set("likeCount", String.valueOf(shot.getLikeCount()))
-                .set("commentsCount", String.valueOf(shot.getCommentCount()))
-                .set("photographers", JsonHelper.toJson(graphersMap))
-                ;
-    }
 
     /**
      *
@@ -105,7 +73,7 @@ public class SpecialShotController {
                 SpecialShotStill entity = new SpecialShotStill();
                 entity.setShotId(shot.getId());
                 entity.setPic(pair.getValue());
-                stillsRepository.save(entity);
+                specialShotStillRepository.save(entity);
             }
         }
         if(grapherIds != null) {
@@ -120,6 +88,63 @@ public class SpecialShotController {
         }
         return new ResponseMessage()
                 .set("shotId", String.valueOf(shot.getId()))
+                ;
+    }
+
+    @RequestMapping(value = "get", method = RequestMethod.GET)
+    public ResponseMessage get(Long uid, Double longitude, Double latitude, Integer page, Integer step){
+        Page<SpecialShot> shots = specialShotRepository.findAll(new PageRequest(page, step));
+        List<Map<String, String>> myShots = new ArrayList<>();
+        for(SpecialShot shot: shots){
+            Map<String, String> map = new TreeMap<>();
+            List<SpecialShotStill> pics = specialShotStillRepository.findByShotId(shot.getId());
+            String picUrl = "";
+            if(!pics.isEmpty()){
+                picUrl = pics.get(0).getPic();
+                picUrl = WebMvcConfig.getUrl(picUrl);
+            }
+            map.put("shotId", String.valueOf(shot.getId()));
+            map.put("title", shot.getTitle());
+            map.put("intro", shot.getIntro());
+            map.put("picUrl", picUrl);
+            map.put("price", String.valueOf(shot.getPrice()));
+            myShots.add(map);
+        }
+        return new ResponseMessage()
+                .set("items", JsonHelper.toJson(myShots))
+                ;
+    }
+
+    @RequestMapping(value = "detail", method = RequestMethod.GET)
+    public ResponseMessage getDetail(long shotId){
+        SpecialShot shot = specialShotRepository.findOne(shotId);
+        if(shot == null){
+            return new ResponseMessage(false, "no special_shot of "+shotId);
+        }
+        List<SpecialShotStill> stills = specialShotStillRepository.findByShotId(shot.getId());
+        List<String> picUrls = stills.stream().map(item -> WebMvcConfig.getUrl(item.getPic())).collect(Collectors.toList());
+
+        List<SpecialShotGrapher> graphers = specialShotGrapherRepository.findByShotId(shotId);
+        Map<String, String> graphersMap = new TreeMap<>();
+        for(SpecialShotGrapher grapher: graphers){
+            User user = userRepository.findById(grapher.getGrapherId());
+            graphersMap.put("uid", String.valueOf(user.getId()));
+            graphersMap.put("avatar", WebMvcConfig.getUrl(user.getAvatar()));
+        }
+        return new ResponseMessage()
+                .set("shotId", String.valueOf(shot.getId()))
+                .set("picUrls", JsonHelper.toJson(picUrls))
+                .set("price", String.valueOf(shot.getPrice()))
+                .set("title", shot.getTitle())
+                .set("intro", shot.getIntro())
+                .set("summary", shot.getSummary())
+                .set("date", String.valueOf(shot.getTime()))
+                .set("location", shot.getLocation())
+                .set("service", shot.getService())
+                .set("sculpt", shot.getSculpt())
+                .set("likeCount", String.valueOf(shot.getLikeCount()))
+                .set("commentsCount", String.valueOf(shot.getCommentCount()))
+                .set("photographers", JsonHelper.toJson(graphersMap))
                 ;
     }
 }

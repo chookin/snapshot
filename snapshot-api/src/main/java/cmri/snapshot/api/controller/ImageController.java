@@ -83,7 +83,7 @@ public class ImageController {
         List<Pic> pics = picRepository.findSince(new Timestamp(myTime));
         List<Map<String, String>> items = new ArrayList<>();
         for(Pic pic : pics){
-            Map<String, String> item = new HashMap<>();
+            Map<String, String> item = new TreeMap<>();
             item.put("title", pic.getTitle()==null?"":pic.getTitle());
             item.put("url", WebMvcConfig.getUrl(pic.getPath()));
             items.add(item);
