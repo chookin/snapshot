@@ -16,6 +16,7 @@ public class GroupShotEnroll {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
     }

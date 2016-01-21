@@ -135,8 +135,8 @@ CREATE TABLE shot_release(
   location varchar(512) comment '拍摄的地点，可以与摄影师的常驻地点不同',
   like_count int default 0 not null comment '点赞次数',
   comment_count int default 0 not null comment '评论次数',
-  release_time DATETIME COMMENT '活动的发布时间',
   appointment_count int DEFAULT 0 NOT NULL COMMENT '预约数量',
+  create_time DATETIME COMMENT '活动的创建时间',
   PRIMARY KEY (id),
   FOREIGN KEY (grapher_id) REFERENCES grapher(user_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
@@ -236,17 +236,20 @@ create table group_shot(
   start_time datetime comment '活动开始时间',
   end_time datetime comment '活动结束时间',
   registration_deadline datetime comment '报名截止时间',
-  location varchar(512) default '' not null comment '拍摄的地点',
-  service varchar(512) default '' not null comment '服务，如：>60张拍摄，30张精修',
+  title varchar(128) DEFAULT '' COMMENT '活动名称',
+  intro varchar(2048) default '' not null comment '活动简介',
+  summary VARCHAR(1024) DEFAULT '' COMMENT '活动内容',
+  location varchar(512) comment '拍摄的地点',
+  service varchar(512) comment '服务，如：>60张拍摄，30张精修',
   min_number int default 0 not null comment '最少参团人数或家庭数, inclusive',
   max_number int default 0 not null comment '最大参团人数或家庭数, inclusive',
   enrolled_number int default 0 not null comment '已报名的人数或家庭数',
   status TINYINT DEFAULT 0 NOT NULL COMMENT '订单状态: 0: 未开始, 1: 进行中; 2, 取消, 3:完成',
-  info varchar(2048) default '' not null comment '活动简介',
   like_count int default 0 not null comment '点赞次数',
   comment_count int default 0 not null comment '评论次数',
+  creator BIGINT NOT NULL COMMENT '创建者',
   create_time datetime comment '活动创建时间',
-  PRIMARY KEY  (id)
+  PRIMARY KEY (id)
 );
 # 团拍活动的摄影师
 drop table if exists group_shot_grapher;
@@ -254,8 +257,9 @@ create table group_shot_grapher(
   id bigint not null auto_increment,
   shot_id bigint not null comment '团拍活动id',
   grapher_id bigint not null comment '摄影师id',
-  PRIMARY KEY  (id),
-  FOREIGN KEY (shot_id) REFERENCES group_shot(id) on DELETE CASCADE
+  PRIMARY KEY (id),
+  FOREIGN KEY (shot_id) REFERENCES group_shot(id) on DELETE CASCADE,
+  FOREIGN KEY (grapher_id) REFERENCES grapher(user_id) on UPDATE CASCADE on DELETE CASCADE
 );
 # 团拍活动的参加人员
 drop table if exists group_shot_enroll;
@@ -264,16 +268,17 @@ create table group_shot_enroll(
   shot_id bigint not null comment '团拍活动id',
   user_id bigint not null comment '参团人id',
   time datetime not null comment '报名的时间',
-  PRIMARY KEY  (id),
+  PRIMARY KEY (id),
   FOREIGN KEY (shot_id) REFERENCES group_shot(id) on DELETE CASCADE
 );
 # 团拍活动的样板图片
-drop table if exists group_shot_poster;
-create table group_shot_poster(
+drop table if exists group_shot_still;
+create table group_shot_still(
   id bigint not null auto_increment,
   shot_id bigint not null comment '团拍活动id',
-  photo varchar(512) comment '团拍海报图片',
-  PRIMARY KEY  (id)
+  pic varchar(512) comment '团拍海报图片',
+  PRIMARY KEY  (id),
+  FOREIGN KEY (shot_id) REFERENCES group_shot(id) on UPDATE CASCADE on DELETE CASCADE
 );
 
 # 图片

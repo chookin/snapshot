@@ -6,6 +6,8 @@ import cmri.snapshot.api.repository.*;
 import cmri.utils.lang.JsonHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,7 +70,10 @@ public class HomePageController {
      */
     @RequestMapping(value = "/recommendedShots", method = RequestMethod.GET)
     public ResponseMessage getRecommendedShots(Long uid, Double longitude, Double latitude, Integer page, Integer step){
-        Iterable<ShotRelease> shotReleases = shotReleaseRepository.findAll(new PageRequest(page, step));
+        Pageable pageable = new PageRequest(page == null?0:page,
+                step==null?12:step,
+                new Sort(Sort.Direction.DESC, "createTime"));
+        Iterable<ShotRelease> shotReleases = shotReleaseRepository.findAll(pageable);
         List<Map<String,String>> items = new ArrayList<>();
         for(ShotRelease shot: shotReleases){
             Map<String, String> map = new TreeMap<>();
@@ -79,7 +84,7 @@ public class HomePageController {
             }
             map.put("avatarUrl", WebMvcConfig.getUrl(user.getAvatar()));
             map.put("nickname", user.getName());
-            map.put("publishDate", String.valueOf(shot.getReleaseTime()));
+            map.put("publishDate", String.valueOf(shot.getCreateTime()));
             map.put("appointmentCount", String.valueOf(shot.getAppointmentCount()));
             map.put("likeCount", String.valueOf(shot.getLikeCount()));
             map.put("commentsCount", String.valueOf(shot.getCommentCount()));

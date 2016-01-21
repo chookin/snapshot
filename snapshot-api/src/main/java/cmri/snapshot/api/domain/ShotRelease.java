@@ -17,7 +17,7 @@ public class ShotRelease {
     private String location;
     private int likeCount;
     private int commentCount;
-    private Timestamp releaseTime;
+    private Timestamp createTime;
     private int appointmentCount;
     private static final AtomicLong idGen = new AtomicLong();
 
@@ -29,7 +29,7 @@ public class ShotRelease {
     public static ShotRelease newOne() {
         ShotRelease shot = new ShotRelease();
         shot.setId(nextId());
-        shot.setReleaseTime(new Timestamp(System.currentTimeMillis()));
+        shot.setCreateTime(new Timestamp(System.currentTimeMillis()));
         return shot;
     }
 
@@ -87,13 +87,13 @@ public class ShotRelease {
     }
 
     @Basic
-    @Column(name = "release_time")
-    public Timestamp getReleaseTime() {
-        return releaseTime;
+    @Column(name = "create_time")
+    public Timestamp getCreateTime() {
+        return createTime;
     }
 
-    public void setReleaseTime(Timestamp releaseTime) {
-        this.releaseTime = releaseTime;
+    public void setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
     }
 
     @Basic
@@ -119,7 +119,7 @@ public class ShotRelease {
         if (commentCount != that.commentCount) return false;
         if (appointmentCount != that.appointmentCount) return false;
         if (location != null ? !location.equals(that.location) : that.location != null) return false;
-        if (releaseTime != null ? !releaseTime.equals(that.releaseTime) : that.releaseTime != null) return false;
+        if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
 
         return true;
     }
@@ -131,7 +131,7 @@ public class ShotRelease {
         result = 31 * result + (location != null ? location.hashCode() : 0);
         result = 31 * result + likeCount;
         result = 31 * result + commentCount;
-        result = 31 * result + (releaseTime != null ? releaseTime.hashCode() : 0);
+        result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + appointmentCount;
         return result;
     }

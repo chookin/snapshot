@@ -165,7 +165,7 @@ public class WorkController {
             myWork.put("workId", String.valueOf(work.getId()));
             List<Photo> photos = photoRepository.findByWorkId(work.getId());
             List<String> photoUrls = photos.stream().map(p -> WebMvcConfig.getUrl(p.getPhoto())).collect(Collectors.toList());
-            myWork.put("picUrls",JsonHelper.toJson(photoUrls));
+            myWork.put("picUrl",photoUrls.isEmpty()?"":photoUrls.get(0));
             myWork.put("commentCount", String.valueOf(work.getCommentCount()));
             myWork.put("likeCount", String.valueOf(work.getLikeCount()));
             myWorks.add(myWork);

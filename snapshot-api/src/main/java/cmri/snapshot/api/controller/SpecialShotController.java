@@ -10,6 +10,8 @@ import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -93,7 +95,10 @@ public class SpecialShotController {
 
     @RequestMapping(value = "get", method = RequestMethod.GET)
     public ResponseMessage get(Long uid, Double longitude, Double latitude, Integer page, Integer step){
-        Page<SpecialShot> shots = specialShotRepository.findAll(new PageRequest(page, step));
+        Pageable pageable = new PageRequest(page == null?0:page,
+                step==null?12:step,
+                new Sort(Sort.Direction.DESC, "createTime"));
+        Page<SpecialShot> shots = specialShotRepository.findAll(pageable);
         List<Map<String, String>> myShots = new ArrayList<>();
         for(SpecialShot shot: shots){
             Map<String, String> map = new TreeMap<>();

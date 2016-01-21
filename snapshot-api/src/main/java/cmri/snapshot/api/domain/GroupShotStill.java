@@ -3,14 +3,14 @@ package cmri.snapshot.api.domain;
 import javax.persistence.*;
 
 /**
- * Created by zhuyin on 12/8/15.
+ * Created by zhuyin on 1/21/16.
  */
 @Entity
-@Table(name = "group_shot_grapher", schema = "", catalog = "snapshot")
-public class GroupShotGrapher {
+@Table(name = "group_shot_still", schema = "", catalog = "snapshot")
+public class GroupShotStill {
     private long id;
     private long shotId;
-    private long grapherId;
+    private String pic;
 
     @Id
     @Column(name = "id")
@@ -34,13 +34,13 @@ public class GroupShotGrapher {
     }
 
     @Basic
-    @Column(name = "grapher_id")
-    public long getGrapherId() {
-        return grapherId;
+    @Column(name = "pic")
+    public String getPic() {
+        return pic;
     }
 
-    public void setGrapherId(long grapherId) {
-        this.grapherId = grapherId;
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 
     @Override
@@ -48,11 +48,11 @@ public class GroupShotGrapher {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        GroupShotGrapher that = (GroupShotGrapher) o;
+        GroupShotStill that = (GroupShotStill) o;
 
         if (id != that.id) return false;
         if (shotId != that.shotId) return false;
-        if (grapherId != that.grapherId) return false;
+        if (pic != null ? !pic.equals(that.pic) : that.pic != null) return false;
 
         return true;
     }
@@ -61,7 +61,7 @@ public class GroupShotGrapher {
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (int) (shotId ^ (shotId >>> 32));
-        result = 31 * result + (int) (grapherId ^ (grapherId >>> 32));
+        result = 31 * result + (pic != null ? pic.hashCode() : 0);
         return result;
     }
 }

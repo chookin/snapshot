@@ -7,6 +7,7 @@ import cmri.snapshot.api.repository.UserRepository;
 import cmri.utils.lang.JsonHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,8 +63,11 @@ public class UserCommentController {
      * @param step 每页条数
      */
     @RequestMapping(value = "/getAboutUser", method = RequestMethod.GET)
-    public ResponseMessage getAboutUser(long userId, int page, int step){
-        List<Comments> comments = commentsRepository.findByObjectId(userId, new PageRequest(page, step, new Sort(Sort.Direction.DESC, "time")));
+    public ResponseMessage getAboutUser(long userId, Integer page, Integer step){
+        Pageable pageable = new PageRequest(page == null?0:page,
+                step==null?12:step,
+                new Sort(Sort.Direction.DESC, "time"));
+        List<Comments> comments = commentsRepository.findByObjectId(userId, pageable);
         List<Map<String, String>> myComments = new ArrayList<>();
         for(Comments comment: comments){
             User commentator = userRepository.findById(comment.getCommentatorId());
