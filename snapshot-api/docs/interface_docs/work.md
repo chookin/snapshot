@@ -7,7 +7,7 @@ paras:
 * uid, long, 添加作品的用户的id
 * name, string, 作品名称
 * location, string, 拍摄地点
-* imgs, MultipartFile[], 作品照片, 可不指定，即只是创建作品，暂不传照片
+* img, MultipartFile[], 作品照片, 可不指定，即只是创建作品，暂不传照片
 
 ## 添加作品的照片
 path: /work/photos/append
@@ -41,4 +41,4 @@ path: /work/getWorks
 
 paras:
 
-* gid, long, 摄影师id
+* userId, long, 摄影师id

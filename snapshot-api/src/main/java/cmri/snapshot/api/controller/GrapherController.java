@@ -72,10 +72,10 @@ public class GrapherController {
     }
 
     @RequestMapping(value = "info/get", method = RequestMethod.GET)
-    public ResponseMessage getInfo(long gid){
-        Grapher grapher = grapherRepository.findByUserId(gid);
-        User user = userRepository.findById(gid);
-        List<GrapherPriceHistory> prices = grapherPriceHistoryRepository.findByGrapherId(gid, new PageRequest(0, 12, new Sort(Sort.Direction.DESC, "time")));
+    public ResponseMessage getInfo(long userId){
+        Grapher grapher = grapherRepository.findByUserId(userId);
+        User user = userRepository.findById(userId);
+        List<GrapherPriceHistory> prices = grapherPriceHistoryRepository.findByGrapherId(userId, new PageRequest(0, 12, new Sort(Sort.Direction.DESC, "time")));
         List<Map<String,String>> priceTendency = new ArrayList<>();
         for(GrapherPriceHistory price: prices){
             Map<String, String> entity = new TreeMap<>();
@@ -85,7 +85,7 @@ public class GrapherController {
         }
         return new ResponseMessage()
                 .set("priceTendency", JsonHelper.toJson(priceTendency))
-                .set("photographerId", String.valueOf(gid))
+                .set("photographerId", String.valueOf(userId))
                 .set("serveCity", grapher.getRegion())
                 .set("skill", grapher.getDesire())
                 .set("intro", user.getProfile())
@@ -138,8 +138,8 @@ public class GrapherController {
      * 获取指定摄影师的套餐详情
      */
     @RequestMapping(value = "/plan/get", method = RequestMethod.GET)
-    public ResponseMessage getPlan(long gid){
-        GrapherPlan plan = planRepository.findByUserId(gid);
+    public ResponseMessage getPlan(long userId){
+        GrapherPlan plan = planRepository.findByUserId(userId);
         return new ResponseMessage()
                 .set("plan", JsonHelper.toJson(plan))
                 ;
@@ -149,8 +149,8 @@ public class GrapherController {
      * 获取指定摄影师的器材详情
      */
     @RequestMapping(value = "/cameras/get", method = RequestMethod.GET)
-    public ResponseMessage getCamera(long gid){
-        List<Camera> cameras = cameraRepository.findByUserId(gid);
+    public ResponseMessage getCamera(long userId){
+        List<Camera> cameras = cameraRepository.findByUserId(userId);
         return new ResponseMessage()
                 .set("cameras", JsonHelper.toJson(cameras))
                 ;
@@ -159,10 +159,10 @@ public class GrapherController {
     /**
      * 获取摄影师的可预约日期
      *
-     * @param gid 摄影师id
+     * @param userId 摄影师id
      */
     @RequestMapping(value = "/availableDate/get", method = RequestMethod.GET)
-    public ResponseMessage getAvailableDate(long gid){
+    public ResponseMessage getAvailableDate(long userId){
         // TODO: 15/12/7
         return new ResponseMessage()
                 ;

@@ -153,12 +153,12 @@ public class WorkController {
      * 获取指定摄影师的作品集合
      */
     @RequestMapping(value = "/getWorks", method = RequestMethod.GET)
-    public ResponseMessage getWorks(Long gid, Integer page, Integer step){
-        Validate.notNull(gid, "para gid is null");
+    public ResponseMessage getWorks(Long userId, Integer page, Integer step){
+        Validate.notNull(userId, "para userId is null");
         Pageable pageable = new PageRequest(page == null?0:page,
                 step==null?12:step,
                 new Sort(Sort.Direction.DESC, "createTime"));
-        List<Work> works = workRepository.findByUserId(gid, pageable);
+        List<Work> works = workRepository.findByUserId(userId, pageable);
         List<Map<String,String>> myWorks = new ArrayList<>();
         for(Work work: works){
             Map<String,String> myWork = new TreeMap<>();

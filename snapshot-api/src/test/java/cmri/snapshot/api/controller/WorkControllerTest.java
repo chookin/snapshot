@@ -36,7 +36,7 @@ public class WorkControllerTest extends WebAppTest{
     public void testGetWork() throws Exception {
         ResponseMessage response = rest.reset()
                 .setPath("work/getWorks")
-                .add("gid", ConfigManager.getLong("test.uid"))
+                .add("userId", ConfigManager.getLong("test.uid"))
                 .get();
         log(response);
         Assert.assertTrue(response.isSucceed());

@@ -36,11 +36,11 @@ path: /photographer/plan/get
 
 paras:
 
-* gid, long, 摄影师id
+* userId, long, 摄影师id
 
 ## 获取指定摄影师的器材详情
 path: /photographer/cameras/get
 
 paras:
 
-* gid, long, 摄影师id
+* userId, long, 摄影师id
