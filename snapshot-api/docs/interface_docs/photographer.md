@@ -1,8 +1,10 @@
 # 摄影师帐户管理接口
 ## 申请成为摄影师
+method: POST
+
 path: /photographer/toBecome
 
-paras:
+request paras:
 
 * uid, long, 用户id
 * realName, string, 真实姓名
@@ -15,10 +17,32 @@ paras:
 
 <strong>注意：</strong>请使用[图片管理接口](./image_manager.md#上传图片文件)上传身份证照片及器材照片。
 
-## 修改摄影师的信息
+## 获取摄影师的基本资料
+method: GET
+
+path: /photographer/info/get
+
+request paras:
+
+* userId, long, 摄影师id
+
+response data:
+
+* photographerId, 摄影师id
+* priceTendency, 身价走势，json array形式，[{month:**,price:**},...]（返回最近12次的）
+* serveCity, string, 服务城市
+* skill, string, 擅长领域
+* intro, string, 摄影师简介
+* appointmentCount, int, 预约数量
+* collectCount, int, 收藏数量
+* likeCount, int, 点赞数量
+
+## 修改摄影师的资料
+method: POST
+
 path: /photographer/info/mod
 
-paras:
+request paras:
 
 * uid, long, 用户ID
 * newName, string, 昵称
@@ -32,15 +56,19 @@ paras:
 * makeup, string, 化妆
 
 ## 获取指定摄影师的套餐详情
+method: GET
+
 path: /photographer/plan/get
 
-paras:
+request paras:
 
 * userId, long, 摄影师id
 
 ## 获取指定摄影师的器材详情
+method: GET
+
 path: /photographer/cameras/get
 
-paras:
+request paras:
 
 * userId, long, 摄影师id

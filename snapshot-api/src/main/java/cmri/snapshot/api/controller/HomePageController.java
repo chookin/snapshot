@@ -21,17 +21,17 @@ import java.util.*;
 @RequestMapping("/home")
 public class HomePageController {
     @Autowired
-    SpecialShotRepository specialShotRepository;
+    private SpecialShotRepository specialShotRepository;
     @Autowired
-    SpecialShotStillRepository specialShotStillRepository;
+    private SpecialShotStillRepository specialShotStillRepository;
     @Autowired
-    ShotReleaseRepository shotReleaseRepository;
+    private ShotReleaseRepository shotReleaseRepository;
     @Autowired
-    ShotStillRepository shotStillRepository;
+    private ShotStillRepository shotStillRepository;
     @Autowired
-    GrapherRepository grapherRepository;
+    private GrapherRepository grapherRepository;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     /**
      * 推荐位广告，推荐特色服务
      * @param uid 用户id，可选
@@ -61,7 +61,7 @@ public class HomePageController {
     }
 
     /**
-     * 推荐位广告，推荐特色服务
+     * 推荐摄影师活动
      * @param uid 用户id，可选
      * @param longitude 经度，double，可选
      * @param latitude 维度，double，可选
@@ -78,18 +78,23 @@ public class HomePageController {
         for(ShotRelease shot: shotReleases){
             Map<String, String> map = new TreeMap<>();
             User user = userRepository.findById(shot.getGrapherId());
+            Grapher grapher = grapherRepository.findByUserId(shot.getGrapherId());
             List<ShotStill> stills = shotStillRepository.findByShotId(shot.getId());
             if(stills.size() > 0){
                 map.put("picUrl", WebMvcConfig.getUrl(stills.get(0).getPic()));
             }
+            map.put("shotId", String.valueOf(shot.getId()));
+            map.put("location", shot.getLocation());
+            map.put("price", String.valueOf(grapher.getPrice()));
+            map.put("publishDate", String.valueOf(shot.getCreateTime().getTime()));
+
+            map.put("photographerId", String.valueOf(user.getId()));
             map.put("avatarUrl", WebMvcConfig.getUrl(user.getAvatar()));
             map.put("nickname", user.getName());
-            map.put("publishDate", String.valueOf(shot.getCreateTime()));
+
             map.put("appointmentCount", String.valueOf(shot.getAppointmentCount()));
             map.put("likeCount", String.valueOf(shot.getLikeCount()));
             map.put("commentsCount", String.valueOf(shot.getCommentCount()));
-            map.put("location", shot.getLocation());
-            map.put("photographerId", String.valueOf(user.getId()));
 
             items.add(map);
         }

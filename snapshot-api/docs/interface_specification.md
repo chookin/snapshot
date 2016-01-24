@@ -92,7 +92,7 @@ $sig = genSig($secret_key, $method, $url, $arrContent);
 
 参数名称 | 类型	  | 是否必需 | 描述
 ------ | -------- | -----  | ----
-time   | long     | 是 | 用户发起请求时的unix时间戳
+time   | long     | 是 | 用户发起请求时的unix时间戳, 精确到毫秒
 sig    | string   | 是 | 签名值
 
 # JSON响应输出格式
@@ -102,7 +102,7 @@ sig    | string   | 是 | 签名值
 * succeed字段，bool型，标识是否HTTP API调用失败；
 * message字段表示HTTP API返回的提示信息，如当调用失败时的错误消息；
 * data属性是一个二级json，由n个包含key和value属性的对象组成；表示API返回的数据内容;
-* time, long型，web server生成响应消息的时间。
+* time, long型，web server生成响应消息的unix时间戳, 精确到毫秒。
 
 格式：
 
@@ -126,7 +126,7 @@ sig    | string   | 是 | 签名值
 其中，
 
     * $id是web server实际返回的响应消息id;
-    * $time是web server生成响应消息的时间。
+    * $time是web server生成响应消息的unix时间戳, 精确到毫秒。
 
 # 参考
 

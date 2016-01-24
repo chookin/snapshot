@@ -1,8 +1,10 @@
 # 用户评论
 ## 对其他用户进行评论
+method: POST
+
 path：/userComment/add
 
-paras:
+request paras:
 
 * uid, long, 用户id
 * userId, long, 被评论用户的id
@@ -10,9 +12,23 @@ paras:
 * content, string, 评论内容
 
 ## 获取对用户的评论
-method: Http.GET  
+method: GET  
+
 path：/userComment/getAboutUser
 
-paras:
+request paras:
 
-* userId, long, 用户id
+* userId, long, 被评论用户的id
+* page, int, 请求的页数
+* step, int, 每页多少条
+
+response data:
+
+* comments, json array, 评论集合，每条评论包括如下信息：
+    * commentatorId, long, 发布评论的用户id
+    * avatar, string, 发布评论的用户头像url
+    * nickname, string, 发布评论的用户的昵称
+    * time, long, 评论时间，unix时间戳
+    * content, string, 评论内容
+
+

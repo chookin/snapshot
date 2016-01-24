@@ -1,5 +1,7 @@
 # 手机验证码接口
 ## 发送手机验证码
+method: POST
+
 path：/sms/authCode/send
 
 paras:

@@ -50,11 +50,11 @@ public class SpecialShotController {
      * @param location 位置, string
      * @param service 服务, string
      * @param sculpt 造型, string
-     * @param grapherIds 摄影师id，格式[id1,id2]
+     * @param photographers 摄影师id，格式[id1,id2]
      * @throws IOException
      */
     @RequestMapping(value = "create", method = RequestMethod.POST)
-    public ResponseMessage create(HttpServletRequest request, long uid, String title, String intro, int price, String summary, String location, String service, String sculpt, String grapherIds ) throws IOException {
+    public ResponseMessage create(HttpServletRequest request, long uid, String title, String intro, int price, String summary, String location, String service, String sculpt, String photographers ) throws IOException {
         SpecialShot shot = SpecialShot.newOne();
         shot.setTitle(title);
         shot.setIntro(intro);
@@ -78,8 +78,8 @@ public class SpecialShotController {
                 specialShotStillRepository.save(entity);
             }
         }
-        if(grapherIds != null) {
-            List<Long> myGrapherIds = new Gson().fromJson(grapherIds, new TypeToken<List<Long>>() {
+        if(photographers != null) {
+            List<Long> myGrapherIds = new Gson().fromJson(photographers, new TypeToken<List<Long>>() {
             }.getType());
             for (long grapherId : myGrapherIds) {
                 SpecialShotGrapher grapher = new SpecialShotGrapher();
@@ -143,7 +143,7 @@ public class SpecialShotController {
                 .set("title", shot.getTitle())
                 .set("intro", shot.getIntro())
                 .set("summary", shot.getSummary())
-                .set("date", String.valueOf(shot.getTime()))
+                .set("date", String.valueOf(shot.getTime().getTime()))
                 .set("location", shot.getLocation())
                 .set("service", shot.getService())
                 .set("sculpt", shot.getSculpt())

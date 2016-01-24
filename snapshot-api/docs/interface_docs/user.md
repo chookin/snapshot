@@ -1,5 +1,7 @@
 # 用户管理接口
 ## 用户注册
+method: POST
+
 path: /user/register
 
 paras:
@@ -21,6 +23,8 @@ response:
         time = 1452583841855
     }
 ## 用户登录
+method: POST
+
 path: /user/login
 ### 基于用户名的登录
 paras:
@@ -65,7 +69,8 @@ response:
     }
 
 ## 获取用户基本信息
-method: Http.GET  
+method: GET
+
 path: /user/info/get
 
 paras:
@@ -90,7 +95,8 @@ response:
     }
 
 ## 获取用户名
-method: Http.GET  
+method: GET
+  
 path: /user/name/
 
 paras:
@@ -110,6 +116,8 @@ response:
     }
 
 ## 修改用户名
+method: POST
+
 path: /user/name/mod
 
 paras:
@@ -128,6 +136,8 @@ response:
     }
     
 ## 修改密码
+method: POST
+
 path: /user/password/mod
 
 paras:
@@ -137,6 +147,8 @@ paras:
 * authCode, string, 手机验证码
 
 ## 修改头像
+method: POST
+
 path: /user/avatar/mod
 
 paras:
