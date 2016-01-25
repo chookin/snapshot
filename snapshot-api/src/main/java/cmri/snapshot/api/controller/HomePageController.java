@@ -89,7 +89,7 @@ public class HomePageController {
             map.put("publishDate", String.valueOf(shot.getCreateTime().getTime()));
 
             map.put("photographerId", String.valueOf(user.getId()));
-            map.put("avatarUrl", WebMvcConfig.getUrl(user.getAvatar()));
+            map.put("avatar", WebMvcConfig.getUrl(user.getAvatar()));
             map.put("nickname", user.getName());
 
             map.put("appointmentCount", String.valueOf(shot.getAppointmentCount()));

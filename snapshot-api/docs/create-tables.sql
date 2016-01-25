@@ -37,8 +37,6 @@ Insert into user(id, name, phone, password, role) values(1,'test', 13426198753, 
 # 创建帐户admin admin@init_sn
 Insert into user(id, name, password, role) values(2,'admin','d35f1337e3f698228e641ea4b29b507d',-1);
 
-INSERT INTO user(id, name, phone, password) VALUE(3, 'jacob', '13811245934', '730ea9a92c1f03e5b1934129e98528c7');
-
 # 用户登录历史详情表
 DROP TABLE IF EXISTS login;
 CREATE TABLE login(
