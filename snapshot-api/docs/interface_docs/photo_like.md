@@ -1,4 +1,4 @@
-# 用户点赞
+# 照片点赞
 ## 用户对照片点赞
 path：/photoLike/add
 

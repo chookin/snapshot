@@ -15,7 +15,7 @@ request paras:
 * lensModel, string, 镜头型号
 * cameraImgPath, string, 器材照片的服务器路径
 
-<strong>注意：</strong>请使用[图片管理接口](./image_manager.md#上传图片文件)上传身份证照片及器材照片。
+<strong>注意：</strong>请使用[图片管理接口](./image.md#上传图片文件)上传身份证照片及器材照片。
 
 ## 获取摄影师的基本资料
 method: GET
