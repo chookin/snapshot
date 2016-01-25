@@ -66,4 +66,4 @@ response data:
 * service, string, 服务内容
 * sculpt, string, 造型，如：1组
 * likeCount, int, 点赞数量
-* commentsCount, int, 评论数量
+* commentCount, int, 评论数量

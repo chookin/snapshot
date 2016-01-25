@@ -59,4 +59,4 @@ response data:
     * nickname, string, 摄影师昵称
     * appointmentCount, int, 预约数量
     * likeCount, int, 点赞数量
-    * commentsCount, int, 评论数量
+    * commentCount, int, 评论数量

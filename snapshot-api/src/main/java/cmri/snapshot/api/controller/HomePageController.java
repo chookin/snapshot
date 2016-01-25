@@ -94,7 +94,7 @@ public class HomePageController {
 
             map.put("appointmentCount", String.valueOf(shot.getAppointmentCount()));
             map.put("likeCount", String.valueOf(shot.getLikeCount()));
-            map.put("commentsCount", String.valueOf(shot.getCommentCount()));
+            map.put("commentCount", String.valueOf(shot.getCommentCount()));
 
             items.add(map);
         }

@@ -148,7 +148,7 @@ public class SpecialShotController {
                 .set("service", shot.getService())
                 .set("sculpt", shot.getSculpt())
                 .set("likeCount", String.valueOf(shot.getLikeCount()))
-                .set("commentsCount", String.valueOf(shot.getCommentCount()))
+                .set("commentCount", String.valueOf(shot.getCommentCount()))
                 .set("photographers", JsonHelper.toJson(graphersMap))
                 ;
     }
