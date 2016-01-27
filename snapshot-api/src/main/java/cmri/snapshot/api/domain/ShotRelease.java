@@ -15,8 +15,6 @@ public class ShotRelease {
     private long id;
     private long grapherId;
     private String location;
-    private int likeCount;
-    private int commentCount;
     private Timestamp createTime;
     private int appointmentCount;
     private static final AtomicLong idGen = new AtomicLong();
@@ -67,26 +65,6 @@ public class ShotRelease {
     }
 
     @Basic
-    @Column(name = "like_count")
-    public int getLikeCount() {
-        return likeCount;
-    }
-
-    public void setLikeCount(int keCount) {
-        this.likeCount = keCount;
-    }
-
-    @Basic
-    @Column(name = "comment_count")
-    public int getCommentCount() {
-        return commentCount;
-    }
-
-    public void setCommentCount(int commentCount) {
-        this.commentCount = commentCount;
-    }
-
-    @Basic
     @Column(name = "create_time")
     public Timestamp getCreateTime() {
         return createTime;
@@ -115,8 +93,6 @@ public class ShotRelease {
 
         if (id != that.id) return false;
         if (grapherId != that.grapherId) return false;
-        if (likeCount != that.likeCount) return false;
-        if (commentCount != that.commentCount) return false;
         if (appointmentCount != that.appointmentCount) return false;
         if (location != null ? !location.equals(that.location) : that.location != null) return false;
         if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
@@ -129,8 +105,6 @@ public class ShotRelease {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (int) (grapherId ^ (grapherId >>> 32));
         result = 31 * result + (location != null ? location.hashCode() : 0);
-        result = 31 * result + likeCount;
-        result = 31 * result + commentCount;
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + appointmentCount;
         return result;

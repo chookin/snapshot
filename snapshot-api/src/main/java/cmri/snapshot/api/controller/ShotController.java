@@ -1,5 +1,6 @@
 package cmri.snapshot.api.controller;
 
+import cmri.snapshot.api.domain.Grapher;
 import cmri.snapshot.api.domain.ResponseMessage;
 import cmri.snapshot.api.domain.ShotRelease;
 import cmri.snapshot.api.domain.ShotStill;
@@ -35,7 +36,10 @@ public class ShotController {
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
     public ResponseMessage create(HttpServletRequest request, long uid, String location) throws IOException {
-        //TODO add grapher check
+        Grapher grapher = grapherRepository.findByUserId(uid);
+        if(grapher == null){
+            return new ResponseMessage(false, "user " + uid + " is not a photographer");
+        }
         ShotRelease shot = ShotRelease.newOne();
         shot.setGrapherId(uid);
         shot.setLocation(location);

@@ -1,6 +1,7 @@
 package cmri.snapshot.api.controller;
 
 import cmri.snapshot.api.domain.*;
+import cmri.snapshot.api.helper.LikeHelper;
 import cmri.snapshot.api.repository.LikesRepository;
 import cmri.snapshot.api.repository.PhotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,6 @@ import java.sql.Timestamp;
 @RestController
 @RequestMapping("/photoLike")
 public class PhotoLikeController {
-    @Autowired
-    private PhotoRepository photoRepository;
-    @Autowired
-    private LikesRepository likeRepository;
 
     /**
      * 用户对照片点赞
@@ -29,16 +26,7 @@ public class PhotoLikeController {
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseMessage add(long uid, long photoId){
-        Photo photo = photoRepository.findOne(photoId);
-        photo.setLikeCount(photo.getLikeCount() + 1);
-        photoRepository.save(photo);
-
-        Likes like = new Likes();
-        like.setCommentatorId(uid);
-        like.setObjectId(photoId);
-        like.setType(CommentObject.Photo.getVal());
-        like.setTime(new Timestamp(System.currentTimeMillis()));
-        likeRepository.save(like);
+        LikeHelper.add(uid, photoId, ModelType.Photo);
         return new ResponseMessage();
     }
 
@@ -50,11 +38,7 @@ public class PhotoLikeController {
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ResponseMessage delete(long uid, long photoId){
-        Photo photo = photoRepository.findOne(photoId);
-        photo.setLikeCount(Math.max(photo.getLikeCount()-1, 0));
-        photoRepository.save(photo);
-
-        likeRepository.delete(uid, photoId);
+        LikeHelper.delete(uid, photoId, ModelType.Photo);
         return new ResponseMessage();
     }
 }

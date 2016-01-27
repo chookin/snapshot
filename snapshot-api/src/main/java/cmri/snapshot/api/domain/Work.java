@@ -18,8 +18,6 @@ public class Work {
     private long userId;
     private String name;
     private String location;
-    private int likeCount;
-    private int commentCount;
     private Timestamp createTime;
     private static final AtomicLong idGen = new AtomicLong();
     static {
@@ -76,26 +74,6 @@ public class Work {
     }
 
     @Basic
-    @Column(name = "like_count")
-    public int getLikeCount() {
-        return likeCount;
-    }
-
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
-    }
-
-    @Basic
-    @Column(name = "comment_count")
-    public int getCommentCount() {
-        return commentCount;
-    }
-
-    public void setCommentCount(int commentCount) {
-        this.commentCount = commentCount;
-    }
-
-    @Basic
     @Column(name = "create_time")
     public Timestamp getCreateTime() {
         return createTime;
@@ -115,8 +93,6 @@ public class Work {
 
         if (id != work.id) return false;
         if (userId != work.userId) return false;
-        if (likeCount != work.likeCount) return false;
-        if (commentCount != work.commentCount) return false;
         if (name != null ? !name.equals(work.name) : work.name != null) return false;
         if (location != null ? !location.equals(work.location) : work.location != null) return false;
         if (createTime != null ? !createTime.equals(work.createTime) : work.createTime != null) return false;
@@ -130,8 +106,6 @@ public class Work {
         result = 31 * result + (int) (userId ^ (userId >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (location != null ? location.hashCode() : 0);
-        result = 31 * result + likeCount;
-        result = 31 * result + commentCount;
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         return result;
     }

@@ -23,8 +23,6 @@ public class SpecialShot {
     private String sculpt;
     private long creator;
     private Timestamp createTime;
-    private int likeCount;
-    private int commentCount;
     private static final AtomicLong idGen = new AtomicLong();
 
     static {
@@ -153,26 +151,6 @@ public class SpecialShot {
         this.createTime = createTime;
     }
 
-    @Basic
-    @Column(name = "like_count")
-    public int getLikeCount() {
-        return likeCount;
-    }
-
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
-    }
-
-    @Basic
-    @Column(name = "comment_count")
-    public int getCommentCount() {
-        return commentCount;
-    }
-
-    public void setCommentCount(int commentCount) {
-        this.commentCount = commentCount;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -183,8 +161,6 @@ public class SpecialShot {
         if (id != that.id) return false;
         if (price != that.price) return false;
         if (creator != that.creator) return false;
-        if (likeCount != that.likeCount) return false;
-        if (commentCount != that.commentCount) return false;
         if (time != null ? !time.equals(that.time) : that.time != null) return false;
         if (location != null ? !location.equals(that.location) : that.location != null) return false;
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
@@ -210,8 +186,6 @@ public class SpecialShot {
         result = 31 * result + (sculpt != null ? sculpt.hashCode() : 0);
         result = 31 * result + (int) (creator ^ (creator >>> 32));
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
-        result = 31 * result + likeCount;
-        result = 31 * result + commentCount;
         return result;
     }
 }

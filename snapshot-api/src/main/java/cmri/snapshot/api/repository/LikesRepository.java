@@ -12,6 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface LikesRepository extends JpaRepository<Likes, Long> {
     @Modifying
-    @Query("delete from Likes as e where e.commentatorId = ?1 and e.objectId = ?2")
-    void delete(long commentatorId, long objectId);
+    @Query("delete from Likes as e where e.commentatorId = ?1 and e.objectId = ?2 and e.type = ?3")
+    void delete(long commentatorId, long objectId, byte type);
 }

@@ -1,10 +1,11 @@
 package cmri.snapshot.api.controller;
 
 import cmri.snapshot.api.WebMvcConfig;
-import cmri.snapshot.api.domain.Photo;
-import cmri.snapshot.api.domain.ResponseMessage;
-import cmri.snapshot.api.domain.SpecialShotStill;
-import cmri.snapshot.api.domain.Work;
+import cmri.snapshot.api.domain.*;
+import cmri.snapshot.api.helper.CommentHelper;
+import cmri.snapshot.api.helper.LikeHelper;
+import cmri.snapshot.api.repository.CommentStatRepository;
+import cmri.snapshot.api.repository.LikeStatRepository;
 import cmri.snapshot.api.repository.PhotoRepository;
 import cmri.snapshot.api.repository.WorkRepository;
 import cmri.utils.lang.JsonHelper;
@@ -166,8 +167,8 @@ public class WorkController {
             List<Photo> photos = photoRepository.findByWorkId(work.getId());
             List<String> photoUrls = photos.stream().map(p -> WebMvcConfig.getUrl(p.getPhoto())).collect(Collectors.toList());
             myWork.put("picUrl",photoUrls.isEmpty()?"":photoUrls.get(0));
-            myWork.put("commentCount", String.valueOf(work.getCommentCount()));
-            myWork.put("likeCount", String.valueOf(work.getLikeCount()));
+            myWork.put("commentCount", String.valueOf(CommentHelper.findCount(work.getId(), ModelType.Work)));
+            myWork.put("likeCount", String.valueOf(LikeHelper.findCount(work.getId(), ModelType.Work)));
             myWorks.add(myWork);
         }
         return new ResponseMessage()

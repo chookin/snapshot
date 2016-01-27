@@ -10,5 +10,5 @@ import java.util.List;
  * Created by zhuyin on 1/19/16.
  */
 public interface CommentsRepository extends JpaRepository<Comments, Long>{
-    List<Comments> findByObjectId(long objectId, Pageable pageable);
+    List<Comments> findByObjectIdAndType(long objectId, byte type, Pageable pageable);
 }

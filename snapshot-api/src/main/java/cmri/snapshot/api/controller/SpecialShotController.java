@@ -2,6 +2,8 @@ package cmri.snapshot.api.controller;
 
 import cmri.snapshot.api.WebMvcConfig;
 import cmri.snapshot.api.domain.*;
+import cmri.snapshot.api.helper.CommentHelper;
+import cmri.snapshot.api.helper.LikeHelper;
 import cmri.snapshot.api.repository.*;
 import cmri.utils.lang.JsonHelper;
 import cmri.utils.lang.Pair;
@@ -147,8 +149,8 @@ public class SpecialShotController {
                 .set("location", shot.getLocation())
                 .set("service", shot.getService())
                 .set("sculpt", shot.getSculpt())
-                .set("likeCount", String.valueOf(shot.getLikeCount()))
-                .set("commentCount", String.valueOf(shot.getCommentCount()))
+                .set("likeCount", String.valueOf(LikeHelper.findCount(shot.getId(), ModelType.SpecialShot)))
+                .set("commentCount", String.valueOf(CommentHelper.findCount(shotId, ModelType.SpecialShot)))
                 .set("photographers", JsonHelper.toJson(graphersMap))
                 ;
     }

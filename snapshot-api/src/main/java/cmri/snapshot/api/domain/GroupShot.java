@@ -26,8 +26,6 @@ public class GroupShot {
     private int maxNumber;
     private int enrolledNumber;
     private byte status;
-    private int likeCount;
-    private int commentCount;
     private long creator;
     private Timestamp createTime;
     private static final AtomicLong idGen = new AtomicLong();
@@ -188,26 +186,6 @@ public class GroupShot {
     }
 
     @Basic
-    @Column(name = "like_count")
-    public int getLikeCount() {
-        return likeCount;
-    }
-
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
-    }
-
-    @Basic
-    @Column(name = "comment_count")
-    public int getCommentCount() {
-        return commentCount;
-    }
-
-    public void setCommentCount(int commentCount) {
-        this.commentCount = commentCount;
-    }
-
-    @Basic
     @Column(name = "creator")
     public long getCreator() {
         return creator;
@@ -240,8 +218,6 @@ public class GroupShot {
         if (maxNumber != groupShot.maxNumber) return false;
         if (enrolledNumber != groupShot.enrolledNumber) return false;
         if (status != groupShot.status) return false;
-        if (likeCount != groupShot.likeCount) return false;
-        if (commentCount != groupShot.commentCount) return false;
         if (startTime != null ? !startTime.equals(groupShot.startTime) : groupShot.startTime != null) return false;
         if (endTime != null ? !endTime.equals(groupShot.endTime) : groupShot.endTime != null) return false;
         if (registrationDeadline != null ? !registrationDeadline.equals(groupShot.registrationDeadline) : groupShot.registrationDeadline != null)
@@ -272,8 +248,6 @@ public class GroupShot {
         result = 31 * result + maxNumber;
         result = 31 * result + enrolledNumber;
         result = 31 * result + (int) status;
-        result = 31 * result + likeCount;
-        result = 31 * result + commentCount;
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         return result;
     }

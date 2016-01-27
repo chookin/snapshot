@@ -2,6 +2,8 @@ package cmri.snapshot.api.controller;
 
 import cmri.snapshot.api.WebMvcConfig;
 import cmri.snapshot.api.domain.*;
+import cmri.snapshot.api.helper.CommentHelper;
+import cmri.snapshot.api.helper.LikeHelper;
 import cmri.snapshot.api.repository.GroupShotGrapherRepository;
 import cmri.snapshot.api.repository.GroupShotRepository;
 import cmri.snapshot.api.repository.GroupShotStillRepository;
@@ -136,8 +138,9 @@ public class GroupShotController {
             map.put("endTime", String.valueOf(shot.getEndTime()==null ? "":shot.getEndTime().getTime()));
             map.put("minNumber", String.valueOf(shot.getMinNumber()));
             map.put("maxNumber", String.valueOf(shot.getMaxNumber()));
-            map.put("likeCount", String.valueOf(shot.getLikeCount()));
-            map.put("commentCount", String.valueOf(shot.getCommentCount()));
+
+            map.put("commentCount", String.valueOf(CommentHelper.findCount(shot.getId(), ModelType.GroupShot)));
+            map.put("likeCount", String.valueOf(LikeHelper.findCount(shot.getId(), ModelType.GroupShot)));
             myShots.add(map);
         }
         return new ResponseMessage()

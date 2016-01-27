@@ -2,6 +2,7 @@ package cmri.snapshot.api.controller;
 
 import cmri.snapshot.api.WebMvcConfig;
 import cmri.snapshot.api.domain.*;
+import cmri.snapshot.api.helper.CommentHelper;
 import cmri.snapshot.api.repository.CommentsRepository;
 import cmri.snapshot.api.repository.UserRepository;
 import cmri.utils.lang.JsonHelper;
@@ -24,9 +25,7 @@ import java.util.*;
 @RequestMapping("/userComment")
 public class UserCommentController {
     @Autowired
-    UserRepository userRepository;
-    @Autowired
-    CommentsRepository commentsRepository;
+    private UserRepository userRepository;
 
     /**
      * 对其他用户进行评论
@@ -39,19 +38,7 @@ public class UserCommentController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseMessage add(long uid, Long userId, Long parent, String content){
         Assert.notNull(userId, "para 'userId' is null");
-        Comments comment = Comments.newOne();
-        comment.setCommentatorId(uid);
-        comment.setObjectId(userId);
-        comment.setType(CommentObject.User.getVal());
-        if(parent == null){
-            comment.setParent(0);
-        }else {
-            comment.setParent(parent);
-        }
-        comment.setContent(content);
-        comment.setTime(new Timestamp(System.currentTimeMillis()));
-        commentsRepository.save(comment);
-        // todo increment user comment count;
+        Comments comment = CommentHelper.save(uid, userId, ModelType.User, parent, content);
         return new ResponseMessage()
                 .set("comment", JsonHelper.toJson(comment));
     }
@@ -64,10 +51,7 @@ public class UserCommentController {
      */
     @RequestMapping(value = "/getAboutUser", method = RequestMethod.GET)
     public ResponseMessage getAboutUser(long userId, Integer page, Integer step){
-        Pageable pageable = new PageRequest(page == null?0:page,
-                step==null?12:step,
-                new Sort(Sort.Direction.DESC, "time"));
-        List<Comments> comments = commentsRepository.findByObjectId(userId, pageable);
+        List<Comments> comments = CommentHelper.findComments(userId, ModelType.User, page, step);
         List<Map<String, String>> myComments = new ArrayList<>();
         for(Comments comment: comments){
             User commentator = userRepository.findById(comment.getCommentatorId());

@@ -2,6 +2,8 @@ package cmri.snapshot.api.controller;
 
 import cmri.snapshot.api.WebMvcConfig;
 import cmri.snapshot.api.domain.*;
+import cmri.snapshot.api.helper.CommentHelper;
+import cmri.snapshot.api.helper.LikeHelper;
 import cmri.snapshot.api.repository.*;
 import cmri.utils.lang.JsonHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,9 +95,9 @@ public class HomePageController {
             map.put("nickname", user.getName());
 
             map.put("appointmentCount", String.valueOf(shot.getAppointmentCount()));
-            map.put("likeCount", String.valueOf(shot.getLikeCount()));
-            map.put("commentCount", String.valueOf(shot.getCommentCount()));
 
+            map.put("commentCount", String.valueOf(CommentHelper.findCount(shot.getId(), ModelType.Shot)));
+            map.put("likeCount", String.valueOf(LikeHelper.findCount(shot.getId(), ModelType.Shot)));
             items.add(map);
         }
         return new ResponseMessage()

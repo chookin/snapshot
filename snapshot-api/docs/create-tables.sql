@@ -25,9 +25,9 @@ CREATE TABLE user (
   avatar varchar(512) COMMENT '头像的存储地址',
   register_time DATETIME COMMENT '注册时间',
   update_time DATETIME COMMENT '账户信息的修改时间',
-#   order_count int DEFAULT 0 NOT NULL COMMENT '订单数',
-#   appointment_count int DEFAULT 0 COMMENT '预约数',
-#   collected_count int DEFAULT 0 NOT NULL COMMENT '被收藏数',
+  order_count int DEFAULT 0 NOT NULL COMMENT '订单数',
+  appointment_count int DEFAULT 0 COMMENT '预约数',
+  collected_count int DEFAULT 0 NOT NULL COMMENT '被收藏数',
   # Must define 'id' as primary key, or else throw exception: Incorrect table definition; there can be only one auto column and it must be defined as a key
   PRIMARY KEY  (id)
 );
@@ -36,6 +36,7 @@ CREATE TABLE user (
 Insert into user(id, name, phone, password, role) values(1,'test', 13426198753, '098f6bcd4621d373cade4e832627b4f6', 0);
 # 创建帐户admin admin@init_sn
 Insert into user(id, name, password, role) values(2,'admin','d35f1337e3f698228e641ea4b29b507d',-1);
+
 
 # 用户登录历史详情表
 DROP TABLE IF EXISTS login;
@@ -131,14 +132,12 @@ CREATE TABLE shot_release(
   id bigint not null,
   grapher_id BIGINT NOT NULL COMMENT '摄影师id',
   location varchar(512) comment '拍摄的地点，可以与摄影师的常驻地点不同',
-  like_count int default 0 not null comment '点赞次数',
-  comment_count int default 0 not null comment '评论次数',
   appointment_count int DEFAULT 0 NOT NULL COMMENT '预约数量',
   create_time DATETIME COMMENT '活动的创建时间',
   PRIMARY KEY (id),
   FOREIGN KEY (grapher_id) REFERENCES grapher(user_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
-
+# 摄影活动剧照
 DROP TABLE IF EXISTS shot_still;
 CREATE TABLE shot_still(
   id bigint not null auto_increment,
@@ -148,7 +147,6 @@ CREATE TABLE shot_still(
   FOREIGN KEY (shot_id) REFERENCES shot_release(id) on UPDATE CASCADE on DELETE CASCADE
 );
 
-
 # 作品
 DROP TABLE if EXISTS work;
 CREATE TABLE work(
@@ -156,8 +154,6 @@ CREATE TABLE work(
   user_id bigint not null comment '上传照片的用户的id',
   name VARCHAR(64) NOT NULL COMMENT '作品名称',
   location VARCHAR(128) COMMENT '拍摄地点',
-  like_count int default 0 not null comment '点赞次数',
-  comment_count int default 0 not null comment '评论次数',
   create_time DATETIME COMMENT '作品创建时间',
   PRIMARY KEY (id)
 );
@@ -170,8 +166,6 @@ CREATE TABLE photo(
   user_id BIGINT COMMENT '照片所属用户',
   work_id BIGINT COMMENT '该照片所属作品的id',
   photo VARCHAR(512) NOT NULL COMMENT '照片地址',
-  like_count int default 0 not null comment '点赞次数',
-  comment_count int default 0 not null comment '评论次数',
   time DATETIME COMMENT '上传时间',
   PRIMARY KEY (id)
 );
@@ -203,10 +197,9 @@ CREATE TABLE special_shot(
   sculpt varchar(32) DEFAULT '' COMMENT '造型，如：1组',
   creator BIGINT NOT NULL COMMENT '创建者',
   create_time DATETIME COMMENT '创建时间',
-  like_count int default 0 not null comment '点赞次数',
-  comment_count int default 0 not null comment '评论次数',
   PRIMARY KEY (id)
 );
+# 特色服务剧照
 DROP TABLE IF EXISTS special_shot_still;
 CREATE TABLE special_shot_still(
   id bigint not null auto_increment,
@@ -215,7 +208,7 @@ CREATE TABLE special_shot_still(
   PRIMARY KEY  (id),
   FOREIGN KEY (shot_id) REFERENCES special_shot(id) on UPDATE CASCADE on DELETE CASCADE
 );
-
+# 特色服务摄影师
 DROP TABLE IF EXISTS special_shot_grapher;
 CREATE TABLE special_shot_grapher(
   id bigint not null auto_increment,
@@ -243,8 +236,6 @@ create table group_shot(
   max_number int default 0 not null comment '最大参团人数或家庭数, inclusive',
   enrolled_number int default 0 not null comment '已报名的人数或家庭数',
   status TINYINT DEFAULT 0 NOT NULL COMMENT '订单状态: 0: 未开始, 1: 进行中; 2, 取消, 3:完成',
-  like_count int default 0 not null comment '点赞次数',
-  comment_count int default 0 not null comment '评论次数',
   creator BIGINT NOT NULL COMMENT '创建者',
   create_time datetime comment '活动创建时间',
   PRIMARY KEY (id)
@@ -289,6 +280,7 @@ CREATE TABLE pic (
   PRIMARY KEY  (id)
 );
 
+# 评论
 DROP TABLE IF EXISTS comments;
 CREATE TABLE comments(
   id bigint not null,
@@ -296,17 +288,36 @@ CREATE TABLE comments(
   commentator_id bigint not null comment '评论的人',
   parent bigint default 0 not null comment '父评论id',
   content text comment '评论正文',
-  type TINYINT not NULL COMMENT '评论对象的类型',
+  type TINYINT not NULL COMMENT '被评论对象的类型：0, user; 1, photo; 2, work; 51, shot; 52, special shot; 53, group shot',
   time datetime comment '评论时间',
   PRIMARY KEY  (id)
 );
 
+# 点赞
 DROP TABLE IF EXISTS likes;
 CREATE TABLE likes(
   id bigint not null auto_increment,
   object_id bigint not null comment '被点赞对象的id',
   commentator_id bigint not null comment '点赞的人',
-  type TINYINT not NULL COMMENT '点赞对象的类型',
+  type TINYINT not NULL COMMENT '被点赞对象的类型：0, user; 1, photo; 2, work; 51, shot; 52, special shot; 53, group shot',
   time datetime comment '点赞时间',
+  PRIMARY KEY  (id)
+);
+# 评论统计，例如，某张照片有多数条评论
+DROP TABLE IF EXISTS comment_stat;
+CREATE TABLE comment_stat(
+  id bigint not null auto_increment,
+  object_id bigint not null comment '被评论对象的id',
+  type TINYINT not NULL COMMENT '被评论对象的类型：0, user; 1, photo; 2, work; 51, shot; 52, special shot; 53, group shot',
+  count BIGINT NOT NULL DEFAULT 0 COMMENT '计数',
+  PRIMARY KEY  (id)
+);
+# 点赞统计，例如，某张照片有多数个点赞
+DROP TABLE IF EXISTS like_stat;
+CREATE TABLE like_stat(
+  id bigint not null auto_increment,
+  object_id bigint not null comment '被点赞对象的id',
+  type TINYINT not NULL COMMENT '被评论对象的类型：0, user; 1, photo; 2, work; 51, shot; 52, special shot; 53, group shot',
+  count BIGINT NOT NULL DEFAULT 0 COMMENT '计数',
   PRIMARY KEY  (id)
 );

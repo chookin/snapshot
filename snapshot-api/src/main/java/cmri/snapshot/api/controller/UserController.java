@@ -45,7 +45,7 @@ public class UserController {
      * 用户登录. 因为签名校验时已经使用了密码信息，因此不需要再传递密码的参数。
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseMessage login(Long phoneNum, String username) {
+    public ResponseMessage login(Long phoneNum, String username, String loginIP) {
         User user;
         if(username != null){
             user = userRepository.findByName(username);
@@ -56,9 +56,9 @@ public class UserController {
         LOG.info("user '" + user.getId() + "' login");
 
         // save login detail to 'login' table
-        // TODO add login ip address
         Login login = new Login()
                 .setUserId(user.getId())
+                .setLoginIp(loginIP)
                 .setTime(new Timestamp(System.currentTimeMillis()))
                 ;
         loginRepository.save(login);

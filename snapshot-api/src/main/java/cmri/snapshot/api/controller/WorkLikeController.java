@@ -1,6 +1,7 @@
 package cmri.snapshot.api.controller;
 
 import cmri.snapshot.api.domain.*;
+import cmri.snapshot.api.helper.LikeHelper;
 import cmri.snapshot.api.repository.LikesRepository;
 import cmri.snapshot.api.repository.WorkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,6 @@ import java.sql.Timestamp;
 @RestController
 @RequestMapping("/workLike")
 public class WorkLikeController {
-    @Autowired
-    private WorkRepository workRepository;
-    @Autowired
-    private LikesRepository likeRepository;
-
     /**
      * 用户对照片点赞
      *
@@ -31,16 +27,7 @@ public class WorkLikeController {
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseMessage add(long uid, long workId){
-        Work work = workRepository.findOne(workId);
-        work.setLikeCount(work.getLikeCount() + 1);
-        workRepository.save(work);
-
-        Likes like = new Likes();
-        like.setCommentatorId(uid);
-        like.setObjectId(workId);
-        like.setType(CommentObject.Work.getVal());
-        like.setTime(new Timestamp(System.currentTimeMillis()));
-        likeRepository.save(like);
+        LikeHelper.add(uid, workId, ModelType.Work);
         return new ResponseMessage();
     }
 }

@@ -3,15 +3,15 @@ package cmri.snapshot.api.domain;
 /**
  * Created by zhuyin on 1/19/16.
  */
-public enum CommentObject {
+public enum ModelType {
     User(0),
-    Shot(3),
-    SpecailShot(3),
-    GroupShot(4),
-    Work(1),
-    Photo(2);
+    Photo(1),
+    Work(2),
+    Shot(51),
+    SpecialShot(52),
+    GroupShot(53);
     private byte val;
-    CommentObject(int val){
+    ModelType(int val){
         this.val = (byte) val;
     }
     public byte getVal(){
