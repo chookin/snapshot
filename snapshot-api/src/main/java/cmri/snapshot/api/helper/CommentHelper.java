@@ -3,16 +3,13 @@ package cmri.snapshot.api.helper;
 import cmri.snapshot.api.domain.CommentStat;
 import cmri.snapshot.api.domain.Comments;
 import cmri.snapshot.api.domain.ModelType;
-import cmri.snapshot.api.domain.Work;
 import cmri.snapshot.api.repository.CommentStatRepository;
 import cmri.snapshot.api.repository.CommentsRepository;
-import cmri.snapshot.api.repository.LikeStatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.sql.Timestamp;

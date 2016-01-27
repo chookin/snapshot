@@ -1,20 +1,14 @@
 package cmri.snapshot.api.controller;
 
-import cmri.snapshot.api.domain.ModelType;
 import cmri.snapshot.api.domain.Comments;
+import cmri.snapshot.api.domain.ModelType;
 import cmri.snapshot.api.domain.ResponseMessage;
-import cmri.snapshot.api.domain.Work;
 import cmri.snapshot.api.helper.CommentHelper;
-import cmri.snapshot.api.repository.CommentsRepository;
-import cmri.snapshot.api.repository.WorkRepository;
 import cmri.utils.lang.JsonHelper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.sql.Timestamp;
 
 /**
  * Created by zhuyin on 1/20/16.

@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ResponseMessage simpleError(HttpServletRequest request, Exception e) {
         String requestDesc = ServerHelper.getDesc(request);
-        ResponseMessage response = new ResponseMessage(false, requestDesc + ". " + e.getMessage());
+        ResponseMessage response = new ResponseMessage(false, requestDesc + ". " + e.toString());
         LOG.error(ServerHelper.getErrorDesc(requestDesc, response.getId()), e);
         return response;
     }

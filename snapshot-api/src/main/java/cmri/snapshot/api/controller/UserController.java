@@ -1,27 +1,31 @@
 package cmri.snapshot.api.controller;
 
 import cmri.snapshot.api.WebMvcConfig;
-import cmri.snapshot.api.domain.*;
+import cmri.snapshot.api.domain.AvatarDetail;
+import cmri.snapshot.api.domain.Login;
+import cmri.snapshot.api.domain.ResponseMessage;
+import cmri.snapshot.api.domain.User;
 import cmri.snapshot.api.helper.ServerHelper;
 import cmri.snapshot.api.helper.ThumbnailGen;
-import cmri.snapshot.api.repository.*;
+import cmri.snapshot.api.repository.AvatarDetailRepository;
+import cmri.snapshot.api.repository.LoginRepository;
+import cmri.snapshot.api.repository.UserRepository;
 import cmri.snapshot.api.validator.SMSValidator;
 import cmri.snapshot.api.validator.UserValidator;
 import cmri.utils.configuration.ConfigManager;
-import cmri.utils.lang.JsonHelper;
-import cmri.utils.lang.Pair;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.util.List;
 
 /**
  * Created by zhuyin on 11/2/15.

@@ -1,15 +1,11 @@
 package cmri.snapshot.api.controller;
 
-import cmri.snapshot.api.domain.*;
+import cmri.snapshot.api.domain.ModelType;
+import cmri.snapshot.api.domain.ResponseMessage;
 import cmri.snapshot.api.helper.LikeHelper;
-import cmri.snapshot.api.repository.LikesRepository;
-import cmri.snapshot.api.repository.WorkRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.sql.Timestamp;
 
 /**
  * 摄影师作品点赞

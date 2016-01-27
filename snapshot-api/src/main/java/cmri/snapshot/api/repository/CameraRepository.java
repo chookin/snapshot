@@ -1,7 +1,6 @@
 package cmri.snapshot.api.repository;
 
 import cmri.snapshot.api.domain.Camera;
-import cmri.snapshot.api.domain.GrapherPlan;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
