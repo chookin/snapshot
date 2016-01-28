@@ -8,33 +8,31 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 摄影师作品点赞
- *
- * Created by zhuyin on 1/20/16.
+ * Created by zhuyin on 1/28/16.
  */
 @RestController
-@RequestMapping("/workLike")
-public class WorkLikeController {
+@RequestMapping("/specialShotLike")
+public class SpecialShotLikeController {
+
     /**
-     * 用户对作品点赞
+     * 用户对活动点赞
      *
      * @param uid 用户id
-     * @param workId 对哪个作品点赞
+     * @param shotId 对哪个活动点赞
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseMessage add(long uid, long workId){
-        LikeHelper.add(uid, workId, ModelType.Work);
-        return new ResponseMessage();
+    public ResponseMessage add(long uid, long shotId){
+        return LikeHelper.add(uid, shotId, ModelType.Shot);
     }
 
     /**
-     * 用户取消对作品点赞
+     * 用户取消对活动点赞
      *
      * @param uid 用户id
-     * @param workId 被取消点赞的作品id
+     * @param shotId 被取消点赞的活动id
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public ResponseMessage delete(long uid, long workId){
-        return LikeHelper.delete(uid, workId, ModelType.Work);
+    public ResponseMessage delete(long uid, long shotId){
+        return LikeHelper.delete(uid, shotId, ModelType.Shot);
     }
 }

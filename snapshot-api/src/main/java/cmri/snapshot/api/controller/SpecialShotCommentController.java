@@ -9,33 +9,33 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Created by zhuyin on 1/20/16.
+ * Created by zhuyin on 1/28/16.
  */
 @RestController
-@RequestMapping("/workComment")
-public class WorkCommentController {
+@RequestMapping("/specialShotComment")
+public class SpecialShotCommentController {
     /**
-     * 对作品进行评论
+     * 对活动进行评论
      *
      * @param uid 用户id
-     * @param workId 摄影作品id
+     * @param shotId 活动id
      * @param parent 父评论id
      * @param content 评论内容
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseMessage add(long uid, Long workId, Long parent, String content){
-        Assert.notNull(workId, "para 'workId' is null");
-        return CommentHelper.save(uid, workId, ModelType.Work, parent, content);
+    public ResponseMessage add(long uid, Long shotId, Long parent, String content){
+        Assert.notNull(shotId, "para 'shotId' is null");
+        return CommentHelper.save(uid, shotId, ModelType.SpecialShot, parent, content);
     }
 
     /**
-     * 获取对作品的评论
-     * @param workId 被评论的作品
+     * 获取对活动的评论
+     * @param shotId 被评论的活动
      * @param page 分页请求的页码
      * @param step 分页请求的每页条数
      */
-    @RequestMapping(value = "/getAboutWork", method = RequestMethod.GET)
-    public ResponseMessage getAboutUser(long workId, Integer page, Integer step){
-        return CommentHelper.findComments(workId, ModelType.Work, page, step);
+    @RequestMapping(value = "/getAboutShot", method = RequestMethod.GET)
+    public ResponseMessage getAboutShot(long shotId, Integer page, Integer step){
+        return CommentHelper.findComments(shotId, ModelType.SpecialShot, page, step);
     }
 }

@@ -8,7 +8,7 @@ request paras:
 
 * uid, long, 用户id
 * userId, long, 被评论用户的id
-* parent, long, 父评论id
+* parent, long, 父评论id，可选
 * content, string, 评论内容
 
 ## 获取对用户的评论
@@ -19,8 +19,8 @@ path：/userComment/getAboutUser
 request paras:
 
 * userId, long, 被评论用户的id
-* page, int, 请求的页数
-* step, int, 每页多少条
+* page, int, 分页请求的页数
+* step, int, 分页请求的每页多少条
 
 response data:
 

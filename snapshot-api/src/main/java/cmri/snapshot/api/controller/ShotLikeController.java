@@ -11,30 +11,28 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by zhuyin on 12/4/15.
  */
 @RestController
-@RequestMapping("/photoLike")
-public class PhotoLikeController {
+@RequestMapping("/shotLike")
+public class ShotLikeController {
 
     /**
-     * 用户对照片点赞
+     * 用户对活动点赞
      *
      * @param uid 用户id
-     * @param photoId 对哪个照片点赞
+     * @param shotId 对哪个活动点赞
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseMessage add(long uid, long photoId){
-        LikeHelper.add(uid, photoId, ModelType.Photo);
-        return new ResponseMessage();
+    public ResponseMessage add(long uid, long shotId){
+        return LikeHelper.add(uid, shotId, ModelType.Shot);
     }
 
     /**
-     * 用户取消对照片点赞
+     * 用户取消对活动点赞
      *
      * @param uid 用户id
-     * @param photoId 被取消点赞的照片id
+     * @param shotId 被取消点赞的活动id
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public ResponseMessage delete(long uid, long photoId){
-        LikeHelper.delete(uid, photoId, ModelType.Photo);
-        return new ResponseMessage();
+    public ResponseMessage delete(long uid, long shotId){
+        return LikeHelper.delete(uid, shotId, ModelType.Shot);
     }
 }

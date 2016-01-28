@@ -41,7 +41,7 @@ public class LikeHelper {
         }
     }
 
-    public static void add(long uid, long objectId, ModelType type){
+    public static ResponseMessage add(long uid, long objectId, ModelType type){
         Likes like = new Likes();
         like.setCommentatorId(uid);
         like.setObjectId(objectId);
@@ -57,9 +57,10 @@ public class LikeHelper {
             stat.setCount(stat.getCount() + 1);
         }
         likeStatRepository_.save(stat);
+        return new ResponseMessage();
     }
 
-    public static void delete(long commentatorId, long objectId, ModelType type){
+    public static ResponseMessage delete(long commentatorId, long objectId, ModelType type){
         LikeStat stat = findStat(objectId, type);
         if(stat != null) {
             stat.setCount(Math.max(stat.getCount() - 1, 0));
@@ -67,5 +68,6 @@ public class LikeHelper {
         likeStatRepository_.save(stat);
 
         likesRepository_.delete(commentatorId, objectId, type.getVal());
+        return new ResponseMessage();
     }
 }

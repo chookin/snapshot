@@ -6,19 +6,17 @@ import cmri.utils.configuration.ConfigManager;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by zhuyin on 15/12/5.
  */
-public class PhotoLikeControllerTest extends WebAppTest{
+public class ShotLikeControllerTest extends WebAppTest{
 
     @Test
     public void testAdd() throws Exception {
         ResponseMessage response = rest.reset()
-                .setPath("photoLike/add")
+                .setPath("shotLike/add")
                 .add("uid", ConfigManager.getLong("test.uid"))
-                .add("photoId", 1)
+                .add("shotId", 1)
                 .post();
         log(response);
         Assert.assertTrue(response.isSucceed());
@@ -27,9 +25,9 @@ public class PhotoLikeControllerTest extends WebAppTest{
     @Test
     public void testDelete() throws Exception {
         ResponseMessage response = rest.reset()
-                .setPath("photoLike/delete")
+                .setPath("shotLike/delete")
                 .add("uid", ConfigManager.getLong("test.uid"))
-                .add("photoId", 1)
+                .add("shotId", 1)
                 .post();
         log(response);
         Assert.assertTrue(response.isSucceed());
