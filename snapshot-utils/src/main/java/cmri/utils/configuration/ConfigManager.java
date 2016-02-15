@@ -126,7 +126,17 @@ public class ConfigManager {
 
     public static long getLong(String item, long defaultValue) {
         String val = get(item);
-        return StringUtils.isEmpty(val) ?defaultValue: Long.valueOf(val);
+        return StringUtils.isEmpty(val) ?defaultValue: Long.parseLong(val);
+    }
+
+    public static double getDouble(String item) {
+        String val = checkConfigured(item);
+        return Double.parseDouble(val);
+    }
+
+    public static double getDouble(String item, double defaultValue) {
+        String val = get(item);
+        return StringUtils.isEmpty(val) ?defaultValue: Double.parseDouble(val);
     }
 
     private static synchronized void startWatchDaemon() {
